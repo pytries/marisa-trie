@@ -1,0 +1,7 @@
+include README.rst
+include CHANGES.rst
+include LICENSE
+include tox.ini
+include update_c.sh
+
+recursive-include lib/marisa *.h *.cc

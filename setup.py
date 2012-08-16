@@ -3,7 +3,6 @@ import glob
 import itertools
 from distutils.core import setup
 from distutils.extension import Extension
-from Cython.Distutils import build_ext
 
 MARISA_FILES = [
     'lib/marisa/*.cc',
@@ -23,17 +22,13 @@ setup(
     author='Mikhail Korobov',
     author_email='kmike84@gmail.com',
     url='https://github.com/kmike/marisa-trie/',
-    #packages = ['hat_trie'],
-    cmdclass = {'build_ext': build_ext},
 
     ext_modules = [
         Extension(
             "marisa_trie",
-            sources=MARISA_FILES,
-            language="c++",
-            #['src/marisa_trie.pyx', 'src/c_marisa_trie.pxd'] + MARISA_FILES,
-            #['src/datrie.c', 'src/cdatrie.c', 'src/stdio_ext.c'] + HATTRIE_FILES,
-            include_dirs=['lib/marisa/'],
+            sources = glob.glob('src/*.cpp') + MARISA_FILES,
+            include_dirs=['lib'],
+            language = "c++",
         )
     ],
 

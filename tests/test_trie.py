@@ -71,3 +71,30 @@ def test_saveload():
 
     for word in words:
         assert word in trie2
+
+def test_len():
+    trie = marisa_trie.Trie()
+    assert len(trie) == 0
+
+    trie.build(['foo', 'f', 'bar'])
+    assert len(trie) == 3
+
+def test_prefixes():
+    trie = marisa_trie.Trie().build(['foo', 'f', 'foobar', 'bar'])
+    assert trie.prefixes('foobar') == ['f', 'foo', 'foobar']
+    assert trie.prefixes('foo') == ['f', 'foo']
+    assert trie.prefixes('bar') == ['bar']
+    assert trie.prefixes('b') == []
+
+    assert list(trie.iter_prefixes('foobar')) == ['f', 'foo', 'foobar']
+
+def test_keys():
+    keys = ['foo', 'f', 'foobar', 'bar']
+    trie = marisa_trie.Trie().build(keys)
+    assert set(trie.keys()) == set(keys)
+
+def test_keys_prefix():
+    keys = ['foo', 'f', 'foobar', 'bar']
+    trie = marisa_trie.Trie().build(keys)
+    assert set(trie.keys('fo')) == set(['foo', 'foobar'])
+    assert trie.keys('foobarz') == []

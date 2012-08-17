@@ -29,7 +29,7 @@ Create a new trie::
 
 Build a trie::
 
-    >>> trie.build([u'key1', u'key2', u'key3'])
+    >>> trie.build([u'key1', u'key2', u'key12'])
     <marisa_trie.Trie at ...>
 
 Check if key is in trie::
@@ -56,6 +56,20 @@ Key can be reconstructed from the ID::
     >>> trie.restore_key(1)
     u'key2'
 
+Find all prefixes of a given key::
+
+    >>> trie.prefixes(u'key12')
+    [u'key1', u'key12']
+
+There is also a generator version of ``.prefixes`` method
+called ``.iter_prefixes``.
+
+Find all keys from this trie that starts with a given prefix::
+
+    >> trie.keys(u'key1')
+    [u'key1', u'key12']
+
+(iterator version ``.iterkeys(prefix)`` is also available).
 
 It is possible to save a trie to a file::
 
@@ -87,7 +101,7 @@ There are no dedicated benchmarks for this package yet.
 
 My quick tests show that memory usage is quite decent.
 For a list of 3000000 (3 million) Russian words memory consumption
-with different data structures (under Python 2.7)::
+with different data structures (under Python 2.7):
 
 * list(unicode words) : about 300M
 * Trie from datrie_ library: about 70M
@@ -106,7 +120,7 @@ Development happens at github and bitbucket:
 * https://github.com/kmike/marisa-trie
 * https://bitbucket.org/kmike/marisa-trie
 
-The main issue tracker is at github: .
+The main issue tracker is at github: https://github.com/kmike/marisa-trie/issues
 
 Feel free to submit ideas, bugs, pull requests (git or hg) or
 regular patches.

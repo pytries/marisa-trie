@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import sys
 
 cimport keyset
@@ -31,6 +32,9 @@ cdef class Trie:
     def __contains__(self, unicode key):
         cdef bytes _key = key.encode('utf8')
         return self._contains(_key)
+
+    def __len__(self):
+        return self._trie.num_keys()
 
     cpdef int key_id(self, unicode key) except -1:
         """
@@ -129,3 +133,53 @@ cdef class Trie:
             return self
         finally:
             del ks
+
+    def iter_prefixes(self, unicode key):
+        """
+        Returns an iterator of all prefixes of a given key.
+        """
+        cdef agent.Agent ag
+        cdef bytes b_prefix
+
+        cdef bytes b_key = key.encode('utf8')
+        ag.set_query(b_key)
+
+        while self._trie.common_prefix_search(ag):
+            b_prefix = ag.key().ptr()[:ag.key().length()]
+            yield b_prefix.decode('utf8')
+
+    def prefixes(self, unicode key):
+        """
+        Returns a list with all prefixes of a given key.
+        """
+        cdef agent.Agent ag
+        cdef bytes b_prefix
+        cdef list res = []
+
+        cdef bytes b_key = key.encode('utf8')
+        ag.set_query(b_key)
+
+        while self._trie.common_prefix_search(ag):
+            b_prefix = ag.key().ptr()[:ag.key().length()]
+            res.append(b_prefix.decode('utf8'))
+        return res
+
+    def iterkeys(self, unicode prefix=""):
+        """
+        Returns an iterator over keys that have a prefix ``prefix``.
+        """
+        cdef agent.Agent ag
+        cdef bytes b_key
+
+        cdef bytes b_prefix = prefix.encode('utf8')
+        ag.set_query(b_prefix)
+
+        while self._trie.predictive_search(ag):
+            b_key = ag.key().ptr()[:ag.key().length()]
+            yield b_key.decode('utf8')
+
+    def keys(self, unicode prefix=""):
+        """
+        Returns a list with all keys with a prefix ``prefix``.
+        """
+        return list(self.iterkeys(prefix))

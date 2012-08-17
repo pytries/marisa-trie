@@ -2,12 +2,12 @@ marisa-trie
 ===========
 
 MARISA-Trie structure for Python (2.x and 3.x).
-Uses `marisa-trie`_.
+Uses `marisa-trie`_ C++ library.
 
 MARISA-Trie is a read-only trie that is very memory efficient.
 
 There are official SWIG-based Python bindings included
-in library distribution; this package provides an alternative
+in C++ library distribution; this package provides an alternative
 unofficial Cython-based pip-installable Python bindings.
 
 .. _marisa-trie: https://code.google.com/p/marisa-trie/
@@ -162,7 +162,8 @@ Authors & Contributors
 
 * Mikhail Korobov <kmike84@gmail.com>
 
-This module is based on `marisa-trie`_ C++ library by Susumu Yata & chgontributors.
+This module is based on `marisa-trie`_ C++ library by
+Susumu Yata & contributors.
 
 License
 =======

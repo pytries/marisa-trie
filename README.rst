@@ -4,6 +4,8 @@ marisa-trie
 MARISA-Trie structure for Python (2.x and 3.x).
 Uses `marisa-trie`_.
 
+MARISA-Trie is a read-only trie that is very memory efficient.
+
 There are official SWIG-based Python bindings included
 in library distribution; this package provides an alternative
 unofficial Cython-based pip-installable Python bindings.
@@ -22,9 +24,79 @@ Usage
 
 Create a new trie::
 
-    >>> from marisa_trie import Trie
-    >>> trie = Trie()
+    >>> import marisa_trie
+    >>> trie = marisa_trie.Trie()
 
+Build a trie::
+
+    >>> trie.build([u'key1', u'key2', u'key3'])
+    <marisa_trie.Trie at ...>
+
+Check if key is in trie::
+
+    >>> u'key1' in trie
+    True
+    >>> u'key20' in trie
+    False
+
+Each key is assigned an unique ID from 0 to (n - 1), where n is the
+number of keys; you can use this ID to store a value in a
+separate structure (e.g. python list)::
+
+    >>> trie.key_id(u'key2')
+    1
+
+.. note::
+
+    In future versions dict-like interface may become builtin.
+
+
+Key can be reconstructed from the ID::
+
+    >>> trie.restore_key(1)
+    u'key2'
+
+
+It is possible to save a trie to a file::
+
+    >>> with open('my_trie.marisa', 'w') as f:
+    ...     trie.write(f)
+
+or::
+
+    >>> trie.save('my_trie_copy.marisa')
+
+Load a trie::
+
+    >>> trie2 = marisa.Trie()
+    >>> with open('my_trie.marisa', 'r') as f:
+    ...     trie.load(f)
+
+or::
+
+    >>> trie2.load('my_trie.marisa')
+
+Alternatively, you could build a trie using ``marisa-build`` command-line
+utility (provided by underlying C library; it should be downloaded and
+compiled separately) and then load it from a file.
+
+Benchmarks
+==========
+
+There are no dedicated benchmarks for this package yet.
+
+My quick tests show that memory usage is quite decent.
+For a list of 3000000 (3 million) Russian words memory consumption
+with different data structures (under Python 2.7)::
+
+* list(unicode words) : about 300M
+* Trie from datrie_ library: about 70M
+* marisa_trie.Trie: 7M
+
+Lookup speed seems to be about 2x slower than with datrie_, but I haven't
+checked this with a good benchmark suite.
+
+.. _datrie: https://github.com/kmike/datrie
 
 Contributing
 ============
@@ -34,10 +106,13 @@ Development happens at github and bitbucket:
 * https://github.com/kmike/marisa-trie
 * https://bitbucket.org/kmike/marisa-trie
 
-The main issue tracker is at github.
+The main issue tracker is at github: .
 
 Feel free to submit ideas, bugs, pull requests (git or hg) or
 regular patches.
+
+If you found a bug in a C++ part please report it to the original
+`bug tracker <https://code.google.com/p/marisa-trie/issues/list>`_.
 
 
 Running tests and benchmarks
@@ -73,7 +148,7 @@ Authors & Contributors
 
 * Mikhail Korobov <kmike84@gmail.com>
 
-This module is based on `marisa-trie`_ C library.
+This module is based on `marisa-trie`_ C++ library.
 
 License
 =======

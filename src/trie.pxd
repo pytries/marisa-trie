@@ -7,33 +7,33 @@ cdef extern from "../lib/marisa/trie.h" namespace "marisa":
         Trie()
 
 #        void build(keyset.Keyset &keyset, int config_flags = ?)
-        void build(keyset.Keyset &keyset, int config_flags)
+        void build(keyset.Keyset &keyset, int config_flags) except +
 
-        void mmap(char *filename)
-        void map(void *ptr, int size)
+        void mmap(char *filename) except +
+        void map(void *ptr, int size) except +
 
-        void load(char *filename)
-        void read(int fd)
+        void load(char *filename) except +
+        void read(int fd) except +
 
-        void save(char *filename)
-        void write(int fd)
+        void save(char *filename) except +
+        void write(int fd) except +
 
-        bint lookup(agent.Agent &agent)
-        void reverse_lookup(agent.Agent &agent)
-        bint common_prefix_search(agent.Agent &agent)
-        bint predictive_search(agent.Agent &agent)
+        bint lookup(agent.Agent &agent) except +
+        void reverse_lookup(agent.Agent &agent) except +KeyError
+        bint common_prefix_search(agent.Agent &agent) except +
+        bint predictive_search(agent.Agent &agent) except +
 
-        int num_tries()
-        int num_keys()
-        int num_nodes()
+        int num_tries() except +
+        int num_keys() except +
+        int num_nodes() except +
 
 #        TailMode tail_mode()
 #        NodeOrder node_order()
 
-        bint empty()
-        int size()
-        int total_size()
-        int io_size()
+        bint empty() except +
+        int size() except +
+        int total_size() except +
+        int io_size() except +
 
         void clear()
         void swap(Trie &rhs)

@@ -162,9 +162,10 @@ Authors & Contributors
 
 * Mikhail Korobov <kmike84@gmail.com>
 
-This module is based on `marisa-trie`_ C++ library.
+This module is based on `marisa-trie`_ C++ library by Susumu Yata & chgontributors.
 
 License
 =======
 
-Licensed under MIT License.
+Wrapper code is licensed under MIT License.
+Bundled `marisa-trie`_ C++ library is licensed under BSD license.

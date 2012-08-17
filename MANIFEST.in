@@ -3,6 +3,7 @@ include CHANGES.rst
 include LICENSE
 include tox.ini
 include update_c.sh
+include lib/COPYING
 
 recursive-include src *.cpp *.pxd *.pyx
 recursive-include lib/marisa *.h *.cc

@@ -201,3 +201,4 @@ License
 
 Wrapper code is licensed under MIT License.
 Bundled `marisa-trie`_ C++ library is licensed under BSD license.
+./

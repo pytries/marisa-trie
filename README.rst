@@ -104,8 +104,6 @@ method.
 Benchmarks
 ==========
 
-There are no dedicated benchmarks for this package yet.
-
 My quick tests show that memory usage is quite decent.
 For a list of 3000000 (3 million) Russian words memory consumption
 with different data structures (under Python 2.7):
@@ -120,8 +118,28 @@ with different data structures (under Python 2.7):
     store arbitrary integers as values and ``marisa_trie.Trie`` uses
     auto-assigned IDs.
 
-Lookup speed seems to be about 2x slower than with datrie_, but I haven't
-checked this with a good benchmark suite.
+Some speed data for ``marisa_trie.Trie`` (100k unicode words, Python 3.2,
+macbook air i5 1.8 Ghz)::
+
+    dict __contains__ (hits):       4.147M ops/sec
+    trie __contains__ (hits):       0.887M ops/sec
+    dict __contains__ (misses):     3.234M ops/sec
+    trie __contains__ (misses):     1.529M ops/sec
+    dict __len__:                   599186.286 ops/sec
+    trie __len__:                   433893.517 ops/sec
+    dict keys():                    215.424 ops/sec
+    trie keys():                    3.425 ops/sec
+    trie.iter_prefixes (hits):      0.169M ops/sec
+    trie.iter_prefixes (misses):    0.822M ops/sec
+    trie.iter_prefixes (mixed):     0.747M ops/sec
+
+    trie.keys(prefix="xxx"), avg_len(res)==415:         0.840K ops/sec
+    trie.keys(prefix="xxxxx"), avg_len(res)==17:        19.172K ops/sec
+    trie.keys(prefix="xxxxxxxx"), avg_len(res)==3:      82.777K ops/sec
+    trie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4:   131.348K ops/sec
+    trie.keys(prefix="xxx"), NON_EXISTING:              1027.093K ops/sec
+
+So ``marisa_trie.Trie`` uses less memory, ``datrie.Trie`` is faster.
 
 .. _datrie: https://github.com/kmike/datrie
 

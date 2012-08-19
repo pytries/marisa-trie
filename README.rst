@@ -4,7 +4,7 @@ marisa-trie
 MARISA-Trie structure for Python (2.x and 3.x).
 Uses `marisa-trie`_ C++ library.
 
-MARISA-Trie is a read-only trie that is very memory efficient.
+MARISA-Trie is a static trie that is very memory efficient and fairly fast.
 
 There are official SWIG-based Python bindings included
 in C++ library distribution; this package provides an alternative
@@ -90,9 +90,16 @@ or::
 
     >>> trie2.load('my_trie.marisa')
 
-Alternatively, you could build a trie using ``marisa-build`` command-line
+Trie objects are picklable::
+
+    >>> import pickle
+    >>> data = pickle.dumps(trie)
+    >>> trie3 = pickle.loads(data)
+
+You could also build a trie using ``marisa-build`` command-line
 utility (provided by underlying C library; it should be downloaded and
-compiled separately) and then load it from a file.
+compiled separately) and then load it from resulting file using ``.load()``
+method.
 
 Benchmarks
 ==========
@@ -104,8 +111,14 @@ For a list of 3000000 (3 million) Russian words memory consumption
 with different data structures (under Python 2.7):
 
 * list(unicode words) : about 300M
-* Trie from datrie_ library: about 70M
+* BaseTrie from datrie_ library: about 70M
 * marisa_trie.Trie: 7M
+
+.. note::
+
+    This is not a fair comparison because ``datrie.BaseTrie`` is able to
+    store arbitrary integers as values and ``marisa_trie.Trie`` uses
+    auto-assigned IDs.
 
 Lookup speed seems to be about 2x slower than with datrie_, but I haven't
 checked this with a good benchmark suite.

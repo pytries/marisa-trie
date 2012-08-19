@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import string
 import random
 import tempfile
+import pickle
 
 import pytest
 
@@ -71,6 +72,44 @@ def test_saveload():
 
     for word in words:
         assert word in trie2
+
+
+def test_mmap():
+    fd, fname = tempfile.mkstemp()
+    words = get_random_words(1000)
+    trie = marisa_trie.Trie().build(words)
+    with open(fname, 'w') as f:
+        trie.write(f)
+
+    trie2 = marisa_trie.Trie()
+    trie2.mmap(fname)
+
+    for word in words:
+        assert word in trie2
+
+def test_dumps_loads():
+    words = get_random_words(1000)
+    trie = marisa_trie.Trie().build(words)
+    data = trie.dumps()
+
+    trie2 = marisa_trie.Trie()
+    trie2.loads(data)
+
+    for word in words:
+        assert word in trie2
+        assert trie2.key_id(word) == trie.key_id(word)
+
+def test_pickling():
+    words = get_random_words(1000)
+    trie = marisa_trie.Trie().build(words)
+
+    data = pickle.dumps(trie)
+    trie2 = pickle.loads(data)
+
+    for word in words:
+        assert word in trie2
+        assert trie2.key_id(word) == trie.key_id(word)
+
 
 def test_len():
     trie = marisa_trie.Trie()

@@ -1,11 +1,12 @@
 from __future__ import unicode_literals
-import sys
 
+from std_iostream cimport stringstream, istream, ostream
 cimport keyset
 cimport key
 cimport query
 cimport agent
 cimport trie
+cimport iostream
 
 
 cdef class Trie:
@@ -106,11 +107,39 @@ cdef class Trie:
         with open(path, 'r') as f:
             self.read(f)
 
+    cpdef bytes dumps(self) except +:
+        """
+        Returns raw trie content as bytes.
+        """
+        cdef stringstream stream
+        iostream.write((<ostream *> &stream)[0], self._trie[0])
+        cdef bytes res = stream.str()
+        return res
+
+    cpdef loads(self, bytes data) except +:
+        """
+        Loads trie from bytes ``data``.
+        """
+        cdef stringstream* stream = new stringstream(data)
+        try:
+            iostream.read((<istream *> stream)[0], self._trie)
+        finally:
+            del stream
+
+
+    def __reduce__(self): # pickling support
+        return self.__class__, tuple(), self.dumps()
+
+    def __setstate__(self, state): # pickling support
+        self.loads(state)
+
+
     def mmap(self, path):
         """
         Mmaps trie to a file; this allows lookups without loading full
         trie to memory.
         """
+        import sys
         str_path = path.encode(sys.getfilesystemencoding())
         cdef char* c_path = str_path
         self._trie.mmap(c_path)
@@ -152,6 +181,9 @@ cdef class Trie:
         """
         Returns a list with all prefixes of a given key.
         """
+
+        # this an inlined version of ``list(self.iter_prefixes(key))``
+
         cdef agent.Agent ag
         cdef bytes b_prefix
         cdef list res = []
@@ -182,4 +214,19 @@ cdef class Trie:
         """
         Returns a list with all keys with a prefix ``prefix``.
         """
-        return list(self.iterkeys(prefix))
+
+        # this an inlined version of ``list(self.iterkeys(prefix))``
+
+        cdef list res = []
+        cdef agent.Agent ag
+        cdef bytes b_key
+
+        cdef bytes b_prefix = prefix.encode('utf8')
+        ag.set_query(b_prefix)
+
+        while self._trie.predictive_search(ag):
+            b_key = ag.key().ptr()[:ag.key().length()]
+            res.append(b_key.decode('utf8'))
+
+        return res
+

@@ -14,7 +14,7 @@ cdef extern from "../lib/marisa/keyset.h" namespace "marisa":
         void push_back(key.Key &key, char end_marker)
 
         void push_back(char *str)
-#        void push_back(char *ptr, int length, float weight=?)
+        void push_back(char *ptr, int length)
         void push_back(char *ptr, int length, float weight)
 
         key.Key &operator[](int i)

@@ -204,8 +204,8 @@ with different data structures (under Python 2.7):
     to store arbitrary values in ``marisa_trie.Trie`` so it uses less
     memory than ``RecordTrie``.
 
-Some speed data for ``marisa_trie.Trie`` (100k unicode words,
-integer values (lenghts of the words), Python 3.2, macbook air i5 1.8 Ghz)::
+Benchmark results (100k unicode words, integer values (lenghts of the words),
+Python 3.2, macbook air i5 1.8 Ghz)::
 
     dict __getitem__ (hits):            4.090M ops/sec
     Trie __getitem__ (hits):            not supported
@@ -239,8 +239,12 @@ integer values (lenghts of the words), Python 3.2, macbook air i5 1.8 Ghz)::
     Trie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4:   136.476K ops/sec
     Trie.keys(prefix="xxx"), NON_EXISTING:              1073.719K ops/sec
 
+
 Tries from ``marisa_trie`` uses less memory, tries from
 ``datrie.Trie`` are faster.
+
+Please take this benchmark results with a grain of salt; this
+is a very simple benchmark on a single data set.
 
 .. _datrie: https://github.com/kmike/datrie
 

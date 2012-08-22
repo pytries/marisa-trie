@@ -88,3 +88,27 @@ class TestBytesTrie(object):
         assert trie.items('bar') == []
 
 
+class TestRecordTrie(object):
+
+    def data(self):
+        keys = get_random_words(10000)
+        values = [(len(key), 'ё' in key) for key in keys]
+        fmt = str("<H?")
+        return fmt,  zip(keys, values)
+
+
+    def test_getitem(self):
+        fmt, data = self.data()
+        trie = marisa_trie.RecordTrie(fmt, data)
+
+        for key, value in data:
+            assert trie[key] == [value]
+
+        with pytest.raises(KeyError):
+            trie['2135']
+
+    def test_items(self):
+        fmt, data = self.data()
+        trie = marisa_trie.RecordTrie(fmt, data)
+
+        assert set(trie.items()) == set(data)

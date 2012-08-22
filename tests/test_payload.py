@@ -12,7 +12,7 @@ class TestBytesTrie(object):
     def data(self):
         keys = get_random_words(10000)
         values = [key.encode('cp1251') for key in keys]
-        return zip(keys, values)
+        return list(zip(keys, values))
 
     def test_contains(self):
         data = self.data()
@@ -94,7 +94,7 @@ class TestRecordTrie(object):
         keys = get_random_words(10000)
         values = [(len(key), 'ё' in key) for key in keys]
         fmt = str("<H?")
-        return fmt,  zip(keys, values)
+        return fmt, list(zip(keys, values))
 
 
     def test_getitem(self):

@@ -35,6 +35,6 @@ cdef extern from "../lib/marisa/trie.h" namespace "marisa":
         int total_size() nogil except +
         int io_size() nogil except +
 
-        void clear()
-        void swap(Trie &rhs)
+        void clear() nogil except +
+        void swap(Trie &rhs) nogil except +
 

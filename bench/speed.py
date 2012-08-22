@@ -6,6 +6,7 @@ import string
 import timeit
 import os
 import zipfile
+import struct
 #import pstats
 #import cProfile
 
@@ -22,7 +23,7 @@ def words100k():
 
 def random_words(num):
     russian = 'абвгдеёжзиклмнопрстуфхцчъыьэюя'
-    alphabet = russian + string.ascii_letters
+    alphabet = '%s%s' % (russian, string.ascii_letters)
     return [
         "".join([random.choice(alphabet) for x in range(random.randint(1,15))])
         for y in range(num)
@@ -62,21 +63,23 @@ def bench(name, timer, descr='M ops/sec', op_count=0.1, repeats=3, runs=5):
 
 def create_trie():
     words = words100k()
-    trie = marisa_trie.Trie()
-    trie.build(words)
-    return trie
+    return marisa_trie.Trie(words)
+
+def create_bytes_trie():
+    words = words100k()
+    values = [struct.pack(str('=H'), len(word)) for word in words]
+    return marisa_trie.BytesTrie(zip(words, values))
 
 def benchmark():
     print('\n====== Benchmarks (100k unique unicode words) =======\n')
 
     tests = [
-        #('__getitem__ (hits)', "for word in words: data[word]", 'M ops/sec', 0.1, 3),
-        ('__contains__ (hits)', "for word in words: word in data", 'M ops/sec', 0.1, 3),
+        #('__getitem__ (hits)', "for word in WORDS100k: data[word]", 'M ops/sec', 0.1, 3),
+        ('__contains__ (hits)', "for word in WORDS100k: word in data", 'M ops/sec', 0.1, 3),
         ('__contains__ (misses)', "for word in NON_WORDS100k: word in data", 'M ops/sec', 0.1, 3),
-        ('__len__', 'len(data)', ' ops/sec', 1, 3),
-        #('__setitem__ (updates)', 'for word in words: data[word]=1', 'M ops/sec',0.1, 3),
+        #('__setitem__ (updates)', 'for word in WORDS100k: data[word]=1', 'M ops/sec',0.1, 3),
         #('__setitem__ (inserts)', 'for word in NON_WORDS_10k: data[word]=1', 'M ops/sec',0.01, 3),
-        #('setdefault (updates)', 'for word in words: data.setdefault(word, 1)', 'M ops/sec', 0.1, 3),
+        #('setdefault (updates)', 'for word in WORDS100k: data.setdefault(word, 1)', 'M ops/sec', 0.1, 3),
         #('setdefault (inserts)', 'for word in  NON_WORDS_10k: data.setdefault(word, 1)', 'M ops/sec', 0.01, 3),
 #        ('items()', 'list(data.items())', ' ops/sec', 1, 1),
         ('keys()', 'list(data.keys())', ' ops/sec', 1, 1),
@@ -84,129 +87,52 @@ def benchmark():
     ]
 
     common_setup = """
-from __main__ import create_trie, WORDS100k, NON_WORDS100k, MIXED_WORDS100k
+from __main__ import create_trie, create_bytes_trie, WORDS100k, NON_WORDS100k, MIXED_WORDS100k
 from __main__ import PREFIXES_3_1k, PREFIXES_5_1k, PREFIXES_8_1k, PREFIXES_15_1k
-words = WORDS100k
 NON_WORDS_10k = NON_WORDS100k[:10000]
 NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
 """
-    dict_setup = common_setup + 'data = dict((word, 1) for word in words);'
+    dict_setup = common_setup + 'data = dict((word, 1) for word in WORDS100k);'
     trie_setup = common_setup + 'data = create_trie();'
+    bytes_trie_setup = common_setup + 'data = create_bytes_trie();'
 
+    structures = [
+        ('dict', dict_setup),
+        ('Trie', trie_setup),
+        ('BytesTrie', bytes_trie_setup),
+    ]
     for test_name, test, descr, op_count, repeats in tests:
-        t_dict = timeit.Timer(test, dict_setup)
-        t_trie = timeit.Timer(test, trie_setup)
-
-        bench('dict '+test_name, t_dict, descr, op_count, repeats)
-        bench('trie '+test_name, t_trie, descr, op_count, repeats)
+        for name, setup in structures:
+            timer = timeit.Timer(test, setup)
+            bench("%s %s" % (name, test_name), timer, descr, op_count, repeats)
 
 
     # trie-specific benchmarks
+    _bench_data = [
+        ('hits', 'WORDS100k'),
+        ('mixed', 'MIXED_WORDS100k'),
+        ('misses', 'NON_WORDS100k'),
+    ]
 
-#    bench(
-#        'trie.iter_prefix_items (hits)',
-#        timeit.Timer(
-#            "for word in words:\n"
-#            "   for it in data.iter_prefix_items(word):\n"
-#            "       pass",
-#            trie_setup
-#        ),
-#    )
-#
-#    bench(
-#        'trie.prefix_items (hits)',
-#        timeit.Timer(
-#            "for word in words: data.prefix_items(word)",
-#            trie_setup
-#        )
-#    )
-#
-#    bench(
-#        'trie.prefix_items loop (hits)',
-#        timeit.Timer(
-#            "for word in words:\n"
-#            "    for it in data.prefix_items(word):pass",
-#            trie_setup
-#        )
-#    )
-#
-    bench(
-        'trie.iter_prefixes (hits)',
-        timeit.Timer(
-            "for word in words:\n"
-            "   for it in data.iter_prefixes(word): pass",
-            trie_setup
-        )
-    )
+    for meth in ['prefixes', 'iter_prefixes']:
+        for name, data in _bench_data:
+            bench(
+                'trie.%s (%s)' % (meth, name),
+                timeit.Timer(
+                    "for word in %s:\n"
+                    "   for it in data.%s(word): pass" % (data, meth),
+                    trie_setup
+                )
+            )
 
-    bench(
-        'trie.iter_prefixes (misses)',
-        timeit.Timer(
-            "for word in NON_WORDS100k:\n"
-            "   for it in data.iter_prefixes(word): pass",
-            trie_setup
-        )
-    )
-
-    bench(
-        'trie.iter_prefixes (mixed)',
-        timeit.Timer(
-            "for word in MIXED_WORDS100k:\n"
-            "   for it in data.iter_prefixes(word): pass",
-            trie_setup
-        )
-    )
-
-#    bench(
-#        'trie.has_keys_with_prefix (hits)',
-#        timeit.Timer(
-#            "for word in words: data.has_keys_with_prefix(word)",
-#            trie_setup
-#        )
-#    )
-#
-#    bench(
-#        'trie.has_keys_with_prefix (misses)',
-#        timeit.Timer(
-#            "for word in NON_WORDS100k: data.has_keys_with_prefix(word)",
-#            trie_setup
-#        )
-#    )
-#
-#    for meth in ('longest_prefix', 'longest_prefix_item'):
-#        bench(
-#            'trie.%s (hits)' % meth,
-#            timeit.Timer(
-#                "for word in words: data.%s(word)" % meth,
-#                trie_setup
-#            )
-#        )
-#
-#        bench(
-#            'trie.%s (misses)' % meth,
-#            timeit.Timer(
-#                "for word in NON_WORDS100k: data.%s(word, default=None)" % meth,
-#                trie_setup
-#            )
-#        )
-#
-#        bench(
-#            'trie.%s (mixed)' % meth,
-#            timeit.Timer(
-#                "for word in MIXED_WORDS100k: data.%s(word, default=None)" % meth,
-#                trie_setup
-#            )
-#        )
-#
-#
-    prefix_data = [
+    _bench_data = [
         ('xxx', 'avg_len(res)==415', 'PREFIXES_3_1k'),
         ('xxxxx', 'avg_len(res)==17', 'PREFIXES_5_1k'),
         ('xxxxxxxx', 'avg_len(res)==3', 'PREFIXES_8_1k'),
         ('xxxxx..xx', 'avg_len(res)==1.4', 'PREFIXES_15_1k'),
         ('xxx', 'NON_EXISTING', 'NON_WORDS_1k'),
     ]
-    for xxx, avg, data in prefix_data:
+    for xxx, avg, data in _bench_data:
         for meth in ['keys']: #('items', 'keys', 'values'):
             bench(
                 'trie.%s(prefix="%s"), %s' % (meth, xxx, avg),
@@ -242,40 +168,8 @@ def profiling():
     s = pstats.Stats("Profile.prof")
     s.strip_dirs().sort_stats("time").print_stats(20)
 
-#def memory():
-#    gc.collect()
-#    _memory = lambda: _get_memory(os.getpid())
-#    initial_memory = _memory()
-#    trie = create_trie()
-#    gc.collect()
-#    trie_memory = _memory()
-#
-#    del trie
-#    gc.collect()
-#    alphabet, words = words100k()
-#    words_dict = dict((word, 1) for word in words)
-#    del alphabet
-#    del words
-#    gc.collect()
-#
-#    dict_memory = _memory()
-#    print('initial: %s, trie: +%s, dict: +%s' % (
-#        initial_memory,
-#        trie_memory-initial_memory,
-#        dict_memory-initial_memory,
-#    ))
 
 if __name__ == '__main__':
-#    trie = create_trie()
-#    def check_pref(prefixes):
-#        cntr = 0
-#        for w in prefixes:
-#            cntr += len(trie.keys(w))
-#        print(len(prefixes), cntr, cntr / len(prefixes))
-#    check_pref(prefixes1k(WORDS100k, 15))
-
-
     benchmark()
     #profiling()
-    #memory()
     print('\n~~~~~~~~~~~~~~\n')

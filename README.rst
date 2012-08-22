@@ -1,10 +1,8 @@
 marisa-trie
 ===========
 
-MARISA-Trie structure for Python (2.x and 3.x).
+Static memory-efficient Trie structure for Python (2.x and 3.x).
 Uses `marisa-trie`_ C++ library.
-
-MARISA-Trie is a static trie that is very memory efficient and fairly fast.
 
 There are official SWIG-based Python bindings included
 in C++ library distribution; this package provides an alternative
@@ -22,15 +20,26 @@ Installation
 Usage
 =====
 
+.. warning::
+
+    API may change in future; this project is in alpha stage!
+
+
+There are several Trie classes:
+
+* ``marisa_trie.Trie`` - read-only Trie that maps unicode keys to
+  auto-generated unique IDs and supports exact and prefix lookups;
+* ``marisa_trie.BytesTrie`` - read-only Trie that maps unicode
+  keys to lists of ``bytes`` objects.
+
+
+marisa_trie.Trie
+----------------
+
 Create a new trie::
 
     >>> import marisa_trie
-    >>> trie = marisa_trie.Trie()
-
-Build a trie::
-
-    >>> trie.build([u'key1', u'key2', u'key12'])
-    <marisa_trie.Trie at ...>
+    >>> trie = marisa_trie.Trie([u'key1', u'key2', u'key12'])
 
 Check if key is in trie::
 
@@ -45,11 +54,6 @@ separate structure (e.g. python list)::
 
     >>> trie.key_id(u'key2')
     1
-
-.. note::
-
-    In future versions dict-like interface may become builtin.
-
 
 Key can be reconstructed from the ID::
 
@@ -71,22 +75,33 @@ Find all keys from this trie that starts with a given prefix::
 
 (iterator version ``.iterkeys(prefix)`` is also available).
 
-It is possible to save a trie to a file::
+marisa_trie.BytesTrie
+---------------------
+
+TODO
+
+Persistence
+-----------
+
+Trie objects supports saving, loading and pickling.
+
+Write trie to a stream::
 
     >>> with open('my_trie.marisa', 'w') as f:
     ...     trie.write(f)
 
-or::
+Save trie to a file::
 
     >>> trie.save('my_trie_copy.marisa')
 
-Load a trie::
+Read trie from stream::
 
     >>> trie2 = marisa.Trie()
     >>> with open('my_trie.marisa', 'r') as f:
-    ...     trie.load(f)
+    ...     trie.read(f)
 
-or::
+
+Load trie from file::
 
     >>> trie2.load('my_trie.marisa')
 
@@ -96,10 +111,10 @@ Trie objects are picklable::
     >>> data = pickle.dumps(trie)
     >>> trie3 = pickle.loads(data)
 
-You could also build a trie using ``marisa-build`` command-line
-utility (provided by underlying C library; it should be downloaded and
-compiled separately) and then load it from resulting file using ``.load()``
-method.
+You may also build a trie using ``marisa-build`` command-line
+utility (provided by underlying C++ library; it should be downloaded and
+compiled separately) and then load the trie from the resulting file
+using ``.load()`` method.
 
 Benchmarks
 ==========
@@ -110,7 +125,7 @@ with different data structures (under Python 2.7):
 
 * list(unicode words) : about 300M
 * BaseTrie from datrie_ library: about 70M
-* marisa_trie.Trie: 7M
+* ``marisa_trie.Trie``: 7M
 
 .. note::
 
@@ -125,8 +140,6 @@ macbook air i5 1.8 Ghz)::
     trie __contains__ (hits):       0.887M ops/sec
     dict __contains__ (misses):     3.234M ops/sec
     trie __contains__ (misses):     1.529M ops/sec
-    dict __len__:                   599186.286 ops/sec
-    trie __len__:                   433893.517 ops/sec
     dict keys():                    215.424 ops/sec
     trie keys():                    3.425 ops/sec
     trie.iter_prefixes (hits):      0.169M ops/sec
@@ -179,11 +192,12 @@ from the source checkout. Tests should pass under python 2.6, 2.7, 3.2 and 3.3.
     (of the env you run tox from) and place an sdist zip/tarball of the newer
     pip (from github) there.
 
+In order to run benchmarks, run
+
 ::
 
     $ tox -c bench.ini
 
-runs benchmarks.
 
 .. _cython: http://cython.org
 .. _tox: http://tox.testrun.org

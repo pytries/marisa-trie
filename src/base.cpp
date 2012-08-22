@@ -271,17 +271,9 @@
 #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
-#define __PYX_HAVE__trie
-#define __PYX_HAVE_API__trie
-#include "../lib/marisa/query.h"
-#include "../lib/marisa/key.h"
-#include "../lib/marisa/keyset.h"
-#include "../lib/marisa/agent.h"
-#include "ios"
-#include "new"
-#include "stdexcept"
-#include "typeinfo"
-#include "../lib/marisa/trie.h"
+#define __PYX_HAVE__base
+#define __PYX_HAVE_API__base
+#include "../lib/marisa/base.h"
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -368,7 +360,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "trie.pxd",
+  "base.pxd",
 };
 
 /*--- Type declarations ---*/
@@ -426,8 +418,6 @@ static const char *__pyx_f[] = {
 #define __Pyx_CLEAR(r)    do { PyObject* tmp = ((PyObject*)(r)); r = NULL; __Pyx_DECREF(tmp);} while(0)
 #define __Pyx_XCLEAR(r)   do { if((r) != NULL) {PyObject* tmp = ((PyObject*)(r)); r = NULL; __Pyx_DECREF(tmp);}} while(0)
 
-static PyObject *__Pyx_GetName(PyObject *dict, PyObject *name); /*proto*/
-
 static CYTHON_INLINE unsigned char __Pyx_PyInt_AsUnsignedChar(PyObject *);
 
 static CYTHON_INLINE unsigned short __Pyx_PyInt_AsUnsignedShort(PyObject *);
@@ -482,24 +472,13 @@ static void __Pyx_AddTraceback(const char *funcname, int c_line,
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t); /*proto*/
 
 
-/* Module declarations from 'query' */
+/* Module declarations from 'base' */
+#define __Pyx_MODULE_NAME "base"
+int __pyx_module_is_main_base = 0;
 
-/* Module declarations from 'key' */
-
-/* Module declarations from 'keyset' */
-
-/* Module declarations from 'agent' */
-
-/* Module declarations from 'trie' */
-#define __Pyx_MODULE_NAME "trie"
-int __pyx_module_is_main_trie = 0;
-
-/* Implementation of 'trie' */
-static PyObject *__pyx_builtin_KeyError;
-static char __pyx_k__KeyError[] = "KeyError";
+/* Implementation of 'base' */
 static char __pyx_k____main__[] = "__main__";
 static char __pyx_k____test__[] = "__test__";
-static PyObject *__pyx_n_s__KeyError;
 static PyObject *__pyx_n_s____main__;
 static PyObject *__pyx_n_s____test__;
 
@@ -510,7 +489,7 @@ static PyMethodDef __pyx_methods[] = {
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef __pyx_moduledef = {
     PyModuleDef_HEAD_INIT,
-    __Pyx_NAMESTR("trie"),
+    __Pyx_NAMESTR("base"),
     0, /* m_doc */
     -1, /* m_size */
     __pyx_methods /* m_methods */,
@@ -522,16 +501,12 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
-  {&__pyx_n_s__KeyError, __pyx_k__KeyError, sizeof(__pyx_k__KeyError), 0, 0, 1, 1},
   {&__pyx_n_s____main__, __pyx_k____main__, sizeof(__pyx_k____main__), 0, 0, 1, 1},
   {&__pyx_n_s____test__, __pyx_k____test__, sizeof(__pyx_k____test__), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_KeyError = __Pyx_GetName(__pyx_b, __pyx_n_s__KeyError); if (!__pyx_builtin_KeyError) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   return 0;
-  __pyx_L1_error:;
-  return -1;
 }
 
 static int __Pyx_InitCachedConstants(void) {
@@ -549,11 +524,11 @@ static int __Pyx_InitGlobals(void) {
 }
 
 #if PY_MAJOR_VERSION < 3
-PyMODINIT_FUNC inittrie(void); /*proto*/
-PyMODINIT_FUNC inittrie(void)
+PyMODINIT_FUNC initbase(void); /*proto*/
+PyMODINIT_FUNC initbase(void)
 #else
-PyMODINIT_FUNC PyInit_trie(void); /*proto*/
-PyMODINIT_FUNC PyInit_trie(void)
+PyMODINIT_FUNC PyInit_base(void); /*proto*/
+PyMODINIT_FUNC PyInit_base(void)
 #endif
 {
   PyObject *__pyx_t_1 = NULL;
@@ -567,7 +542,7 @@ PyMODINIT_FUNC PyInit_trie(void)
           Py_FatalError("failed to import 'refnanny' module");
   }
   #endif
-  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_trie(void)", 0);
+  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_base(void)", 0);
   if ( __Pyx_check_binary_version() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -589,7 +564,7 @@ PyMODINIT_FUNC PyInit_trie(void)
   #endif
   /*--- Module creation code ---*/
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4(__Pyx_NAMESTR("trie"), __pyx_methods, 0, 0, PYTHON_API_VERSION);
+  __pyx_m = Py_InitModule4(__Pyx_NAMESTR("base"), __pyx_methods, 0, 0, PYTHON_API_VERSION);
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
@@ -605,7 +580,7 @@ PyMODINIT_FUNC PyInit_trie(void)
   if (__Pyx_SetAttrString(__pyx_m, "__builtins__", __pyx_b) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   /*--- Initialize various global constants etc. ---*/
   if (unlikely(__Pyx_InitGlobals() < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (__pyx_module_is_main_trie) {
+  if (__pyx_module_is_main_base) {
     if (__Pyx_SetAttrString(__pyx_m, "__name__", __pyx_n_s____main__) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   /*--- Builtin init code ---*/
@@ -621,10 +596,10 @@ PyMODINIT_FUNC PyInit_trie(void)
   /*--- Function import code ---*/
   /*--- Execution code ---*/
 
-  /* "trie.pxd":1
- * cimport keyset             # <<<<<<<<<<<<<<
- * cimport agent
+  /* "base.pxd":1
+ * cdef extern from "../lib/marisa/base.h":             # <<<<<<<<<<<<<<
  * 
+ *     # A dictionary consists of 3 tries in default. Usually more tries make a
  */
   __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(((PyObject *)__pyx_t_1));
@@ -634,10 +609,10 @@ PyMODINIT_FUNC PyInit_trie(void)
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   if (__pyx_m) {
-    __Pyx_AddTraceback("init trie", __pyx_clineno, __pyx_lineno, __pyx_filename);
+    __Pyx_AddTraceback("init base", __pyx_clineno, __pyx_lineno, __pyx_filename);
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init trie");
+    PyErr_SetString(PyExc_ImportError, "init base");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -664,21 +639,6 @@ end:
     return (__Pyx_RefNannyAPIStruct *)r;
 }
 #endif /* CYTHON_REFNANNY */
-
-static PyObject *__Pyx_GetName(PyObject *dict, PyObject *name) {
-    PyObject *result;
-    result = PyObject_GetAttr(dict, name);
-    if (!result) {
-        if (dict != __pyx_b) {
-            PyErr_Clear();
-            result = PyObject_GetAttr(__pyx_b, name);
-        }
-        if (!result) {
-            PyErr_SetObject(PyExc_NameError, name);
-        }
-    }
-    return result;
-}
 
 static CYTHON_INLINE unsigned char __Pyx_PyInt_AsUnsignedChar(PyObject* x) {
     const unsigned char neg_one = (unsigned char)-1, const_zero = 0;

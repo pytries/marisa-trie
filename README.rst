@@ -1,7 +1,7 @@
 marisa-trie
 ===========
 
-Static memory-efficient Trie structure for Python (2.x and 3.x).
+Static memory-efficient Trie structures for Python (2.x and 3.x).
 Uses `marisa-trie`_ C++ library.
 
 There are official SWIG-based Python bindings included
@@ -20,17 +20,20 @@ Installation
 Usage
 =====
 
-.. warning::
+There are several Trie classes in this package:
 
-    API may change in future; this project is in alpha stage!
+* ``marisa_trie.Trie`` - read-only trie-based data structure that maps
+  unicode keys to auto-generated unique IDs and supports exact lookups,
+  prefix lookups and searching for all prefixes of a given key;
 
+* ``marisa_trie.RecordTrie`` - read-only trie-based data structure that
+  maps unicode keys to lists of data tuples. All tuples must be of the
+  same format (the data is packed with using python ``struct`` module).
+  ``RecordTrie`` supports exact and prefix lookups.
 
-There are several Trie classes:
-
-* ``marisa_trie.Trie`` - read-only Trie that maps unicode keys to
-  auto-generated unique IDs and supports exact and prefix lookups;
 * ``marisa_trie.BytesTrie`` - read-only Trie that maps unicode
-  keys to lists of ``bytes`` objects.
+  keys to lists of ``bytes`` objects.  ``BytesTrie`` supports exact
+  and prefix lookups.
 
 
 marisa_trie.Trie
@@ -75,15 +78,59 @@ Find all keys from this trie that starts with a given prefix::
 
 (iterator version ``.iterkeys(prefix)`` is also available).
 
-marisa_trie.BytesTrie
----------------------
+marisa_trie.RecordTrie
+----------------------
 
-TODO
+Create a new trie::
+
+    >>> keys = [u'foo', u'bar', u'foobar', u'foo']
+    >>> values = [(1, 2), (2, 1), (3, 3), (2, 1)]
+    >>> fmt = "<HH"   # a tuple with 2 short integers
+    >>> trie = marisa_trie.RecordTrie(fmt, zip(keys, values))
+
+Trie initial data must be an iterable of tuples ``(unicode_key, data_tuple)``.
+Data tuples will be converted to bytes with ``struct.pack(fmt, *data_tuple)``.
+
+Take a look at http://docs.python.org/library/struct.html#format-strings
+for the format string specification.
+
+Duplicate keys are allowed.
+
+Check if key is in trie::
+
+    >>> u'foo' in trie
+    True
+    >>> u'spam' in trie
+    False
+
+Get a values list::
+
+    >>> trie[u'bar']
+    [(2, 1)]
+    >>> trie[u'foo']
+    [(1, 2), (2, 1)]
+
+Find all keys from this trie that starts with a given prefix::
+
+    >> trie.keys(u'fo')
+    [u'foo', u'foo', u'foobar']
+
+Find all items from this trie that starts with a given prefix::
+
+    >> trie.items(u'fo')
+    [(u'foo', (1, 2)), (u'foo', (2, 1), (u'foobar', (3, 3))]
+
+
+.. note::
+
+    Iterator version of ``.keys()`` and ``.items()`` are not implemented yet.
+
 
 Persistence
 -----------
 
-Trie objects supports saving, loading and pickling.
+Trie objects supports saving/loading, pickling/unpickling
+and memory mapped I/O.
 
 Write trie to a stream::
 
@@ -96,7 +143,7 @@ Save trie to a file::
 
 Read trie from stream::
 
-    >>> trie2 = marisa.Trie()
+    >>> trie2 = marisa_trie.Trie()
     >>> with open('my_trie.marisa', 'r') as f:
     ...     trie.read(f)
 
@@ -116,6 +163,23 @@ utility (provided by underlying C++ library; it should be downloaded and
 compiled separately) and then load the trie from the resulting file
 using ``.load()`` method.
 
+Memory mapped I/O
+-----------------
+
+It is possible to use memory mapped file as data source::
+
+    >>> trie = marisa_trie.RecordTrie(fmt)
+    >>> trie.mmap('my_record_trie.marisa')
+
+This way the whole dictionary won't be loaded to memory; memory
+mapped I/O is an easy way to share dictionary data among processes.
+
+.. warning::
+
+    Memory mapped trie might cause a lot of random disk accesses which
+    considerably increase the search time.
+
+
 Benchmarks
 ==========
 
@@ -125,34 +189,58 @@ with different data structures (under Python 2.7):
 
 * list(unicode words) : about 300M
 * BaseTrie from datrie_ library: about 70M
+* ``marisa_trie.RecordTrie`` : 11M
 * ``marisa_trie.Trie``: 7M
+
 
 .. note::
 
-    This is not a fair comparison because ``datrie.BaseTrie`` is able to
-    store arbitrary integers as values and ``marisa_trie.Trie`` uses
-    auto-assigned IDs.
+    Lengths of words were stored as values in ``datrie.BaseTrie``
+    and ``marisa_trie.RecordTrie``. ``RecordTrie`` compresses
+    similar values and the key compression is better so it uses
+    much less memory than ``datrie.BaseTrie``.
 
-Some speed data for ``marisa_trie.Trie`` (100k unicode words, Python 3.2,
-macbook air i5 1.8 Ghz)::
+    ``marisa_trie.Trie`` provides auto-assigned IDs. It is not possible
+    to store arbitrary values in ``marisa_trie.Trie`` so it uses less
+    memory than ``RecordTrie``.
 
-    dict __contains__ (hits):       4.147M ops/sec
-    trie __contains__ (hits):       0.887M ops/sec
-    dict __contains__ (misses):     3.234M ops/sec
-    trie __contains__ (misses):     1.529M ops/sec
-    dict keys():                    215.424 ops/sec
-    trie keys():                    3.425 ops/sec
-    trie.iter_prefixes (hits):      0.169M ops/sec
-    trie.iter_prefixes (misses):    0.822M ops/sec
-    trie.iter_prefixes (mixed):     0.747M ops/sec
+Some speed data for ``marisa_trie.Trie`` (100k unicode words,
+integer values (lenghts of the words), Python 3.2, macbook air i5 1.8 Ghz)::
 
-    trie.keys(prefix="xxx"), avg_len(res)==415:         0.840K ops/sec
-    trie.keys(prefix="xxxxx"), avg_len(res)==17:        19.172K ops/sec
-    trie.keys(prefix="xxxxxxxx"), avg_len(res)==3:      82.777K ops/sec
-    trie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4:   131.348K ops/sec
-    trie.keys(prefix="xxx"), NON_EXISTING:              1027.093K ops/sec
+    dict __getitem__ (hits):            4.090M ops/sec
+    Trie __getitem__ (hits):            not supported
+    BytesTrie __getitem__ (hits):       0.469M ops/sec
+    RecordTrie __getitem__ (hits):      0.373M ops/sec
+    dict __contains__ (hits):           4.036M ops/sec
+    Trie __contains__ (hits):           0.910M ops/sec
+    BytesTrie __contains__ (hits):      0.573M ops/sec
+    RecordTrie __contains__ (hits):     0.591M ops/sec
+    dict __contains__ (misses):         3.346M ops/sec
+    Trie __contains__ (misses):         1.643M ops/sec
+    BytesTrie __contains__ (misses):    0.976M ops/sec
+    RecordTrie __contains__ (misses):   1.017M ops/sec
+    dict items():                       58.316 ops/sec
+    Trie items():                       not supported
+    BytesTrie items():                  2.456 ops/sec
+    RecordTrie items():                 2.254 ops/sec
+    dict keys():                        211.194 ops/sec
+    Trie keys():                        3.341 ops/sec
+    BytesTrie keys():                   2.308 ops/sec
+    RecordTrie keys():                  2.184 ops/sec
+    Trie.prefixes (hits):               0.176M ops/sec
+    Trie.prefixes (mixed):              0.956M ops/sec
+    Trie.prefixes (misses):             1.035M ops/sec
+    Trie.iter_prefixes (hits):          0.170M ops/sec
+    Trie.iter_prefixes (mixed):         0.799M ops/sec
+    Trie.iter_prefixes (misses):        0.898M ops/sec
+    Trie.keys(prefix="xxx"), avg_len(res)==415:         0.825K ops/sec
+    Trie.keys(prefix="xxxxx"), avg_len(res)==17:        19.934K ops/sec
+    Trie.keys(prefix="xxxxxxxx"), avg_len(res)==3:      85.239K ops/sec
+    Trie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4:   136.476K ops/sec
+    Trie.keys(prefix="xxx"), NON_EXISTING:              1073.719K ops/sec
 
-So ``marisa_trie.Trie`` uses less memory, ``datrie.Trie`` is faster.
+Tries from ``marisa_trie`` uses less memory, tries from
+``datrie.Trie`` are faster.
 
 .. _datrie: https://github.com/kmike/datrie
 
@@ -192,7 +280,7 @@ from the source checkout. Tests should pass under python 2.6, 2.7, 3.2 and 3.3.
     (of the env you run tox from) and place an sdist zip/tarball of the newer
     pip (from github) there.
 
-In order to run benchmarks, run
+In order to run benchmarks, type
 
 ::
 

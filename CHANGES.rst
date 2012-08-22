@@ -5,8 +5,8 @@ CHANGES
 dev (TBA)
 ---------
 
+* BytesTrie and RecordTrie are introduced;
 * IntTrie class is removed (probably temporary);
-* BytesTrie is introduced;
 * dumps/loads methods are renamed to tobytes/frombytes;
 * benchmark & tests improvements;
 * support for MARISA-trie config options is added.

@@ -47,6 +47,10 @@ PREFIXES_8_1k = prefixes1k(WORDS100k, 8)
 PREFIXES_15_1k = prefixes1k(WORDS100k, 15)
 
 
+def format_result(key, value):
+    print("%55s:    %s" % (key, value))
+
+
 def bench(name, timer, descr='M ops/sec', op_count=0.1, repeats=3, runs=5):
     times = []
     for x in range(runs):
@@ -55,11 +59,8 @@ def bench(name, timer, descr='M ops/sec', op_count=0.1, repeats=3, runs=5):
     def op_time(time):
         return op_count*repeats / time
 
-    print("%55s:    %0.3f%s" % (
-        name,
-        op_time(min(times)),
-        descr,
-    ))
+    val = "%0.3f%s" % (op_time(min(times)), descr)
+    format_result(name, val)
 
 def create_trie():
     words = words100k()
@@ -67,44 +68,57 @@ def create_trie():
 
 def create_bytes_trie():
     words = words100k()
-    values = [struct.pack(str('=H'), len(word)) for word in words]
+    values = [struct.pack(str('<H'), len(word)) for word in words]
     return marisa_trie.BytesTrie(zip(words, values))
+
+def create_record_trie():
+    words = words100k()
+    values = [ [len(word)] for word in words]
+    return marisa_trie.RecordTrie(str('<H'), zip(words, values))
+
 
 def benchmark():
     print('\n====== Benchmarks (100k unique unicode words) =======\n')
 
     tests = [
-        #('__getitem__ (hits)', "for word in WORDS100k: data[word]", 'M ops/sec', 0.1, 3),
+        ('__getitem__ (hits)', "for word in WORDS100k: data[word]", 'M ops/sec', 0.1, 3),
         ('__contains__ (hits)', "for word in WORDS100k: word in data", 'M ops/sec', 0.1, 3),
         ('__contains__ (misses)', "for word in NON_WORDS100k: word in data", 'M ops/sec', 0.1, 3),
         #('__setitem__ (updates)', 'for word in WORDS100k: data[word]=1', 'M ops/sec',0.1, 3),
         #('__setitem__ (inserts)', 'for word in NON_WORDS_10k: data[word]=1', 'M ops/sec',0.01, 3),
         #('setdefault (updates)', 'for word in WORDS100k: data.setdefault(word, 1)', 'M ops/sec', 0.1, 3),
         #('setdefault (inserts)', 'for word in  NON_WORDS_10k: data.setdefault(word, 1)', 'M ops/sec', 0.01, 3),
-#        ('items()', 'list(data.items())', ' ops/sec', 1, 1),
+        ('items()', 'list(data.items())', ' ops/sec', 1, 1),
         ('keys()', 'list(data.keys())', ' ops/sec', 1, 1),
 #        ('values()', 'list(data.values())', ' ops/sec', 1, 1),
     ]
 
     common_setup = """
-from __main__ import create_trie, create_bytes_trie, WORDS100k, NON_WORDS100k, MIXED_WORDS100k
+from __main__ import create_trie, create_bytes_trie, create_record_trie
+from __main__ import WORDS100k, NON_WORDS100k, MIXED_WORDS100k
 from __main__ import PREFIXES_3_1k, PREFIXES_5_1k, PREFIXES_8_1k, PREFIXES_15_1k
 NON_WORDS_10k = NON_WORDS100k[:10000]
 NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
 """
-    dict_setup = common_setup + 'data = dict((word, 1) for word in WORDS100k);'
+    dict_setup = common_setup + 'data = dict((word, len(word)) for word in WORDS100k);'
     trie_setup = common_setup + 'data = create_trie();'
     bytes_trie_setup = common_setup + 'data = create_bytes_trie();'
+    record_trie_setup = common_setup + 'data = create_record_trie();'
 
     structures = [
         ('dict', dict_setup),
         ('Trie', trie_setup),
         ('BytesTrie', bytes_trie_setup),
+        ('RecordTrie', record_trie_setup),
     ]
     for test_name, test, descr, op_count, repeats in tests:
         for name, setup in structures:
             timer = timeit.Timer(test, setup)
-            bench("%s %s" % (name, test_name), timer, descr, op_count, repeats)
+            full_test_name = "%s %s" % (name, test_name)
+            try:
+                bench(full_test_name, timer, descr, op_count, repeats)
+            except (TypeError, AttributeError):
+                format_result(full_test_name, "not supported")
 
 
     # trie-specific benchmarks
@@ -117,7 +131,7 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
     for meth in ['prefixes', 'iter_prefixes']:
         for name, data in _bench_data:
             bench(
-                'trie.%s (%s)' % (meth, name),
+                'Trie.%s (%s)' % (meth, name),
                 timeit.Timer(
                     "for word in %s:\n"
                     "   for it in data.%s(word): pass" % (data, meth),
@@ -135,7 +149,7 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
     for xxx, avg, data in _bench_data:
         for meth in ['keys']: #('items', 'keys', 'values'):
             bench(
-                'trie.%s(prefix="%s"), %s' % (meth, xxx, avg),
+                'Trie.%s(prefix="%s"), %s' % (meth, xxx, avg),
                 timeit.Timer(
                     "for word in %s: data.%s(word)" % (data, meth),
                     trie_setup

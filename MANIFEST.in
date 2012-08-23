@@ -7,3 +7,5 @@ include lib/COPYING
 
 recursive-include src *.cpp *.pxd *.pyx
 recursive-include lib/marisa *.h *.cc
+recursive-include tests *.py
+recursive-include bench *.py

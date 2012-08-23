@@ -16,7 +16,7 @@ MARISA_FILES = list(itertools.chain(*(glob.glob(path) for path in MARISA_FILES))
 
 setup(
     name="marisa-trie",
-    version="0.2",
+    version="0.3",
     description="Python bindings to marisa-trie (unofficial)",
     long_description = open('README.rst').read() + open('CHANGES.rst').read(),
     author='Mikhail Korobov',

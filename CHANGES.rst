@@ -2,6 +2,11 @@
 CHANGES
 =======
 
+0.3.1 (2012-08-23)
+------------------
+
+* ``.prefixes()`` support for RecordTrie and BytesTrie.
+
 0.3 (2012-08-23)
 ----------------
 

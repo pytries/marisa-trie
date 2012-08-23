@@ -329,6 +329,32 @@ cdef class BytesTrie(_Trie):
         ag.set_query(_key)
         return self._trie.predictive_search(ag)
 
+    cpdef list prefixes(self, unicode key):
+        """
+        Returns a list with all prefixes of a given key.
+        """
+
+        # XXX: is there a char-walking API in libmarisa?
+        # This implementation is suboptimal.
+
+        cdef agent.Agent ag
+        cdef list res = []
+        cdef int key_len = len(key)
+        cdef unicode prefix
+        cdef bytes b_prefix
+        cdef int ind = 1
+
+        while ind <= key_len:
+            prefix = key[:ind]
+            b_prefix = prefix.encode('utf8') + _VALUE_SEPARATOR
+            ag.set_query(b_prefix)
+            if self._trie.predictive_search(ag):
+                res.append(prefix)
+
+            ind += 1
+
+        return res
+
 
     def __getitem__(self, key):
         cdef list res

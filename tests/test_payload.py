@@ -112,3 +112,15 @@ class TestRecordTrie(object):
         trie = marisa_trie.RecordTrie(fmt, data)
 
         assert set(trie.items()) == set(data)
+
+    def test_prefixes(self):
+        trie = marisa_trie.RecordTrie(str("<H"), [
+            ('foo', [1]),
+            ('bar',  [2]),
+            ('foobar', [3]),
+        ])
+        assert trie.prefixes('foo') == ['foo']
+        assert trie.prefixes('foobar') == ['foo', 'foobar']
+        assert trie.prefixes('bara') == ['bar']
+        assert trie.prefixes('f') == []
+

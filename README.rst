@@ -23,8 +23,8 @@ Usage
 There are several Trie classes in this package:
 
 * ``marisa_trie.Trie`` - read-only trie-based data structure that maps
-  unicode keys to auto-generated unique IDs and supports exact lookups,
-  prefix lookups and searching for all prefixes of a given key;
+  unicode keys to auto-generated unique IDs and supports exact and prefix
+  lookups;
 
 * ``marisa_trie.RecordTrie`` - read-only trie-based data structure that
   maps unicode keys to lists of data tuples. All tuples must be of the
@@ -109,6 +109,11 @@ Get a values list::
     [(2, 1)]
     >>> trie[u'foo']
     [(1, 2), (2, 1)]
+
+Find all prefixes of a given key::
+
+    >>> trie.prefixes(u'foobarz')
+    [u'foo', u'foobar']
 
 Find all keys from this trie that starts with a given prefix::
 
@@ -230,6 +235,9 @@ Python 3.2, macbook air i5 1.8 Ghz)::
     Trie.prefixes (hits):               0.176M ops/sec
     Trie.prefixes (mixed):              0.956M ops/sec
     Trie.prefixes (misses):             1.035M ops/sec
+    RecordTrie.prefixes (hits):         0.106M ops/sec
+    RecordTrie.prefixes (mixed):        0.451M ops/sec
+    RecordTrie.prefixes (misses):       0.173M ops/sec
     Trie.iter_prefixes (hits):          0.170M ops/sec
     Trie.iter_prefixes (mixed):         0.799M ops/sec
     Trie.iter_prefixes (misses):        0.898M ops/sec

@@ -1,8 +1,5 @@
+# cython: profile=False
 from __future__ import unicode_literals
-#from cython cimport view
-#cimport cpython.array
-#import array
-#from libc.stdlib cimport free, malloc
 
 from std_iostream cimport stringstream, istream, ostream
 cimport keyset
@@ -419,8 +416,29 @@ cdef class BytesTrie(_Trie):
         return list(keys)
 
 
+cdef class _UnpackTrie(BytesTrie):
 
-cdef class RecordTrie(BytesTrie):
+    def __init__(self, arg=None, **options):
+        keys = ((d[0], self._pack(d[1])) for d in (arg or []))
+        super(_UnpackTrie, self).__init__(keys, **options)
+
+    cdef _unpack(self, bytes value):
+        return value
+
+    cdef bytes _pack(self, value):
+        return value
+
+    cpdef list b_get_value(self, bytes key):
+        cdef list values = BytesTrie.b_get_value(self, key)
+        return [self._unpack(val) for val in values]
+
+    cpdef list items(self, unicode prefix=""):
+        cdef list items = BytesTrie.items(self, prefix)
+        return [(key, self._unpack(val)) for (key, val) in items]
+
+
+
+cdef class RecordTrie(_UnpackTrie):
     """
     This class implements read-only Trie-based
     {unicode -> list of tuples} mapping where all tuples are of the
@@ -449,16 +467,11 @@ cdef class RecordTrie(BytesTrie):
         format string specification.
         """
         self._struct = struct.Struct(str(fmt))
+        super(RecordTrie, self).__init__(arg, **options)
 
-        keys = ((d[0], self._struct.pack(*d[1])) for d in (arg or []))
-        super(RecordTrie, self).__init__(keys, **options)
+    cdef _unpack(self, bytes value):
+        return self._struct.unpack(value)
 
+    cdef bytes _pack(self, value):
+        return self._struct.pack(*value)
 
-    cpdef list b_get_value(self, bytes key):
-        cdef list values = BytesTrie.b_get_value(self, key)
-        return [self._struct.unpack(val) for val in values]
-
-
-    cpdef list items(self, unicode prefix=""):
-        cdef list items = BytesTrie.items(self, prefix)
-        return [(key, self._struct.unpack(val)) for (key, val) in items]

@@ -130,6 +130,7 @@ cdef class _Trie:
         file-like objects are not supported.
         """
         self._trie.read(f.fileno())
+        return self
 
     def write(self, f):
         """
@@ -149,6 +150,7 @@ cdef class _Trie:
         """ Loads trie from a file. """
         with open(path, 'r') as f:
             self.read(f)
+        return self
 
     cpdef bytes tobytes(self) except +:
         """
@@ -187,6 +189,7 @@ cdef class _Trie:
         str_path = path.encode(sys.getfilesystemencoding())
         cdef char* c_path = str_path
         self._trie.mmap(c_path)
+        return self
 
     cpdef list keys(self, unicode prefix=""):
         """

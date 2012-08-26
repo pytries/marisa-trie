@@ -16,8 +16,8 @@ MARISA_FILES = list(itertools.chain(*(glob.glob(path) for path in MARISA_FILES))
 
 setup(
     name="marisa-trie",
-    version="0.3.1",
-    description="Python bindings to marisa-trie (unofficial)",
+    version="0.3.2",
+    description="Static memory-efficient & fast Trie structures for Python (based on marisa-trie C++ library)",
     long_description = open('README.rst').read() + open('CHANGES.rst').read(),
     author='Mikhail Korobov',
     author_email='kmike84@gmail.com',
@@ -44,7 +44,6 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Scientific/Engineering :: Information Analysis',

@@ -124,3 +124,4 @@ class TestRecordTrie(object):
         assert trie.prefixes('bara') == ['bar']
         assert trie.prefixes('f') == []
 
+

@@ -2,6 +2,14 @@
 CHANGES
 =======
 
+0.3.2 (2012-08-25)
+------------------
+
+* Small code cleanup;
+* ``load``, ``read`` and ``mmap`` methods returns 'self';
+* I can't run tests (via tox) under Python 3.3 so it is
+  removed from supported versions for now.
+
 0.3.1 (2012-08-23)
 ------------------
 

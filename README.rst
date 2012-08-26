@@ -130,6 +130,18 @@ Find all items from this trie that starts with a given prefix::
 
     Iterator version of ``.keys()`` and ``.items()`` are not implemented yet.
 
+marisa_trie.BytesTrie
+---------------------
+
+``BytesTrie`` is similar to ``RecordTrie``, but the values are raw bytes,
+not tuples::
+
+    >>> keys = [u'foo', u'bar', u'foobar', u'foo']
+    >>> values = [b'foo-value', b'bar-value', b'foobar-value', b'foo-value2']
+    >>> trie = marisa_trie.BytesTrie(zip(keys, values))
+    >>> trie[u'bar']
+    [b'bar-value']
+
 
 Persistence
 -----------
@@ -183,6 +195,22 @@ mapped I/O is an easy way to share dictionary data among processes.
 
     Memory mapped trie might cause a lot of random disk accesses which
     considerably increase the search time.
+
+Trie storage options
+--------------------
+
+`marisa-trie`_ C++ library provides some configuration options for trie storage;
+check http://marisa-trie.googlecode.com/svn/trunk/docs/readme.en.html page
+(scroll down to "Enumeration Constants" section) to get an idea.
+
+These options are exposed as ``order``, ``num_tries``, ``cache_size``
+and ``binary`` keyword arguments for trie constructors.
+
+For example, set ``order`` to ``marisa_trie.LABEL_ORDER`` in order to
+make trie functions return results in alphabetical oder::
+
+    >>> trie = marisa_trie.RecordTrie(fmt, data, order=marisa_trie.LABEL_ORDER)
+
 
 
 Benchmarks
@@ -249,7 +277,7 @@ Python 3.2, macbook air i5 1.8 Ghz)::
 
 
 Tries from ``marisa_trie`` uses less memory, tries from
-``datrie.Trie`` are faster.
+`datrie`_ are faster.
 
 Please take this benchmark results with a grain of salt; this
 is a very simple benchmark on a single data set.
@@ -282,7 +310,7 @@ Make sure `tox`_ is installed and run
 
     $ tox
 
-from the source checkout. Tests should pass under python 2.6, 2.7, 3.2 and 3.3.
+from the source checkout. Tests should pass under python 2.6, 2.7, 3.2.
 
 .. note::
 

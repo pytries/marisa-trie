@@ -357,6 +357,16 @@ cdef class BytesTrie(_Trie):
 
 
     def __getitem__(self, key):
+        cdef list res = self.get(key)
+        if res is None:
+            raise KeyError(key)
+        return res
+
+    cpdef get(self, key, default=None):
+        """
+        Returns a list of payloads (as byte objects) for a given key
+        or ``default`` if the key is not found.
+        """
         cdef list res
 
         if isinstance(key, unicode):
@@ -365,7 +375,7 @@ cdef class BytesTrie(_Trie):
             res = self.b_get_value(key)
 
         if not res:
-            raise KeyError(key)
+            return default
         return res
 
 

@@ -124,4 +124,16 @@ class TestRecordTrie(object):
         assert trie.prefixes('bara') == ['bar']
         assert trie.prefixes('f') == []
 
+    def test_get(self):
+        trie = marisa_trie.RecordTrie(str("<H"), [
+            ('foo', [1]),
+            ('bar',  [2]),
+            ('foobar', [3]),
+        ])
+
+        assert trie.get('foo') == [(1,)]
+        assert trie.get('foo', [(55,)]) == [(1,)]
+        assert trie.get('FOO') is None
+        assert trie.get('FOO', [(55,)]) == [(55,)]
+        assert trie.get('FOO', 123) == 123
 

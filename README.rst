@@ -109,6 +109,11 @@ Get a values list::
     [(2, 1)]
     >>> trie[u'foo']
     [(1, 2), (2, 1)]
+    >>> trie.get(u'bar', 123)
+    [(2, 1)]
+    >>> trie.get(u'BAAR', 123) # default value
+    123
+
 
 Find all prefixes of a given key::
 
@@ -244,6 +249,16 @@ Python 3.2, macbook air i5 1.8 Ghz)::
     Trie __getitem__ (hits):            not supported
     BytesTrie __getitem__ (hits):       0.469M ops/sec
     RecordTrie __getitem__ (hits):      0.373M ops/sec
+
+    dict get() (hits):                  2.792M ops/sec
+    Trie get() (hits):                  not supported
+    BytesTrie get() (hits):             0.434M ops/sec
+    RecordTrie get() (hits):            0.369M ops/sec
+    dict get() (misses):                2.867M ops/sec
+    Trie get() (misses):                not supported
+    BytesTrie get() (misses):           0.817M ops/sec
+    RecordTrie get() (misses):          0.824M ops/sec
+
     dict __contains__ (hits):           4.036M ops/sec
     Trie __contains__ (hits):           0.910M ops/sec
     BytesTrie __contains__ (hits):      0.573M ops/sec
@@ -252,14 +267,17 @@ Python 3.2, macbook air i5 1.8 Ghz)::
     Trie __contains__ (misses):         1.643M ops/sec
     BytesTrie __contains__ (misses):    0.976M ops/sec
     RecordTrie __contains__ (misses):   1.017M ops/sec
+
     dict items():                       58.316 ops/sec
     Trie items():                       not supported
     BytesTrie items():                  2.456 ops/sec
     RecordTrie items():                 2.254 ops/sec
+
     dict keys():                        211.194 ops/sec
     Trie keys():                        3.341 ops/sec
     BytesTrie keys():                   2.308 ops/sec
     RecordTrie keys():                  2.184 ops/sec
+
     Trie.prefixes (hits):               0.176M ops/sec
     Trie.prefixes (mixed):              0.956M ops/sec
     Trie.prefixes (misses):             1.035M ops/sec
@@ -269,6 +287,7 @@ Python 3.2, macbook air i5 1.8 Ghz)::
     Trie.iter_prefixes (hits):          0.170M ops/sec
     Trie.iter_prefixes (mixed):         0.799M ops/sec
     Trie.iter_prefixes (misses):        0.898M ops/sec
+
     Trie.keys(prefix="xxx"), avg_len(res)==415:         0.825K ops/sec
     Trie.keys(prefix="xxxxx"), avg_len(res)==17:        19.934K ops/sec
     Trie.keys(prefix="xxxxxxxx"), avg_len(res)==3:      85.239K ops/sec
@@ -299,6 +318,21 @@ regular patches.
 
 If you found a bug in a C++ part please report it to the original
 `bug tracker <https://code.google.com/p/marisa-trie/issues/list>`_.
+
+How is source code organized (repo structure)
+---------------------------------------------
+
+There are 4 folders in repository:
+
+* ``bench`` - benchmarks & benchmark data;
+* ``lib`` - original unmodified `marisa-trie`_ C++ library which is bundled
+  for easier distribution; if something is have to be fixed in this library
+  consider fixing it in the `original repo <https://code.google.com/p/marisa-trie/>`_ ;
+* ``src`` - wrapper code; ``src/marisa_trie.pyx`` is a wrapper implementation;
+  ``src/*.pxd`` files are Cython headers for correcponding C++ headers;
+  ``src/*.cpp`` files are the pre-built extension code and shouldn't be
+  modified directly (they should be updated via ``update_cpp.sh`` script).
+* ``tests`` - the test suite.
 
 
 Running tests and benchmarks

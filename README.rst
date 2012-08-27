@@ -2,11 +2,18 @@ marisa-trie
 ===========
 
 Static memory-efficient Trie structures for Python (2.x and 3.x).
-Uses `marisa-trie`_ C++ library.
 
-There are official SWIG-based Python bindings included
-in C++ library distribution; this package provides an alternative
-unofficial Cython-based pip-installable Python bindings.
+String data in a MARISA-trie may take up to 50x-100x less memory than
+in a standard Python dict; the raw lookup speed is comparable; trie also
+provides fast advanced methods like prefix search.
+
+Based on `marisa-trie`_ C++ library.
+
+.. note::
+
+    There are official SWIG-based Python bindings included
+    in C++ library distribution; this package provides an alternative
+    Cython-based pip-installable Python bindings.
 
 .. _marisa-trie: https://code.google.com/p/marisa-trie/
 
@@ -190,8 +197,7 @@ Memory mapped I/O
 
 It is possible to use memory mapped file as data source::
 
-    >>> trie = marisa_trie.RecordTrie(fmt)
-    >>> trie.mmap('my_record_trie.marisa')
+    >>> trie = marisa_trie.RecordTrie(fmt).mmap('my_record_trie.marisa')
 
 This way the whole dictionary won't be loaded to memory; memory
 mapped I/O is an easy way to share dictionary data among processes.
@@ -225,6 +231,7 @@ My quick tests show that memory usage is quite decent.
 For a list of 3000000 (3 million) Russian words memory consumption
 with different data structures (under Python 2.7):
 
+* dict(unicode words -> word lenghts): about 600M
 * list(unicode words) : about 300M
 * BaseTrie from datrie_ library: about 70M
 * ``marisa_trie.RecordTrie`` : 11M

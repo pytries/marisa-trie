@@ -2,7 +2,13 @@
 CHANGES
 =======
 
-0.3.2 (2012-08-25)
+0.3.3 (2012-08-27)
+------------------
+
+* ``.get(key, default=None)`` method for ``BytesTrie`` and ``RecordTrie``;
+* small README improvements.
+
+0.3.2 (2012-08-26)
 ------------------
 
 * Small code cleanup;

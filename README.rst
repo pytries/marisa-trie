@@ -30,17 +30,14 @@ Usage
 There are several Trie classes in this package:
 
 * ``marisa_trie.Trie`` - read-only trie-based data structure that maps
-  unicode keys to auto-generated unique IDs and supports exact and prefix
-  lookups;
+  unicode keys to auto-generated unique IDs;
 
 * ``marisa_trie.RecordTrie`` - read-only trie-based data structure that
   maps unicode keys to lists of data tuples. All tuples must be of the
   same format (the data is packed with using python ``struct`` module).
-  ``RecordTrie`` supports exact and prefix lookups.
 
 * ``marisa_trie.BytesTrie`` - read-only Trie that maps unicode
-  keys to lists of ``bytes`` objects.  ``BytesTrie`` supports exact
-  and prefix lookups.
+  keys to lists of ``bytes`` objects.
 
 
 marisa_trie.Trie
@@ -310,6 +307,18 @@ is a very simple benchmark on a single data set.
 
 .. _datrie: https://github.com/kmike/datrie
 
+Current limitations
+===================
+
+* The library is known not to install on Windows with mingw32 compiler;
+* ``.prefixes()`` method implementation is sub-optimal;
+* ``read()`` and ``write()`` methods don't work with file-like objects
+  (they work only with real files; pickling works fine for file-like objects);
+* iterator versions of methods are not always implemented;
+* there are ``keys()`` and ``items()`` methods but no ``values()`` method.
+
+Contributions are welcome!
+
 Contributing
 ============
 
@@ -326,8 +335,8 @@ regular patches.
 If you found a bug in a C++ part please report it to the original
 `bug tracker <https://code.google.com/p/marisa-trie/issues/list>`_.
 
-How is source code organized (repo structure)
----------------------------------------------
+How is source code organized
+----------------------------
 
 There are 4 folders in repository:
 
@@ -336,7 +345,7 @@ There are 4 folders in repository:
   for easier distribution; if something is have to be fixed in this library
   consider fixing it in the `original repo <https://code.google.com/p/marisa-trie/>`_ ;
 * ``src`` - wrapper code; ``src/marisa_trie.pyx`` is a wrapper implementation;
-  ``src/*.pxd`` files are Cython headers for correcponding C++ headers;
+  ``src/*.pxd`` files are Cython headers for corresponding C++ headers;
   ``src/*.cpp`` files are the pre-built extension code and shouldn't be
   modified directly (they should be updated via ``update_cpp.sh`` script).
 * ``tests`` - the test suite.

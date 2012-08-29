@@ -2,6 +2,11 @@
 CHANGES
 =======
 
+0.3.4 (2012-08-29)
+------------------
+
+* Issues with mingw32 should be resolved (thanks Susumu Yata).
+
 0.3.3 (2012-08-27)
 ------------------
 

@@ -106,9 +106,19 @@ const void *Mapper::map_data(std::size_t size) {
 }
 
 #if (defined _WIN32) || (defined _WIN64)
+ #ifdef __MSVCRT_VERSION__
+  #if __MSVCRT_VERSION__ >= 0x0601
+   #define MARISA_HAS_STAT64
+  #endif  // __MSVCRT_VERSION__ >= 0x0601
+ #endif  // __MSVCRT_VERSION__
 void Mapper::open_(const char *filename) {
+ #ifdef MARISA_HAS_STAT64
   struct __stat64 st;
   MARISA_THROW_IF(::_stat64(filename, &st) != 0, MARISA_IO_ERROR);
+ #else  // MARISA_HAS_STAT64
+  struct _stat st;
+  MARISA_THROW_IF(::_stat(filename, &st) != 0, MARISA_IO_ERROR);
+ #endif  // MARISA_HAS_STAT64
   MARISA_THROW_IF((UInt64)st.st_size > MARISA_SIZE_MAX, MARISA_SIZE_ERROR);
   size_ = (std::size_t)st.st_size;
 

@@ -468,6 +468,7 @@ cdef class RecordTrie(_UnpackTrie):
     utf8-encoded keys and storing the result in MARISA-trie.
     """
     cdef _struct
+    cdef _fmt
 
     def __init__(self, fmt, arg=None, **options):
         """
@@ -479,6 +480,7 @@ cdef class RecordTrie(_UnpackTrie):
         http://docs.python.org/library/struct.html#format-strings for the
         format string specification.
         """
+        self._fmt = fmt
         self._struct = struct.Struct(str(fmt))
         super(RecordTrie, self).__init__(arg, **options)
 
@@ -488,3 +490,5 @@ cdef class RecordTrie(_UnpackTrie):
     cdef bytes _pack(self, value):
         return self._struct.pack(*value)
 
+    def __reduce__(self): # pickling support
+        return self.__class__, (self._fmt,), self.tobytes()

@@ -2,6 +2,8 @@
 from __future__ import absolute_import, unicode_literals
 
 import pytest
+import io
+import pickle
 
 import marisa_trie
 from .utils import get_random_words, get_random_binary
@@ -87,6 +89,20 @@ class TestBytesTrie(object):
         assert trie.items('food') == []
         assert trie.items('bar') == []
 
+    def test_pickling(self):
+        trie = marisa_trie.BytesTrie([
+            ('foo', b'foo'),
+            ('bar', b'bar'),
+        ])
+        buf = io.BytesIO()
+        pickle.dump(trie, buf)
+        buf.seek(0)
+
+        trie2 = pickle.load(buf)
+        assert trie2['foo'] == [b'foo']
+        assert trie2['bar'] == [b'bar']
+
+
 
 class TestRecordTrie(object):
 
@@ -136,4 +152,17 @@ class TestRecordTrie(object):
         assert trie.get('FOO') is None
         assert trie.get('FOO', [(55,)]) == [(55,)]
         assert trie.get('FOO', 123) == 123
+
+    def test_pickling(self):
+        trie = marisa_trie.RecordTrie(str("<H"), [
+            ('foo', [1]),
+            ('bar', [2]),
+        ])
+        buf = io.BytesIO()
+        pickle.dump(trie, buf)
+        buf.seek(0)
+
+        trie2 = pickle.load(buf)
+        assert trie2['foo'] == [(1,)]
+        assert trie2['bar'] == [(2,)]
 

@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+0.3.5 (2012-08-30)
+------------------
+
+* Pickling of RecordTrie is fixed (thanks lazarou for the report);
+* error messages should become more useful.
+
 0.3.4 (2012-08-29)
 ------------------
 

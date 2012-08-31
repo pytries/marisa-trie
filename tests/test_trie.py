@@ -126,6 +126,15 @@ def test_keys_prefix():
     assert trie.keys('foobarz') == []
 
 
+def test_invalid_file():
+    try:
+        marisa_trie.Trie().load(__file__)
+    except RuntimeError as e:
+        assert "MARISA_FORMAT_ERROR" in e.args[0]
+    else:
+        raise AssertionError("Exception is not raised")
+
+
 #def test_int_trie():
 #    data = {'foo': 10, 'f': 20, 'foobar':30, 'bar': 40}
 #    trie = marisa_trie.IntTrie().build(data)

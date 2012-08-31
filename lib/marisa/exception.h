@@ -2,6 +2,7 @@
 #define MARISA_EXCEPTION_H_
 
 #include <exception>
+
 #include "base.h"
 
 namespace marisa {
@@ -9,15 +10,16 @@ namespace marisa {
 // An exception object keeps a filename, a line number, an error code and an
 // error message. The message format is as follows:
 //  "__FILE__:__LINE__: error_code: error_message"
-class Exception: public std::exception {
+class Exception : public std::exception {
  public:
   Exception(const char *filename, int line,
       ErrorCode error_code, const char *error_message)
-      : filename_(filename), line_(line),
+      : std::exception(), filename_(filename), line_(line),
         error_code_(error_code), error_message_(error_message) {}
   Exception(const Exception &ex)
-      : filename_(ex.filename_), line_(ex.line_),
+      : std::exception(), filename_(ex.filename_), line_(ex.line_),
         error_code_(ex.error_code_), error_message_(ex.error_message_) {}
+  virtual ~Exception() throw() {}
 
   Exception &operator=(const Exception &rhs) {
     filename_ = rhs.filename_;

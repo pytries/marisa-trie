@@ -403,26 +403,49 @@ cdef class BytesTrie(_Trie):
 
     cpdef list items(self, unicode prefix=""):
         cdef bytes b_prefix = prefix.encode('utf8')
-        cdef bytes key, raw_key, value
+        cdef bytes value
+        cdef unicode key
+        cdef char* raw_key
         cdef list res = []
+        cdef int i, value_len
 
         cdef agent.Agent ag
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            raw_key = ag.key().ptr()[:ag.key().length()]
-            key, value = raw_key.split(_VALUE_SEPARATOR, 1)
+            raw_key = <char*>ag.key().ptr()
+
+            for i in range(0, ag.key().length()):
+                if raw_key[i] == _VALUE_SEPARATOR:
+                    break
+
+            key = raw_key[:i].decode('utf8')
+            value = raw_key[i+1:ag.key().length()]
+
             res.append(
-                (key.decode('utf8'), value)
+                (key, value)
             )
         return res
 
     cpdef list keys(self, unicode prefix=""):
-        items = self.items(prefix)
-        if not items:
-            return []
-        keys, values = zip(*items)
-        return list(keys)
+        cdef bytes b_prefix = prefix.encode('utf8')
+        cdef unicode key
+        cdef char* raw_key
+        cdef list res = []
+        cdef int i
+
+        cdef agent.Agent ag
+        ag.set_query(b_prefix)
+
+        while self._trie.predictive_search(ag):
+            raw_key = <char*>ag.key().ptr()
+
+            for i in range(0, ag.key().length()):
+                if raw_key[i] == _VALUE_SEPARATOR:
+                    key = raw_key[:i].decode('utf8')
+                    res.append(key)
+                    break
+        return res
 
 
 cdef class _UnpackTrie(BytesTrie):

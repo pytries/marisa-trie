@@ -6,7 +6,7 @@ CHANGES
 ------------------
 
 * much faster (3x-7x) ``.items()`` and ``.keys()`` methods for all tries;
-  faster (up to 3x) ``.prefixes()`` method for ``Trie``.h
+  faster (up to 3x) ``.prefixes()`` method for ``Trie``.
 
 0.3.5 (2012-08-30)
 ------------------

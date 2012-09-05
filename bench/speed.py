@@ -89,10 +89,6 @@ def benchmark():
         ('get() (misses)', "for word in NON_WORDS_10k: data.get(word)", 'M ops/sec', 0.01, 5),
         ('__contains__ (hits)', "for word in WORDS100k: word in data", 'M ops/sec', 0.1, 3),
         ('__contains__ (misses)', "for word in NON_WORDS100k: word in data", 'M ops/sec', 0.1, 3),
-        #('__setitem__ (updates)', 'for word in WORDS100k: data[word]=1', 'M ops/sec',0.1, 3),
-        #('__setitem__ (inserts)', 'for word in NON_WORDS_10k: data[word]=1', 'M ops/sec',0.01, 3),
-        #('setdefault (updates)', 'for word in WORDS100k: data.setdefault(word, 1)', 'M ops/sec', 0.1, 3),
-        #('setdefault (inserts)', 'for word in  NON_WORDS_10k: data.setdefault(word, 1)', 'M ops/sec', 0.01, 3),
         ('items()', 'list(data.items())', ' ops/sec', 1, 1),
         ('keys()', 'list(data.keys())', ' ops/sec', 1, 1),
 #        ('values()', 'list(data.values())', ' ops/sec', 1, 1),
@@ -156,7 +152,7 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
                     '%s.%s(prefix="%s"), %s' % (struct_name, meth, xxx, avg),
                     timeit.Timer(
                         "for word in %s: data.%s(word)" % (data, meth),
-                        trie_setup
+                        setup
                     ),
                     'K ops/sec',
                     op_count=1,

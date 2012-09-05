@@ -197,15 +197,15 @@ cdef class _Trie:
         """
         # non-generator inlined version of iterkeys()
         cdef list res = []
-        cdef bytes b_key
+        cdef unicode key
 
         cdef bytes b_prefix = prefix.encode('utf8')
         cdef agent.Agent ag
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            b_key = ag.key().ptr()[:ag.key().length()]
-            res.append(b_key.decode('utf8'))
+            key = ag.key().ptr()[:ag.key().length()].decode('utf8')
+            res.append(key)
 
         return res
 
@@ -236,8 +236,7 @@ cdef class Trie(_Trie):
              self._trie.reverse_lookup(ag)
          except KeyError:
              raise KeyError(index)
-         cdef bytes _key = ag.key().ptr()
-         return _key.decode('utf8')
+         return (<char*>ag.key().ptr()).decode('utf8')
 
      cdef int _key_id(self, char* key):
          cdef bint res
@@ -253,14 +252,12 @@ cdef class Trie(_Trie):
          Returns an iterator of all prefixes of a given key.
          """
          cdef agent.Agent ag
-         cdef bytes b_prefix
 
          cdef bytes b_key = key.encode('utf8')
          ag.set_query(b_key)
 
          while self._trie.common_prefix_search(ag):
-             b_prefix = ag.key().ptr()[:ag.key().length()]
-             yield b_prefix.decode('utf8')
+             yield ag.key().ptr()[:ag.key().length()].decode('utf8')
 
      def prefixes(self, unicode key):
          """
@@ -270,15 +267,15 @@ cdef class Trie(_Trie):
          # this an inlined version of ``list(self.iter_prefixes(key))``
 
          cdef agent.Agent ag
-         cdef bytes b_prefix
+         cdef unicode prefix
          cdef list res = []
 
          cdef bytes b_key = key.encode('utf8')
          ag.set_query(b_key)
 
          while self._trie.common_prefix_search(ag):
-             b_prefix = ag.key().ptr()[:ag.key().length()]
-             res.append(b_prefix.decode('utf8'))
+             prefix = ag.key().ptr()[:ag.key().length()].decode('utf8')
+             res.append(prefix)
          return res
 
      def iterkeys(self, unicode prefix=""):
@@ -286,13 +283,12 @@ cdef class Trie(_Trie):
          Returns an iterator over keys that have a prefix ``prefix``.
          """
          cdef agent.Agent ag
-         cdef bytes b_key
+         cdef unicode key
          cdef bytes b_prefix = prefix.encode('utf8')
          ag.set_query(b_prefix)
 
          while self._trie.predictive_search(ag):
-             b_key = ag.key().ptr()[:ag.key().length()]
-             yield b_key.decode('utf8')
+             yield (ag.key().ptr()[:ag.key().length()]).decode('utf8')
 
 
 
@@ -492,3 +488,4 @@ cdef class RecordTrie(_UnpackTrie):
 
     def __reduce__(self): # pickling support
         return self.__class__, (self._fmt,), self.tobytes()
+

@@ -34,7 +34,7 @@ There are several Trie classes in this package:
 
 * ``marisa_trie.RecordTrie`` - read-only trie-based data structure that
   maps unicode keys to lists of data tuples. All tuples must be of the
-  same format (the data is packed with using python ``struct`` module).
+  same format (the data is packed using python ``struct`` module).
 
 * ``marisa_trie.BytesTrie`` - read-only Trie that maps unicode
   keys to lists of ``bytes`` objects.
@@ -220,7 +220,6 @@ make trie functions return results in alphabetical oder::
     >>> trie = marisa_trie.RecordTrie(fmt, data, order=marisa_trie.LABEL_ORDER)
 
 
-
 Benchmarks
 ==========
 
@@ -274,29 +273,35 @@ Python 3.2, macbook air i5 1.8 Ghz)::
 
     dict items():                       58.316 ops/sec
     Trie items():                       not supported
-    BytesTrie items():                  2.456 ops/sec
-    RecordTrie items():                 2.254 ops/sec
+    BytesTrie items():                  11.914 ops/sec
+    RecordTrie items():                 8.668 ops/sec
 
     dict keys():                        211.194 ops/sec
-    Trie keys():                        3.341 ops/sec
-    BytesTrie keys():                   2.308 ops/sec
-    RecordTrie keys():                  2.184 ops/sec
+    Trie keys():                        19.198 ops/sec
+    BytesTrie keys():                   15.399 ops/sec
+    RecordTrie keys():                  15.277 ops/sec
 
-    Trie.prefixes (hits):               0.176M ops/sec
-    Trie.prefixes (mixed):              0.956M ops/sec
-    Trie.prefixes (misses):             1.035M ops/sec
+    Trie.prefixes (hits):               0.525M ops/sec
+    Trie.prefixes (mixed):              1.522M ops/sec
+    Trie.prefixes (misses):             1.191M ops/sec
     RecordTrie.prefixes (hits):         0.106M ops/sec
     RecordTrie.prefixes (mixed):        0.451M ops/sec
     RecordTrie.prefixes (misses):       0.173M ops/sec
-    Trie.iter_prefixes (hits):          0.170M ops/sec
-    Trie.iter_prefixes (mixed):         0.799M ops/sec
-    Trie.iter_prefixes (misses):        0.898M ops/sec
+    Trie.iter_prefixes (hits):          0.536M ops/sec
+    Trie.iter_prefixes (mixed):         1.248M ops/sec
+    Trie.iter_prefixes (misses):        1.001M ops/sec
 
-    Trie.keys(prefix="xxx"), avg_len(res)==415:         0.825K ops/sec
-    Trie.keys(prefix="xxxxx"), avg_len(res)==17:        19.934K ops/sec
-    Trie.keys(prefix="xxxxxxxx"), avg_len(res)==3:      85.239K ops/sec
-    Trie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4:   136.476K ops/sec
-    Trie.keys(prefix="xxx"), NON_EXISTING:              1073.719K ops/sec
+    Trie.keys(prefix="xxx"), avg_len(res)==415:         5.087K ops/sec
+    Trie.keys(prefix="xxxxx"), avg_len(res)==17:        86.911K ops/sec
+    Trie.keys(prefix="xxxxxxxx"), avg_len(res)==3:      258.711K ops/sec
+    Trie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4:   280.668K ops/sec
+    Trie.keys(prefix="xxx"), NON_EXISTING:              1076.751K ops/sec
+
+    RecordTrie.keys(prefix="xxx"), avg_len(res)==415:       3.754K ops/sec
+    RecordTrie.keys(prefix="xxxxx"), avg_len(res)==17:      73.784K ops/sec
+    RecordTrie.keys(prefix="xxxxxxxx"), avg_len(res)==3:    234.210K ops/sec
+    RecordTrie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4: 274.754K ops/sec
+    RecordTrie.keys(prefix="xxx"), NON_EXISTING:            1061.222K ops/sec
 
 
 Tries from ``marisa_trie`` uses less memory, tries from
@@ -311,7 +316,7 @@ Current limitations
 ===================
 
 * The library is known not to install on Windows with mingw32 compiler;
-* ``.prefixes()`` method implementation is sub-optimal;
+* ``.prefixes()`` method of ``BytesTrie`` and ``RecordTrie`` is quite slow;
 * ``read()`` and ``write()`` methods don't work with file-like objects
   (they work only with real files; pickling works fine for file-like objects);
 * iterator versions of methods are not always implemented;
@@ -361,14 +366,6 @@ Make sure `tox`_ is installed and run
     $ tox
 
 from the source checkout. Tests should pass under python 2.6, 2.7, 3.2.
-
-.. note::
-
-    At the moment of writing the latest pip release (1.1) does not
-    support Python 3.3; in order to run tox tests under Python 3.3
-    find the "virtualenv_support" directory in site-packages
-    (of the env you run tox from) and place an sdist zip/tarball of the newer
-    pip (from github) there.
 
 In order to run benchmarks, type
 

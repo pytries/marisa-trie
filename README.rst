@@ -315,7 +315,7 @@ is a very simple benchmark on a single data set.
 Current limitations
 ===================
 
-* The library is known not to install on Windows with mingw32 compiler;
+* The library is not tested with mingw32 compiler;
 * ``.prefixes()`` method of ``BytesTrie`` and ``RecordTrie`` is quite slow;
 * ``read()`` and ``write()`` methods don't work with file-like objects
   (they work only with real files; pickling works fine for file-like objects);
@@ -365,7 +365,7 @@ Make sure `tox`_ is installed and run
 
     $ tox
 
-from the source checkout. Tests should pass under python 2.6, 2.7, 3.2.
+from the source checkout. Tests should pass under python 2.6, 2.7, 3.2 and 3.3.
 
 In order to run benchmarks, type
 

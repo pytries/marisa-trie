@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+0.3.7 (2012-09-21)
+------------------
+
+* Update bundled marisa-trie C++ library (this may fix more mingw issues);
+* Python 3.3 support is back.
+
 0.3.6 (2012-09-05)
 ------------------
 

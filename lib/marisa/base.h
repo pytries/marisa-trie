@@ -1,7 +1,7 @@
 #ifndef MARISA_BASE_H_
 #define MARISA_BASE_H_
 
-// Visual C++ does not provide stdint.h.
+// Old Visual C++ does not provide stdint.h.
 #ifndef _MSC_VER
  #include <stdint.h>
 #endif  // _MSC_VER

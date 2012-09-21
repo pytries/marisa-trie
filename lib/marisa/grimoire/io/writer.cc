@@ -1,10 +1,10 @@
 #include <stdio.h>
 
-#ifdef _MSC_VER
+#ifdef _WIN32
  #include <io.h>
-#else  // _MSC_VER
+#else  // _WIN32
  #include <unistd.h>
-#endif  // _MSC_VER
+#endif  // _WIN32
 
 #include <limits>
 
@@ -115,17 +115,17 @@ void Writer::write_data(const void *data, std::size_t size) {
     return;
   } else if (fd_ != -1) {
     while (size != 0) {
-#ifdef _MSC_VER
+#ifdef _WIN32
       static const std::size_t CHUNK_SIZE =
           std::numeric_limits<int>::max();
       const unsigned int count = (size < CHUNK_SIZE) ? size : CHUNK_SIZE;
       const int size_written = ::_write(fd_, data, count);
-#else  // _MSC_VER
+#else  // _WIN32
       static const std::size_t CHUNK_SIZE =
           std::numeric_limits< ::ssize_t>::max();
       const ::size_t count = (size < CHUNK_SIZE) ? size : CHUNK_SIZE;
       const ::ssize_t size_written = ::write(fd_, data, count);
-#endif  // _MSC_VER
+#endif  // _WIN32
       MARISA_THROW_IF(size_written <= 0, MARISA_IO_ERROR);
       data = static_cast<const char *>(data) + size_written;
       size -= size_written;

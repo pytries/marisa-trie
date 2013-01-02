@@ -1,7 +1,7 @@
 marisa-trie
 ===========
 
-Static memory-efficient Trie structures for Python (2.x and 3.x).
+Static memory-efficient Trie-like structures for Python (2.x and 3.x).
 
 String data in a MARISA-trie may take up to 50x-100x less memory than
 in a standard Python dict; the raw lookup speed is comparable; trie also
@@ -248,69 +248,73 @@ with different data structures (under Python 2.7):
 Benchmark results (100k unicode words, integer values (lenghts of the words),
 Python 3.2, macbook air i5 1.8 Ghz)::
 
-    dict __getitem__ (hits):            4.090M ops/sec
-    Trie __getitem__ (hits):            not supported
-    BytesTrie __getitem__ (hits):       0.469M ops/sec
-    RecordTrie __getitem__ (hits):      0.373M ops/sec
+    dict __getitem__ (hits)           8.239M ops/sec
+    Trie __getitem__ (hits)           not supported
+    BytesTrie __getitem__ (hits)      0.498M ops/sec
+    RecordTrie __getitem__ (hits)     0.404M ops/sec
 
-    dict get() (hits):                  2.792M ops/sec
-    Trie get() (hits):                  not supported
-    BytesTrie get() (hits):             0.434M ops/sec
-    RecordTrie get() (hits):            0.369M ops/sec
-    dict get() (misses):                2.867M ops/sec
-    Trie get() (misses):                not supported
-    BytesTrie get() (misses):           0.817M ops/sec
-    RecordTrie get() (misses):          0.824M ops/sec
+    dict get() (hits)                 4.410M ops/sec
+    Trie get() (hits)                 not supported
+    BytesTrie get() (hits)            0.458M ops/sec
+    RecordTrie get() (hits)           0.364M ops/sec
+    dict get() (misses)               4.869M ops/sec
+    Trie get() (misses)               not supported
+    BytesTrie get() (misses)          0.849M ops/sec
+    RecordTrie get() (misses)         0.816M ops/sec
 
-    dict __contains__ (hits):           4.036M ops/sec
-    Trie __contains__ (hits):           0.910M ops/sec
-    BytesTrie __contains__ (hits):      0.573M ops/sec
-    RecordTrie __contains__ (hits):     0.591M ops/sec
-    dict __contains__ (misses):         3.346M ops/sec
-    Trie __contains__ (misses):         1.643M ops/sec
-    BytesTrie __contains__ (misses):    0.976M ops/sec
-    RecordTrie __contains__ (misses):   1.017M ops/sec
+    dict __contains__ (hits)          8.053M ops/sec
+    Trie __contains__ (hits)          1.018M ops/sec
+    BytesTrie __contains__ (hits)     0.605M ops/sec
+    RecordTrie __contains__ (hits)    0.618M ops/sec
+    dict __contains__ (misses)        6.489M ops/sec
+    Trie __contains__ (misses)        2.047M ops/sec
+    BytesTrie __contains__ (misses)   1.079M ops/sec
+    RecordTrie __contains__ (misses)  1.123M ops/sec
 
-    dict items():                       58.316 ops/sec
-    Trie items():                       not supported
-    BytesTrie items():                  11.914 ops/sec
-    RecordTrie items():                 8.668 ops/sec
+    dict items()                      57.248 ops/sec
+    Trie items()                      not supported
+    BytesTrie items()                 11.691 ops/sec
+    RecordTrie items()                8.369 ops/sec
 
-    dict keys():                        211.194 ops/sec
-    Trie keys():                        19.198 ops/sec
-    BytesTrie keys():                   15.399 ops/sec
-    RecordTrie keys():                  15.277 ops/sec
+    dict keys()                       217.920 ops/sec
+    Trie keys()                       19.589 ops/sec
+    BytesTrie keys()                  14.849 ops/sec
+    RecordTrie keys()                 15.369 ops/sec
 
-    Trie.prefixes (hits):               0.525M ops/sec
-    Trie.prefixes (mixed):              1.522M ops/sec
-    Trie.prefixes (misses):             1.191M ops/sec
-    RecordTrie.prefixes (hits):         0.106M ops/sec
-    RecordTrie.prefixes (mixed):        0.451M ops/sec
-    RecordTrie.prefixes (misses):       0.173M ops/sec
-    Trie.iter_prefixes (hits):          0.536M ops/sec
-    Trie.iter_prefixes (mixed):         1.248M ops/sec
-    Trie.iter_prefixes (misses):        1.001M ops/sec
+    Trie.prefixes (hits)              0.594M ops/sec
+    Trie.prefixes (mixed)             1.874M ops/sec
+    Trie.prefixes (misses)            1.447M ops/sec
+    RecordTrie.prefixes (hits)        0.103M ops/sec
+    RecordTrie.prefixes (mixed)       0.458M ops/sec
+    RecordTrie.prefixes (misses)      0.164M ops/sec
+    Trie.iter_prefixes (hits)         0.588M ops/sec
+    Trie.iter_prefixes (mixed)        1.470M ops/sec
+    Trie.iter_prefixes (misses)       1.170M ops/sec
 
-    Trie.keys(prefix="xxx"), avg_len(res)==415:         5.087K ops/sec
-    Trie.keys(prefix="xxxxx"), avg_len(res)==17:        86.911K ops/sec
-    Trie.keys(prefix="xxxxxxxx"), avg_len(res)==3:      258.711K ops/sec
-    Trie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4:   280.668K ops/sec
-    Trie.keys(prefix="xxx"), NON_EXISTING:              1076.751K ops/sec
+    Trie.keys(prefix="xxx"), avg_len(res)==415                   5.044K ops/sec
+    Trie.keys(prefix="xxxxx"), avg_len(res)==17                  89.363K ops/sec
+    Trie.keys(prefix="xxxxxxxx"), avg_len(res)==3                258.732K ops/sec
+    Trie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4             293.199K ops/sec
+    Trie.keys(prefix="xxx"), NON_EXISTING                        1169.524K ops/sec
 
-    RecordTrie.keys(prefix="xxx"), avg_len(res)==415:       3.754K ops/sec
-    RecordTrie.keys(prefix="xxxxx"), avg_len(res)==17:      73.784K ops/sec
-    RecordTrie.keys(prefix="xxxxxxxx"), avg_len(res)==3:    234.210K ops/sec
-    RecordTrie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4: 274.754K ops/sec
-    RecordTrie.keys(prefix="xxx"), NON_EXISTING:            1061.222K ops/sec
+    RecordTrie.keys(prefix="xxx"), avg_len(res)==415             3.836K ops/sec
+    RecordTrie.keys(prefix="xxxxx"), avg_len(res)==17            73.591K ops/sec
+    RecordTrie.keys(prefix="xxxxxxxx"), avg_len(res)==3          229.515K ops/sec
+    RecordTrie.keys(prefix="xxxxx..xx"), avg_len(res)==1.4       269.228K ops/sec
+    RecordTrie.keys(prefix="xxx"), NON_EXISTING                  1071.433K ops/sec
 
 
-Tries from ``marisa_trie`` uses less memory, tries from
-`datrie`_ are faster.
+Tries from ``marisa_trie`` are static and uses less memory, tries from
+`datrie`_ are faster and can be updated.
+
+You may also give DAWG_ a try - it is usually faster than
+``marisa-trie`` and sometimes can use less memory (depending on data).
 
 Please take this benchmark results with a grain of salt; this
 is a very simple benchmark on a single data set.
 
 .. _datrie: https://github.com/kmike/datrie
+.. _DAWG: https://github.com/kmike/DAWG
 
 Current limitations
 ===================

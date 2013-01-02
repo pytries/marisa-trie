@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+0.3.8 (2013-01-03)
+------------------
+
+* Rebuild wrapper with Cython pre-0.18;
+* update benchmarks.
+
 0.3.7 (2012-09-21)
 ------------------
 

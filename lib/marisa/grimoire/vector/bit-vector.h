@@ -8,25 +8,13 @@ namespace marisa {
 namespace grimoire {
 namespace vector {
 
-template <std::size_t T>
-class BitVectorUnit;
-
-template <>
-class BitVectorUnit<32> {
- public:
-  typedef UInt32 Type;
-};
-
-template <>
-class BitVectorUnit<64> {
- public:
-  typedef UInt64 Type;
-};
-
-template <std::size_t T>
 class BitVector {
  public:
-  typedef typename BitVectorUnit<T>::Type Unit;
+#if MARISA_WORD_SIZE == 64
+  typedef UInt64 Unit;
+#else  // MARISA_WORD_SIZE == 64
+  typedef UInt32 Unit;
+#endif  // MARISA_WORD_SIZE == 64
 
   BitVector()
       : units_(), size_(0), num_1s_(0), ranks_(), select0s_(), select1s_() {}
@@ -62,11 +50,12 @@ class BitVector {
 
   void push_back(bool bit) {
     MARISA_THROW_IF(size_ == MARISA_UINT32_MAX, MARISA_SIZE_ERROR);
-    if (size_ == (T * units_.size())) {
-      units_.resize(units_.size() + (64 / T), 0);
+    if (size_ == (MARISA_WORD_SIZE * units_.size())) {
+      units_.resize(units_.size() + (64 / MARISA_WORD_SIZE), 0);
     }
     if (bit) {
-      units_[size_ / T] |= (Unit)1 << (size_ % T);
+      units_[size_ / MARISA_WORD_SIZE] |=
+          (Unit)1 << (size_ % MARISA_WORD_SIZE);
       ++num_1s_;
     }
     ++size_;
@@ -74,7 +63,8 @@ class BitVector {
 
   bool operator[](std::size_t i) const {
     MARISA_DEBUG_IF(i >= size_, MARISA_BOUND_ERROR);
-    return (units_[i / T] & ((Unit)1 << (i % T))) != 0;
+    return (units_[i / MARISA_WORD_SIZE]
+        & ((Unit)1 << (i % MARISA_WORD_SIZE))) != 0;
   }
 
   std::size_t rank0(std::size_t i) const {

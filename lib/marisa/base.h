@@ -28,7 +28,15 @@ typedef uint32_t marisa_uint32;
 typedef uint64_t marisa_uint64;
 #endif  // _MSC_VER
 
-#define MARISA_WORD_SIZE  (sizeof(void *) * 8)
+#if defined(_WIN64) || defined(__amd64__) || defined(__x86_64__) || \
+    defined(__ia64__) || defined(__ppc64__) || defined(__powerpc64__) || \
+    defined(__sparc64__) || defined(__mips64__) || defined(__aarch64__)
+ #define MARISA_WORD_SIZE 64
+#else  // defined(_WIN64), etc.
+ #define MARISA_WORD_SIZE 32
+#endif  // defined(_WIN64), etc.
+
+//#define MARISA_WORD_SIZE  (sizeof(void *) * 8)
 
 #define MARISA_UINT8_MAX  ((marisa_uint8)~(marisa_uint8)0)
 #define MARISA_UINT16_MAX ((marisa_uint16)~(marisa_uint16)0)

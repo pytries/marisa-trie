@@ -9,8 +9,8 @@ namespace marisa {
 namespace grimoire {
 
 using vector::Vector;
-typedef vector::FlatVector<MARISA_WORD_SIZE> FlatVector;
-typedef vector::BitVector<MARISA_WORD_SIZE> BitVector;
+typedef vector::FlatVector FlatVector;
+typedef vector::BitVector BitVector;
 
 }  // namespace grimoire
 }  // namespace marisa

@@ -124,7 +124,7 @@ void Mapper::open_(const char *filename) {
 
   file_ = ::CreateFileA(filename, GENERIC_READ, FILE_SHARE_READ,
       NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-  MARISA_THROW_IF(file_ == NULL, MARISA_IO_ERROR);
+  MARISA_THROW_IF(file_ == INVALID_HANDLE_VALUE, MARISA_IO_ERROR);
 
   map_ = ::CreateFileMapping(file_, NULL, PAGE_READONLY, 0, 0, NULL);
   MARISA_THROW_IF(map_ == NULL, MARISA_IO_ERROR);

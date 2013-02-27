@@ -7,25 +7,13 @@ namespace marisa {
 namespace grimoire {
 namespace vector {
 
-template <std::size_t T>
-class FlatVectorUnit;
-
-template <>
-class FlatVectorUnit<32> {
- public:
-  typedef UInt32 Type;
-};
-
-template <>
-class FlatVectorUnit<64> {
- public:
-  typedef UInt64 Type;
-};
-
-template <std::size_t T>
 class FlatVector {
  public:
-  typedef typename FlatVectorUnit<T>::Type Unit;
+#if MARISA_WORD_SIZE == 64
+  typedef UInt64 Unit;
+#else  // MARISA_WORD_SIZE == 64
+  typedef UInt32 Unit;
+#endif  // MARISA_WORD_SIZE == 64
 
   FlatVector() : units_(), value_size_(0), mask_(0), size_(0) {}
 
@@ -53,14 +41,14 @@ class FlatVector {
     MARISA_DEBUG_IF(i >= size_, MARISA_BOUND_ERROR);
 
     const std::size_t pos = i * value_size_;
-    const std::size_t unit_id = pos / T;
-    const std::size_t unit_offset = pos % T;
+    const std::size_t unit_id = pos / MARISA_WORD_SIZE;
+    const std::size_t unit_offset = pos % MARISA_WORD_SIZE;
 
-    if ((unit_offset + value_size_) <= T) {
+    if ((unit_offset + value_size_) <= MARISA_WORD_SIZE) {
       return (UInt32)(units_[unit_id] >> unit_offset) & mask_;
     } else {
       return (UInt32)((units_[unit_id] >> unit_offset)
-          | (units_[unit_id + 1] << (T - unit_offset))) & mask_;
+          | (units_[unit_id + 1] << (MARISA_WORD_SIZE - unit_offset))) & mask_;
     }
   }
 
@@ -114,11 +102,12 @@ class FlatVector {
       max_value >>= 1;
     }
 
-    std::size_t num_units = values.empty() ? 0 : (64 / T);
+    std::size_t num_units = values.empty() ? 0 : (64 / MARISA_WORD_SIZE);
     if (value_size != 0) {
       num_units = (std::size_t)(
-          (((UInt64)value_size * values.size()) + (T - 1)) / T);
-      num_units += num_units % (64 / T);
+          (((UInt64)value_size * values.size()) + (MARISA_WORD_SIZE - 1))
+          / MARISA_WORD_SIZE);
+      num_units += num_units % (64 / MARISA_WORD_SIZE);
     }
 
     units_.resize(num_units);
@@ -191,14 +180,16 @@ class FlatVector {
     MARISA_DEBUG_IF(value > mask_, MARISA_RANGE_ERROR);
 
     const std::size_t pos = i * value_size_;
-    const std::size_t unit_id = pos / T;
-    const std::size_t unit_offset = pos % T;
+    const std::size_t unit_id = pos / MARISA_WORD_SIZE;
+    const std::size_t unit_offset = pos % MARISA_WORD_SIZE;
 
     units_[unit_id] &= ~((Unit)mask_ << unit_offset);
     units_[unit_id] |= (Unit)(value & mask_) << unit_offset;
-    if ((unit_offset + value_size_) > T) {
-      units_[unit_id + 1] &= ~((Unit)mask_ >> (T - unit_offset));
-      units_[unit_id + 1] |= (Unit)(value & mask_) >> (T - unit_offset);
+    if ((unit_offset + value_size_) > MARISA_WORD_SIZE) {
+      units_[unit_id + 1] &=
+          ~((Unit)mask_ >> (MARISA_WORD_SIZE - unit_offset));
+      units_[unit_id + 1] |=
+          (Unit)(value & mask_) >> (MARISA_WORD_SIZE - unit_offset);
     }
   }
 

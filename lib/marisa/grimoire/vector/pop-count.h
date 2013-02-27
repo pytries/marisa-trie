@@ -1,63 +1,15 @@
 #ifndef MARISA_GRIMOIRE_VECTOR_POP_COUNT_H_
 #define MARISA_GRIMOIRE_VECTOR_POP_COUNT_H_
 
-#ifdef MARISA_USE_POPCNT
- #ifdef _MSC_VER
-  #include <intrin.h>
- #endif  // _MSC_VER
-#endif  // MARISA_USE_POPCNT
-
-#include "../../base.h"
+#include "../intrin.h"
 
 namespace marisa {
 namespace grimoire {
 namespace vector {
 
-template <std::size_t T>
-class PopCount;
+#if MARISA_WORD_SIZE == 64
 
-template <>
-class PopCount<32> {
- public:
-  explicit PopCount(UInt32 x) : value_() {
-    x = (x & 0x55555555U) + ((x & 0xAAAAAAAAU) >> 1);
-    x = (x & 0x33333333U) + ((x & 0xCCCCCCCCU) >> 2);
-    x = (x & 0x0F0F0F0FU) + ((x & 0xF0F0F0F0U) >> 4);
-    x *= 0x01010101U;
-    value_ = x;
-  }
-
-  std::size_t lo8() const {
-    return value_ & 0xFFU;
-  }
-  std::size_t lo16() const {
-    return (value_ >> 8) & 0xFFU;
-  }
-  std::size_t lo24() const {
-    return (value_ >> 16) & 0xFFU;
-  }
-  std::size_t lo32() const {
-    return (value_ >> 24) & 0xFFU;
-  }
-
-  static std::size_t count(UInt32 x) {
-#ifdef MARISA_USE_POPCNT
- #ifdef _MSC_VER
-    return ::__popcnt32(x);
- #else  // _MSC_VER
-    return ::__builtin_popcount(x);
- #endif  // _MSC_VER
-#else  // MARISA_USE_POPCNT
-    return PopCount(x).lo32();
-#endif  // MARISA_USE_POPCNT
-  }
-
- private:
-  UInt32 value_;
-};
-
-template <>
-class PopCount<64> {
+class PopCount {
  public:
   explicit PopCount(UInt64 x) : value_() {
     x = (x & 0x5555555555555555ULL) + ((x & 0xAAAAAAAAAAAAAAAAULL) >> 1);
@@ -93,24 +45,63 @@ class PopCount<64> {
   }
 
   static std::size_t count(UInt64 x) {
-#ifdef MARISA_USE_POPCNT
+#if defined(MARISA_X64) && defined(MARISA_USE_POPCNT)
  #ifdef _MSC_VER
-  #ifdef _WIN64
-    return (std::size_t)::__popcnt64(x);
-  #else  // _WIN64
-    return PopCount(x).lo64();
-  #endif  // _WIN64
+    return __popcnt64(x);
  #else  // _MSC_VER
-    return ::__builtin_popcountll(x);
+    return _mm_popcnt_u64(x);
  #endif  // _MSC_VER
-#else  // MARISA_USE_POPCNT
+#else  // defined(MARISA_X64) && defined(MARISA_USE_POPCNT)
     return PopCount(x).lo64();
-#endif  // MARISA_USE_POPCNT
+#endif  // defined(MARISA_X64) && defined(MARISA_USE_POPCNT)
   }
 
  private:
   UInt64 value_;
 };
+
+#else  // MARISA_WORD_SIZE == 64
+
+class PopCount {
+ public:
+  explicit PopCount(UInt32 x) : value_() {
+    x = (x & 0x55555555U) + ((x & 0xAAAAAAAAU) >> 1);
+    x = (x & 0x33333333U) + ((x & 0xCCCCCCCCU) >> 2);
+    x = (x & 0x0F0F0F0FU) + ((x & 0xF0F0F0F0U) >> 4);
+    x *= 0x01010101U;
+    value_ = x;
+  }
+
+  std::size_t lo8() const {
+    return value_ & 0xFFU;
+  }
+  std::size_t lo16() const {
+    return (value_ >> 8) & 0xFFU;
+  }
+  std::size_t lo24() const {
+    return (value_ >> 16) & 0xFFU;
+  }
+  std::size_t lo32() const {
+    return (value_ >> 24) & 0xFFU;
+  }
+
+  static std::size_t count(UInt32 x) {
+#ifdef MARISA_USE_POPCNT
+ #ifdef _MSC_VER
+    return __popcnt(x);
+ #else  // _MSC_VER
+    return _mm_popcnt_u32(x);
+ #endif  // _MSC_VER
+#else  // MARISA_USE_POPCNT
+    return PopCount(x).lo32();
+#endif  // MARISA_USE_POPCNT
+  }
+
+ private:
+  UInt32 value_;
+};
+
+#endif  // MARISA_WORD_SIZE == 64
 
 }  // namespace vector
 }  // namespace grimoire

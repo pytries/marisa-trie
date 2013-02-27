@@ -11,6 +11,12 @@ cimport iostream
 cimport base
 
 import struct
+import itertools
+
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip
 
 
 DEFAULT_CACHE = base.MARISA_DEFAULT_CACHE
@@ -61,23 +67,26 @@ cdef class _Trie:
 
     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
                         cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
-                        input_is_sorted=False):
+                        weights=None):
         """
-        ``arg`` must be an iterable with unicode keys or None
-        if you're going to load a trie later.
+        ``arg`` can be one of the following:
+
+        * an iterable with unicode keys;
+        * None (if you're going to load a trie later).
+
+        Pass a ``weights`` iterable with expected lookup frequences
+        to optimize lookup and prefix search speed.
         """
 
         if self._trie:
             return
         self._trie = new trie.Trie()
 
-        arg = arg or []
-        if not input_is_sorted:
-            arg = sorted(arg)
+        byte_keys = (key.encode('utf8') for key in (arg or []))
 
-        byte_keys = (key.encode('utf8') for key in arg)
         self._build(
             byte_keys,
+            weights,
             num_tries=num_tries,
             binary=binary,
             cache_size=cache_size,
@@ -100,17 +109,21 @@ cdef class _Trie:
         return num_tries | binary_flag | cache_size | order
 
 
-    def _build(self, byte_keys, **options):
+    def _build(self, byte_keys, weights=None, **options):
         """
         Build the trie using values from ``byte_keys`` iterable.
         """
+        if weights is None:
+            weights = itertools.repeat(1.0)
+
         cdef char* data
+        cdef float weight
         cdef keyset.Keyset *ks = new keyset.Keyset()
 
         try:
-            for key in byte_keys:
-                data = key
-                ks.push_back(data, len(key))
+            for key, weight in izip(byte_keys, weights):
+                data = key # cast to char*
+                ks.push_back(data, len(key), weight)
             self._trie.build(ks[0], self._config_flags(**options))
         finally:
             del ks
@@ -315,13 +328,7 @@ cdef class BytesTrie(_Trie):
         ``arg`` must be an iterable of tuples (unicode_key, bytes_payload).
         """
         super(BytesTrie, self).__init__()
-        if arg is None:
-            arg = []
-
-        if options.get('input_is_sorted', False):
-            raise ValueError("input_is_sorted=True is not supported by BytesTrie and subclasses")
-
-        byte_keys = (self._raw_key(d[0], d[1]) for d in sorted(arg))
+        byte_keys = (self._raw_key(d[0], d[1]) for d in (arg or []))
         self._build(byte_keys, **options)
 
 

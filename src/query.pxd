@@ -1,20 +1,20 @@
-cdef extern from "../lib/marisa/query.h" namespace "marisa":
+cdef extern from "../lib/marisa/query.h" namespace "marisa" nogil:
 
     cdef cppclass Query:
-        Query() nogil
-        Query(Query &query) nogil
+        Query()
+        Query(Query &query)
 
         #Query &operator=(Query &query)
 
-        char operator[](int i) nogil
+        char operator[](int i)
 
-        void set_str(char *str) nogil
-        void set_str(char *ptr, int length) nogil
-        void set_id(int id) nogil
+        void set_str(char *str)
+        void set_str(char *ptr, int length)
+        void set_id(int id)
 
-        char *ptr() nogil
-        int length() nogil
-        int id() nogil
+        char *ptr()
+        int length()
+        int id()
 
-        void clear() nogil
-        void swap(Query &rhs) nogil
+        void clear()
+        void swap(Query &rhs)

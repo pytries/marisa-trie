@@ -147,12 +147,12 @@ cdef class _Trie:
         self._trie.write(f.fileno())
 
     def save(self, path):
-        """ Saves trie to a file. """
+        """ Save trie to a file. """
         with open(path, 'w') as f:
             self.write(f)
 
     def load(self, path):
-        """ Loads trie from a file. """
+        """ Load trie from a file. """
         with open(path, 'r') as f:
             self.read(f)
         return self

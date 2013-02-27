@@ -1,23 +1,23 @@
 cimport query, key
 
-cdef extern from "../lib/marisa/agent.h" namespace "marisa":
+cdef extern from "../lib/marisa/agent.h" namespace "marisa" nogil:
     cdef cppclass Agent:
         Agent() except +
 
-        query.Query &query() nogil
-        key.Key &key() nogil
+        query.Query &query()
+        key.Key &key()
 
-        void set_query(char *str) nogil
-        void set_query(char *ptr, int length) nogil
-        void set_query(int key_id) nogil
+        void set_query(char *str)
+        void set_query(char *ptr, int length)
+        void set_query(int key_id)
 
-        void set_key(char *str) nogil
-        void set_key(char *ptr, int length) nogil
-        void set_key(int id) nogil
+        void set_key(char *str)
+        void set_key(char *ptr, int length)
+        void set_key(int id)
 
-        void clear() nogil
+        void clear()
 
-        void init_state() nogil
+        void init_state()
 
-        void swap(Agent &rhs) nogil
+        void swap(Agent &rhs)
 

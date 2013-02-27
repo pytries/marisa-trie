@@ -1,22 +1,22 @@
-cdef extern from "../lib/marisa/key.h" namespace "marisa":
+cdef extern from "../lib/marisa/key.h" namespace "marisa" nogil:
 
     cdef cppclass Key:
-        Key() nogil
-        Key(Key &query) nogil
+        Key()
+        Key(Key &query)
 
         #Key &operator=(Key &query)
 
-        char operator[](int i) nogil
+        char operator[](int i)
 
-        void set_str(char *str) nogil
-        void set_str(char *ptr, int length) nogil
-        void set_id(int id) nogil
-        void set_weight(float weight) nogil
+        void set_str(char *str)
+        void set_str(char *ptr, int length)
+        void set_id(int id)
+        void set_weight(float weight)
 
-        char *ptr() nogil
-        int length() nogil
-        int id() nogil
-        float weight() nogil
+        char *ptr()
+        int length()
+        int id()
+        float weight()
 
-        void clear() nogil
-        void swap(Key &rhs) nogil
+        void clear()
+        void swap(Key &rhs)

@@ -1,6 +1,6 @@
 cimport query, key
 
-cdef extern from "../lib/marisa/keyset.h" namespace "marisa":
+cdef extern from "../lib/marisa/keyset.h" namespace "marisa" nogil:
     cdef cppclass Keyset:
 
 #        cdef enum constants:
@@ -8,23 +8,23 @@ cdef extern from "../lib/marisa/keyset.h" namespace "marisa":
 #            EXTRA_BLOCK_SIZE = 1024
 #            KEY_BLOCK_SIZE   = 256
 
-        Keyset() nogil
+        Keyset()
 
-        void push_back(key.Key &key) nogil
-        void push_back(key.Key &key, char end_marker) nogil
+        void push_back(key.Key &key)
+        void push_back(key.Key &key, char end_marker)
 
-        void push_back(char *str) nogil
-        void push_back(char *ptr, int length) nogil
-        void push_back(char *ptr, int length, float weight) nogil
+        void push_back(char *str)
+        void push_back(char *ptr, int length)
+        void push_back(char *ptr, int length, float weight)
 
-        key.Key &operator[](int i) nogil
+        key.Key &operator[](int i)
 
-        int num_keys() nogil
-        bint empty() nogil
+        int num_keys()
+        bint empty()
 
-        int size() nogil
-        int total_length() nogil
+        int size()
+        int total_length()
 
-        void reset() nogil
-        void clear() nogil
-        void swap(Keyset &rhs) nogil
+        void reset()
+        void clear()
+        void swap(Keyset &rhs)

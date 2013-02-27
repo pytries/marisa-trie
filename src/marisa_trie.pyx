@@ -60,7 +60,8 @@ cdef class _Trie:
     cdef trie.Trie* _trie
 
     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
-                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER):
+                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
+                        input_is_sorted=False):
         """
         ``arg`` must be an iterable with unicode keys or None
         if you're going to load a trie later.
@@ -70,7 +71,11 @@ cdef class _Trie:
             return
         self._trie = new trie.Trie()
 
-        byte_keys = (key.encode('utf8') for key in sorted(arg or []))
+        arg = arg or []
+        if not input_is_sorted:
+            arg = sorted(arg)
+
+        byte_keys = (key.encode('utf8') for key in arg)
         self._build(
             byte_keys,
             num_tries=num_tries,
@@ -312,6 +317,10 @@ cdef class BytesTrie(_Trie):
         super(BytesTrie, self).__init__()
         if arg is None:
             arg = []
+
+        if options.get('input_is_sorted', False):
+            raise ValueError("input_is_sorted=True is not supported by BytesTrie and subclasses")
+
         byte_keys = (self._raw_key(d[0], d[1]) for d in sorted(arg))
         self._build(byte_keys, **options)
 

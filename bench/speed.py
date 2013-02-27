@@ -84,6 +84,38 @@ def create_record_trie():
 def benchmark():
     print('\n====== Benchmarks (100k unique unicode words) =======\n')
 
+    common_setup = """
+from __main__ import create_trie, create_bytes_trie, create_record_trie
+from __main__ import WORDS100k, NON_WORDS100k, MIXED_WORDS100k
+from __main__ import PREFIXES_3_1k, PREFIXES_5_1k, PREFIXES_8_1k, PREFIXES_15_1k
+NON_WORDS_10k = NON_WORDS100k[:10000]
+NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
+"""
+    BUILD = {
+        'dict': 'data = dict((word, len(word)) for word in WORDS100k);',
+        'Trie': 'data = create_trie();',
+        'BytesTrie': 'data = create_bytes_trie();',
+        'RecordTrie': 'data = create_record_trie();',
+    }
+
+    dict_setup = common_setup + BUILD['dict']
+    trie_setup = common_setup + BUILD['Trie']
+    bytes_trie_setup = common_setup + BUILD['BytesTrie']
+    record_trie_setup = common_setup + BUILD['RecordTrie']
+
+    structures = [
+        ('dict', dict_setup),
+        ('Trie', trie_setup),
+        ('BytesTrie', bytes_trie_setup),
+        ('RecordTrie', record_trie_setup),
+    ]
+
+    # build performance
+    for name, setup in structures:
+        timer = timeit.Timer(BUILD[name], common_setup)
+        bench("%s building" % name, timer, 'M words/sec', 0.1, 5)
+
+    # common operations speed
     tests = [
         ('__getitem__ (hits)', "for word in WORDS100k: data[word]", 'M ops/sec', 0.1, 3),
         ('get() (hits)', "for word in WORDS100k: data.get(word)", 'M ops/sec', 0.1, 3),
@@ -95,24 +127,6 @@ def benchmark():
 #        ('values()', 'list(data.values())', ' ops/sec', 1, 1),
     ]
 
-    common_setup = """
-from __main__ import create_trie, create_bytes_trie, create_record_trie
-from __main__ import WORDS100k, NON_WORDS100k, MIXED_WORDS100k
-from __main__ import PREFIXES_3_1k, PREFIXES_5_1k, PREFIXES_8_1k, PREFIXES_15_1k
-NON_WORDS_10k = NON_WORDS100k[:10000]
-NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
-"""
-    dict_setup = common_setup + 'data = dict((word, len(word)) for word in WORDS100k);'
-    trie_setup = common_setup + 'data = create_trie();'
-    bytes_trie_setup = common_setup + 'data = create_bytes_trie();'
-    record_trie_setup = common_setup + 'data = create_record_trie();'
-
-    structures = [
-        ('dict', dict_setup),
-        ('Trie', trie_setup),
-        ('BytesTrie', bytes_trie_setup),
-        ('RecordTrie', record_trie_setup),
-    ]
     for test_name, test, descr, op_count, repeats in tests:
         for name, setup in structures:
             timer = timeit.Timer(test, setup)

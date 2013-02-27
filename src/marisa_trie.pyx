@@ -97,7 +97,7 @@ cdef class _Trie:
 
     def _build(self, byte_keys, **options):
         """
-        Builds the trie using values from ``byte_keys`` iterable.
+        Build the trie using values from ``byte_keys`` iterable.
         """
         cdef char* data
         cdef keyset.Keyset *ks = new keyset.Keyset()
@@ -124,7 +124,7 @@ cdef class _Trie:
 
     def read(self, f):
         """
-        Reads a trie from an open file object.
+        Read a trie from an open file object.
 
         Works only with "real" disk-based file objects,
         file-like objects are not supported.
@@ -134,7 +134,7 @@ cdef class _Trie:
 
     def write(self, f):
         """
-        Reads a trie to an open file object.
+        Read a trie to an open file object.
 
         Works only with "real" disk-based file objects,
         file-like objects are not supported.
@@ -154,7 +154,7 @@ cdef class _Trie:
 
     cpdef bytes tobytes(self) except +:
         """
-        Returns raw trie content as bytes.
+        Return raw trie content as bytes.
         """
         cdef stringstream stream
         iostream.write((<ostream *> &stream)[0], self._trie[0])
@@ -163,7 +163,7 @@ cdef class _Trie:
 
     cpdef frombytes(self, bytes data) except +:
         """
-        Loads trie from bytes ``data``.
+        Load a trie from bytes ``data``.
         """
         cdef stringstream* stream = new stringstream(data)
         try:
@@ -182,7 +182,7 @@ cdef class _Trie:
 
     def mmap(self, path):
         """
-        Mmaps trie to a file; this allows lookups without loading full
+        Mmap trie to a file; this allows lookups without loading full
         trie to memory.
         """
         import sys
@@ -193,7 +193,7 @@ cdef class _Trie:
 
     cpdef list keys(self, unicode prefix=""):
         """
-        Returns a list with all keys with a prefix ``prefix``.
+        Return a list with all keys with a prefix ``prefix``.
         """
         # non-generator inlined version of iterkeys()
         cdef list res = []
@@ -217,7 +217,7 @@ cdef class Trie(_Trie):
 
      cpdef int key_id(self, unicode key) except -1:
          """
-         Returns unique auto-generated key index for a ``key``.
+         Return unique auto-generated key index for a ``key``.
          Raises KeyError if key is not in this trie.
          """
          cdef bytes _key = key.encode('utf8')
@@ -228,7 +228,7 @@ cdef class Trie(_Trie):
 
      cpdef unicode restore_key(self, int index):
          """
-         Returns a key given its index (obtained by ``key_id`` method).
+         Return a key given its index (obtained by ``key_id`` method).
          """
          cdef agent.Agent ag
          ag.set_query(index)
@@ -249,7 +249,7 @@ cdef class Trie(_Trie):
 
      def iter_prefixes(self, unicode key):
          """
-         Returns an iterator of all prefixes of a given key.
+         Return an iterator of all prefixes of a given key.
          """
          cdef agent.Agent ag
 
@@ -261,7 +261,7 @@ cdef class Trie(_Trie):
 
      def prefixes(self, unicode key):
          """
-         Returns a list with all prefixes of a given key.
+         Return a list with all prefixes of a given key.
          """
 
          # this an inlined version of ``list(self.iter_prefixes(key))``
@@ -280,7 +280,7 @@ cdef class Trie(_Trie):
 
      def iterkeys(self, unicode prefix=""):
          """
-         Returns an iterator over keys that have a prefix ``prefix``.
+         Return an iterator over keys that have a prefix ``prefix``.
          """
          cdef agent.Agent ag
          cdef unicode key
@@ -327,7 +327,7 @@ cdef class BytesTrie(_Trie):
 
     cpdef list prefixes(self, unicode key):
         """
-        Returns a list with all prefixes of a given key.
+        Return a list with all prefixes of a given key.
         """
 
         # XXX: is there a char-walking API in libmarisa?
@@ -360,7 +360,7 @@ cdef class BytesTrie(_Trie):
 
     cpdef get(self, key, default=None):
         """
-        Returns a list of payloads (as byte objects) for a given key
+        Return a list of payloads (as byte objects) for a given key
         or ``default`` if the key is not found.
         """
         cdef list res
@@ -377,7 +377,7 @@ cdef class BytesTrie(_Trie):
 
     cpdef list get_value(self, unicode key):
         """
-        Returns a list of payloads (as byte objects) for a given unicode key.
+        Return a list of payloads (as byte objects) for a given unicode key.
         """
         cdef bytes b_key = key.encode('utf8')
         return self.b_get_value(b_key)
@@ -385,7 +385,7 @@ cdef class BytesTrie(_Trie):
 
     cpdef list b_get_value(self, bytes key):
         """
-        Returns a list of payloads (as byte objects) for a given utf8-encoded key.
+        Return a list of payloads (as byte objects) for a given utf8-encoded key.
         """
         cdef list res = []
         cdef bytes value

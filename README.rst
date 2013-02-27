@@ -248,6 +248,11 @@ with different data structures (under Python 2.7):
 Benchmark results (100k unicode words, integer values (lenghts of the words),
 Python 3.2, macbook air i5 1.8 Ghz)::
 
+    dict building                     2.919M words/sec
+    Trie building                     0.394M words/sec
+    BytesTrie building                0.355M words/sec
+    RecordTrie building               0.354M words/sec
+
     dict __getitem__ (hits)           8.239M ops/sec
     Trie __getitem__ (hits)           not supported
     BytesTrie __getitem__ (hits)      0.498M ops/sec

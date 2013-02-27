@@ -16,9 +16,9 @@ MARISA_FILES = list(itertools.chain(*(glob.glob(path) for path in MARISA_FILES))
 
 setup(
     name="marisa-trie",
-    version="0.3.8",
+    version="0.4",
     description="Static memory-efficient & fast Trie-like structures for Python (based on marisa-trie C++ library)",
-    long_description = open('README.rst').read() + open('CHANGES.rst').read(),
+    long_description = open('README.rst').read() + "\n\n" + open('CHANGES.rst').read(),
     author='Mikhail Korobov',
     author_email='kmike84@gmail.com',
     url='https://github.com/kmike/marisa-trie/',

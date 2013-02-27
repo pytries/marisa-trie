@@ -2,6 +2,14 @@
 CHANGES
 =======
 
+0.4 (2013-02-28)
+----------------
+
+* improved trie building: ``weights`` optional parameter;
+* improved trie building: unnecessary input sorting is removed;
+* wrapper is rebuilt with Cython 0.18;
+* bundled marisa-trie C++ library is updated to svn r133.
+
 0.3.8 (2013-01-03)
 ------------------
 

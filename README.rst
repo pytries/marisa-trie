@@ -1,6 +1,9 @@
 marisa-trie
 ===========
 
+.. image:: https://travis-ci.org/kmike/marisa-trie.png?branch=master
+    :target: https://travis-ci.org/kmike/marisa-trie
+
 Static memory-efficient Trie-like structures for Python (2.x and 3.x).
 
 String data in a MARISA-trie may take up to 50x-100x less memory than

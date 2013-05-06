@@ -2,6 +2,14 @@
 CHANGES
 =======
 
+0.5 (2013-05-07)
+----------------
+
+* ``BytesTrie.iterkeys``, ``BytesTrie.iteritems``,
+  ``RecordTrie.iterkeys`` and ``RecordTrie.iteritems`` methods;
+* wrapper is rebuilt with Cython 0.19;
+* ``value_separator`` parameter for ``BytesTrie`` and ``RecordTrie``.
+
 0.4 (2013-02-28)
 ----------------
 

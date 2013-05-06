@@ -328,10 +328,10 @@ Current limitations
 ===================
 
 * The library is not tested with mingw32 compiler;
-* ``.prefixes()`` method of ``BytesTrie`` and ``RecordTrie`` is quite slow;
+* ``.prefixes()`` method of ``BytesTrie`` and ``RecordTrie`` is quite slow
+  and doesn't have iterator counterpart;
 * ``read()`` and ``write()`` methods don't work with file-like objects
   (they work only with real files; pickling works fine for file-like objects);
-* iterator versions of methods are not always implemented;
 * there are ``keys()`` and ``items()`` methods but no ``values()`` method.
 
 Contributions are welcome!

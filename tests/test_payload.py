@@ -75,6 +75,17 @@ class TestBytesTrie(object):
         assert trie.keys('food') == []
         assert trie.keys('bar') == []
 
+    def test_iterkeys(self):
+        keys = get_random_words(1000)
+        values = get_random_binary(1000)
+
+        trie = marisa_trie.BytesTrie(zip(keys, values))
+        assert trie.keys() == list(trie.iterkeys())
+
+        for key in keys:
+            prefix = key[:5]
+            assert trie.keys(prefix) == list(trie.iterkeys(prefix))
+
     def test_items(self):
         data = [
             ('fo',  b'y'),
@@ -88,6 +99,17 @@ class TestBytesTrie(object):
         assert set(trie.items('foo')) == set(data[1:])
         assert trie.items('food') == []
         assert trie.items('bar') == []
+
+    def test_iteritems(self):
+        keys = get_random_words(1000)
+        values = get_random_binary(1000)
+
+        trie = marisa_trie.BytesTrie(zip(keys, values))
+        assert trie.items() == list(trie.iteritems())
+
+        for key in keys:
+            prefix = key[:5]
+            assert trie.items(prefix) == list(trie.iteritems(prefix))
 
     def test_pickling(self):
         trie = marisa_trie.BytesTrie([
@@ -128,6 +150,16 @@ class TestRecordTrie(object):
         trie = marisa_trie.RecordTrie(fmt, data)
 
         assert set(trie.items()) == set(data)
+
+    def test_iteritems(self):
+        fmt, data = self.data()
+        trie = marisa_trie.RecordTrie(fmt, data)
+        assert trie.items() == list(trie.iteritems())
+
+        for key, value in data:
+            prefix = key[:5]
+            assert trie.items(prefix) == list(trie.iteritems(prefix))
+
 
     def test_prefixes(self):
         trie = marisa_trie.RecordTrie(str("<H"), [

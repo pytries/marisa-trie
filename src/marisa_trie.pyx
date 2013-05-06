@@ -301,7 +301,6 @@ cdef class Trie(_Trie):
          Return an iterator over keys that have a prefix ``prefix``.
          """
          cdef agent.Agent ag
-         cdef unicode key
          cdef bytes b_prefix = prefix.encode('utf8')
          ag.set_query(b_prefix)
 
@@ -427,6 +426,7 @@ cdef class BytesTrie(_Trie):
         return res
 
     cpdef list items(self, unicode prefix=""):
+        # copied from iteritems for speed
         cdef bytes b_prefix = prefix.encode('utf8')
         cdef bytes value
         cdef unicode key
@@ -452,7 +452,31 @@ cdef class BytesTrie(_Trie):
             )
         return res
 
+    def iteritems(self, unicode prefix=""):
+        cdef bytes b_prefix = prefix.encode('utf8')
+        cdef bytes value
+        cdef unicode key
+        cdef unsigned char* raw_key
+        cdef int i, value_len
+
+        cdef agent.Agent ag
+        ag.set_query(b_prefix)
+
+        while self._trie.predictive_search(ag):
+            raw_key = <unsigned char*>ag.key().ptr()
+
+            for i in range(0, ag.key().length()):
+                if raw_key[i] == self._c_value_separator:
+                    break
+
+            key = raw_key[:i].decode('utf8')
+            value = raw_key[i+1:ag.key().length()]
+
+            yield key, value
+
+
     cpdef list keys(self, unicode prefix=""):
+        # copied from iterkeys for speed
         cdef bytes b_prefix = prefix.encode('utf8')
         cdef unicode key
         cdef unsigned char* raw_key
@@ -471,6 +495,23 @@ cdef class BytesTrie(_Trie):
                     res.append(key)
                     break
         return res
+
+    def iterkeys(self, unicode prefix=""):
+        cdef bytes b_prefix = prefix.encode('utf8')
+        cdef unicode key
+        cdef unsigned char* raw_key
+        cdef int i
+
+        cdef agent.Agent ag
+        ag.set_query(b_prefix)
+
+        while self._trie.predictive_search(ag):
+            raw_key = <unsigned char*>ag.key().ptr()
+
+            for i in range(0, ag.key().length()):
+                if raw_key[i] == self._c_value_separator:
+                    yield raw_key[:i].decode('utf8')
+                    break
 
 
 cdef class _UnpackTrie(BytesTrie):
@@ -493,6 +534,8 @@ cdef class _UnpackTrie(BytesTrie):
         cdef list items = BytesTrie.items(self, prefix)
         return [(key, self._unpack(val)) for (key, val) in items]
 
+    def iteritems(self, unicode prefix=""):
+        return ((key, self._unpack(val)) for key, val in BytesTrie.iteritems(self, prefix))
 
 
 cdef class RecordTrie(_UnpackTrie):

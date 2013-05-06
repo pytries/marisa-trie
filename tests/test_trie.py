@@ -105,6 +105,7 @@ def test_len():
     trie = marisa_trie.Trie(['foo', 'f', 'bar'])
     assert len(trie) == 3
 
+
 def test_prefixes():
     trie = marisa_trie.Trie(['foo', 'f', 'foobar', 'bar'])
     assert trie.prefixes('foobar') == ['f', 'foo', 'foobar']
@@ -114,16 +115,28 @@ def test_prefixes():
 
     assert list(trie.iter_prefixes('foobar')) == ['f', 'foo', 'foobar']
 
+
 def test_keys():
     keys = ['foo', 'f', 'foobar', 'bar']
     trie = marisa_trie.Trie(keys)
     assert set(trie.keys()) == set(keys)
+
 
 def test_keys_prefix():
     keys = ['foo', 'f', 'foobar', 'bar']
     trie = marisa_trie.Trie(keys)
     assert set(trie.keys('fo')) == set(['foo', 'foobar'])
     assert trie.keys('foobarz') == []
+
+
+def test_iterkeys():
+    keys = get_random_words(1000)
+    trie = marisa_trie.Trie(keys)
+    assert trie.keys() == list(trie.iterkeys())
+
+    for key in keys:
+        prefix = key[:5]
+        assert trie.keys(prefix) == list(trie.iterkeys(prefix))
 
 
 def test_invalid_file():

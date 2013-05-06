@@ -312,7 +312,10 @@ cdef class Trie(_Trie):
 
 # This symbol is not allowed in utf8 so it is safe to use
 # as a separator between utf8-encoded string and binary payload.
-DEF _VALUE_SEPARATOR = b'\xff'
+# XXX: b'\xff' value changes sort order for BytesTrie and RecordTrie.
+# See https://github.com/kmike/DAWG docs for a description of a similar issue.
+cdef bytes _VALUE_SEPARATOR = b'\xff'
+
 
 cdef class BytesTrie(_Trie):
     """
@@ -323,21 +326,27 @@ cdef class BytesTrie(_Trie):
     utf8-encoded keys and storing the result in MARISA-trie.
     """
 
-    def __init__(self, arg=None, **options):
+    cdef bytes _b_value_separator
+    cdef unsigned char _c_value_separator
+
+    def __init__(self, arg=None, bytes value_separator=_VALUE_SEPARATOR, **options):
         """
         ``arg`` must be an iterable of tuples (unicode_key, bytes_payload).
         """
         super(BytesTrie, self).__init__()
+
+        self._b_value_separator = value_separator
+        self._c_value_separator = <unsigned char>ord(value_separator)
+
         byte_keys = (self._raw_key(d[0], d[1]) for d in (arg or []))
         self._build(byte_keys, **options)
 
-
     cpdef bytes _raw_key(self, unicode key, bytes payload):
-        return key.encode('utf8') + _VALUE_SEPARATOR + payload
+        return key.encode('utf8') + self._b_value_separator + payload
 
     cdef bint _contains(self, bytes key):
         cdef agent.Agent ag
-        cdef bytes _key = key + _VALUE_SEPARATOR
+        cdef bytes _key = key + self._b_value_separator
         ag.set_query(_key)
         return self._trie.predictive_search(ag)
 
@@ -358,7 +367,7 @@ cdef class BytesTrie(_Trie):
 
         while ind <= key_len:
             prefix = key[:ind]
-            b_prefix = prefix.encode('utf8') + _VALUE_SEPARATOR
+            b_prefix = prefix.encode('utf8') + self._b_value_separator
             ag.set_query(b_prefix)
             if self._trie.predictive_search(ag):
                 res.append(prefix)
@@ -405,7 +414,7 @@ cdef class BytesTrie(_Trie):
         """
         cdef list res = []
         cdef bytes value
-        cdef bytes b_prefix = key + _VALUE_SEPARATOR
+        cdef bytes b_prefix = key + self._b_value_separator
         cdef int prefix_len = len(b_prefix)
 
         cdef agent.Agent ag
@@ -421,7 +430,7 @@ cdef class BytesTrie(_Trie):
         cdef bytes b_prefix = prefix.encode('utf8')
         cdef bytes value
         cdef unicode key
-        cdef char* raw_key
+        cdef unsigned char* raw_key
         cdef list res = []
         cdef int i, value_len
 
@@ -429,10 +438,10 @@ cdef class BytesTrie(_Trie):
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            raw_key = <char*>ag.key().ptr()
+            raw_key = <unsigned char*>ag.key().ptr()
 
             for i in range(0, ag.key().length()):
-                if raw_key[i] == _VALUE_SEPARATOR:
+                if raw_key[i] == self._c_value_separator:
                     break
 
             key = raw_key[:i].decode('utf8')
@@ -446,7 +455,7 @@ cdef class BytesTrie(_Trie):
     cpdef list keys(self, unicode prefix=""):
         cdef bytes b_prefix = prefix.encode('utf8')
         cdef unicode key
-        cdef char* raw_key
+        cdef unsigned char* raw_key
         cdef list res = []
         cdef int i
 
@@ -454,10 +463,10 @@ cdef class BytesTrie(_Trie):
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            raw_key = <char*>ag.key().ptr()
+            raw_key = <unsigned char*>ag.key().ptr()
 
             for i in range(0, ag.key().length()):
-                if raw_key[i] == _VALUE_SEPARATOR:
+                if raw_key[i] == self._c_value_separator:
                     key = raw_key[:i].decode('utf8')
                     res.append(key)
                     break

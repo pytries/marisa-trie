@@ -307,6 +307,15 @@ cdef class Trie(_Trie):
          while self._trie.predictive_search(ag):
              yield (ag.key().ptr()[:ag.key().length()]).decode('utf8')
 
+     def has_keys_with_prefix(self, unicode prefix=""):
+         """
+         Returns True if any key in the trie begins with ``prefix``.
+         """
+         cdef agent.Agent ag
+         cdef bytes b_prefix = prefix.encode('utf8')
+         ag.set_query(b_prefix)
+
+         return self._trie.predictive_search(ag):
 
 
 # This symbol is not allowed in utf8 so it is safe to use

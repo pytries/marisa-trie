@@ -127,6 +127,13 @@ Find all prefixes of a given key::
     >>> trie.prefixes(u'foobarz')
     [u'foo', u'foobar']
 
+Test whether some key begins with a given prefix::
+
+    >>> trie.has_keys_with_prefix(u'fo')
+    True
+    >>> trie.has_keys_with_prefix(u'go')
+    False
+
 Find all keys from this trie that starts with a given prefix::
 
     >> trie.keys(u'fo')
@@ -393,6 +400,7 @@ Authors & Contributors
 ----------------------
 
 * Mikhail Korobov <kmike84@gmail.com>
+* `Matt Hickford <https://github.com/matt-hickford>`_
 
 This module is based on `marisa-trie`_ C++ library by
 Susumu Yata & contributors.

@@ -139,11 +139,16 @@ def test_iterkeys():
         assert trie.keys(prefix) == list(trie.iterkeys(prefix))
 
 def test_has_keys_with_prefix():
-    keys = ['foo', 'f', 'foobar', 'bar']
-    trie = marisa_trie.Trie(keys)
-    assert trie.has_keys_with_prefix('f')
-    assert trie.has_keys_with_prefix('foobar')
-    assert not trie.has_keys_with_prefix('la')
+    empty_trie = marisa_trie.Trie()
+    assert empty_trie.has_keys_with_prefix('') == False
+    assert empty_trie.has_keys_with_prefix('ab') == False
+
+    fruit_trie = marisa_trie.Trie(['apple', 'pear', 'peach'])
+    assert fruit_trie.has_keys_with_prefix('') == True
+    assert fruit_trie.has_keys_with_prefix('a') == True
+    assert fruit_trie.has_keys_with_prefix('pe') == True
+    assert fruit_trie.has_keys_with_prefix('x') == False
+
 
 def test_invalid_file():
     try:

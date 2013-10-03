@@ -124,6 +124,24 @@ class TestBytesTrie(object):
         assert trie2['foo'] == [b'foo']
         assert trie2['bar'] == [b'bar']
 
+    def test_has_keys_with_prefix_empty(self):
+        empty_trie = marisa_trie.BytesTrie()
+        assert not empty_trie.has_keys_with_prefix('')
+        assert not empty_trie.has_keys_with_prefix('ab')
+
+
+    def test_has_keys_with_prefix(self):
+        fruit_trie = marisa_trie.BytesTrie([
+            ('apple', b'foo'),
+            ('pear', b'bar'),
+            ('peach', b'baz'),
+        ])
+        assert fruit_trie.has_keys_with_prefix('')
+        assert fruit_trie.has_keys_with_prefix('a')
+        assert fruit_trie.has_keys_with_prefix('pe')
+        assert fruit_trie.has_keys_with_prefix('pear')
+        assert not fruit_trie.has_keys_with_prefix('x')
+
 
 
 class TestRecordTrie(object):

@@ -147,6 +147,7 @@ def test_has_keys_with_prefix():
     assert fruit_trie.has_keys_with_prefix('') == True
     assert fruit_trie.has_keys_with_prefix('a') == True
     assert fruit_trie.has_keys_with_prefix('pe') == True
+    assert fruit_trie.has_keys_with_prefix('pear') == True
     assert fruit_trie.has_keys_with_prefix('x') == False
 
 

@@ -239,83 +239,83 @@ cdef class _Trie:
 
 
 cdef class Trie(_Trie):
-     """
-     This trie stores unicode keys and assigns an unque ID to each key.
-     """
+    """
+    This trie stores unicode keys and assigns an unque ID to each key.
+    """
 
-     cpdef int key_id(self, unicode key) except -1:
-         """
-         Return unique auto-generated key index for a ``key``.
-         Raises KeyError if key is not in this trie.
-         """
-         cdef bytes _key = key.encode('utf8')
-         cdef int res = self._key_id(_key)
-         if res == -1:
-             raise KeyError(key)
-         return res
+    cpdef int key_id(self, unicode key) except -1:
+        """
+        Return unique auto-generated key index for a ``key``.
+        Raises KeyError if key is not in this trie.
+        """
+        cdef bytes _key = key.encode('utf8')
+        cdef int res = self._key_id(_key)
+        if res == -1:
+            raise KeyError(key)
+        return res
 
-     cpdef unicode restore_key(self, int index):
-         """
-         Return a key given its index (obtained by ``key_id`` method).
-         """
-         cdef agent.Agent ag
-         ag.set_query(index)
-         try:
-             self._trie.reverse_lookup(ag)
-         except KeyError:
-             raise KeyError(index)
-         return (<char*>ag.key().ptr()).decode('utf8')
+    cpdef unicode restore_key(self, int index):
+        """
+        Return a key given its index (obtained by ``key_id`` method).
+        """
+        cdef agent.Agent ag
+        ag.set_query(index)
+        try:
+            self._trie.reverse_lookup(ag)
+        except KeyError:
+            raise KeyError(index)
+        return (<char*>ag.key().ptr()).decode('utf8')
 
-     cdef int _key_id(self, char* key):
-         cdef bint res
-         cdef agent.Agent ag
-         ag.set_query(key)
-         res = self._trie.lookup(ag)
-         if not res:
-             return -1
-         return ag.key().id()
+    cdef int _key_id(self, char* key):
+        cdef bint res
+        cdef agent.Agent ag
+        ag.set_query(key)
+        res = self._trie.lookup(ag)
+        if not res:
+            return -1
+        return ag.key().id()
 
-     def iter_prefixes(self, unicode key):
-         """
-         Return an iterator of all prefixes of a given key.
-         """
-         cdef agent.Agent ag
+    def iter_prefixes(self, unicode key):
+        """
+        Return an iterator of all prefixes of a given key.
+        """
+        cdef agent.Agent ag
 
-         cdef bytes b_key = key.encode('utf8')
-         ag.set_query(b_key)
+        cdef bytes b_key = key.encode('utf8')
+        ag.set_query(b_key)
 
-         while self._trie.common_prefix_search(ag):
-             yield ag.key().ptr()[:ag.key().length()].decode('utf8')
+        while self._trie.common_prefix_search(ag):
+            yield ag.key().ptr()[:ag.key().length()].decode('utf8')
 
-     def prefixes(self, unicode key):
-         """
-         Return a list with all prefixes of a given key.
-         """
+    def prefixes(self, unicode key):
+        """
+        Return a list with all prefixes of a given key.
+        """
 
-         # this an inlined version of ``list(self.iter_prefixes(key))``
+        # this an inlined version of ``list(self.iter_prefixes(key))``
 
-         cdef agent.Agent ag
-         cdef unicode prefix
-         cdef list res = []
+        cdef agent.Agent ag
+        cdef unicode prefix
+        cdef list res = []
 
-         cdef bytes b_key = key.encode('utf8')
-         ag.set_query(b_key)
+        cdef bytes b_key = key.encode('utf8')
+        ag.set_query(b_key)
 
-         while self._trie.common_prefix_search(ag):
-             prefix = ag.key().ptr()[:ag.key().length()].decode('utf8')
-             res.append(prefix)
-         return res
+        while self._trie.common_prefix_search(ag):
+            prefix = ag.key().ptr()[:ag.key().length()].decode('utf8')
+            res.append(prefix)
+        return res
 
-     def iterkeys(self, unicode prefix=""):
-         """
-         Return an iterator over keys that have a prefix ``prefix``.
-         """
-         cdef agent.Agent ag
-         cdef bytes b_prefix = prefix.encode('utf8')
-         ag.set_query(b_prefix)
+    def iterkeys(self, unicode prefix=""):
+        """
+        Return an iterator over keys that have a prefix ``prefix``.
+        """
+        cdef agent.Agent ag
+        cdef bytes b_prefix = prefix.encode('utf8')
+        ag.set_query(b_prefix)
 
-         while self._trie.predictive_search(ag):
-             yield (ag.key().ptr()[:ag.key().length()]).decode('utf8')
+        while self._trie.predictive_search(ag):
+            yield (ag.key().ptr()[:ag.key().length()]).decode('utf8')
 
 
 # This symbol is not allowed in utf8 so it is safe to use

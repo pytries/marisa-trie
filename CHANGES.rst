@@ -2,6 +2,11 @@
 CHANGES
 =======
 
+0.5.3 (2014-02-08)
+------------------
+
+* small ``Trie.restore_key`` optimization (it should work 5-15% faster)
+
 0.5.2 (2014-02-08)
 ------------------
 

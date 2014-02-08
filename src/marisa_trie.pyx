@@ -264,7 +264,7 @@ cdef class Trie(_Trie):
             self._trie.reverse_lookup(ag)
         except KeyError:
             raise KeyError(index)
-        return (<char*>ag.key().ptr()).decode('utf8')
+        return (ag.key().ptr()[:ag.key().length()]).decode('utf8')
 
     cdef int _key_id(self, char* key):
         cdef bint res

@@ -254,7 +254,7 @@ cdef class Trie(_Trie):
             raise KeyError(key)
         return res
 
-    cpdef unicode restore_key(self, int index):
+    cpdef restore_key(self, int index):
         """
         Return a key given its index (obtained by ``key_id`` method).
         """

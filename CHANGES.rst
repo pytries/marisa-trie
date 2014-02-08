@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+0.5.2 (2014-02-08)
+------------------
+
+* fix ``Trie.restore_key`` method - it was reading past declared string length;
+* rebuild wrapper with Cython 0.20.
+
 0.5.1 (2013-10-03)
 ------------------
 

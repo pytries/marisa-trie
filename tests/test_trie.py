@@ -28,13 +28,13 @@ def test_contains():
     assert 'foo' in trie
     assert 'f' not in trie
 
+
 def test_key_id():
     words = ['foo', 'bar', 'f']
     trie = marisa_trie.Trie(words)
     for word in words:
         key_id = trie.key_id(word)
         assert trie.restore_key(key_id) == word
-
 
     key_ids = [trie.key_id(word) for word in words]
     non_existing_id = max(key_ids) + 1
@@ -44,6 +44,43 @@ def test_key_id():
 
     with pytest.raises(KeyError):
         print(trie.key_id('fo'))
+
+
+def test_getitem():
+    words = ['foo', 'bar', 'f']
+    trie = marisa_trie.Trie(words)
+    for word in words:
+        key_id = trie[word]
+        assert trie.restore_key(key_id) == word
+
+    key_ids = [trie[word] for word in words]
+    non_existing_id = max(key_ids) + 1
+
+    with pytest.raises(KeyError):
+        trie.restore_key(non_existing_id)
+
+    with pytest.raises(KeyError):
+        print(trie['fo'])
+
+
+def test_get():
+    words = ['foo', 'bar', 'f']
+    trie = marisa_trie.Trie(words)
+    for word in words:
+        key_id = trie.get(word)
+        assert trie.restore_key(key_id) == word
+
+        key_id = trie.get(word.encode('utf8'))
+        assert trie.restore_key(key_id) == word
+
+        key_id = trie.get(word, 'default value')
+        assert trie.restore_key(key_id) == word
+
+    assert trie.get('non_existing_key') is None
+    assert trie.get(b'non_existing_bytes_key') is None
+    assert trie.get('non_existing_key', 'default value') == 'default value'
+    assert trie.get(b'non_existing_bytes_key', 'default value') == 'default value'
+
 
 def test_saveload():
     fd, fname = tempfile.mkstemp()
@@ -75,6 +112,7 @@ def test_mmap():
     for word in words:
         assert word in trie2
 
+
 def test_dumps_loads():
     words = get_random_words(1000)
     trie = marisa_trie.Trie(words)
@@ -85,6 +123,7 @@ def test_dumps_loads():
     for word in words:
         assert word in trie2
         assert trie2.key_id(word) == trie.key_id(word)
+
 
 def test_pickling():
     words = get_random_words(1000)
@@ -137,6 +176,33 @@ def test_iterkeys():
     for key in keys:
         prefix = key[:5]
         assert trie.keys(prefix) == list(trie.iterkeys(prefix))
+
+
+def test_items():
+    keys = ['foo', 'f', 'foobar', 'bar']
+    trie = marisa_trie.Trie(keys)
+    items = trie.items()
+    assert set(items) == set(zip(keys, (trie[k] for k in keys)))
+
+
+def test_items_prefix():
+    keys = ['foo', 'f', 'foobar', 'bar']
+    trie = marisa_trie.Trie(keys)
+    assert set(trie.items('fo')) == set([
+        ('foo', trie['foo']),
+        ('foobar', trie['foobar']),
+    ])
+
+
+def test_iteritems():
+    keys = get_random_words(1000)
+    trie = marisa_trie.Trie(keys)
+    assert trie.items() == list(trie.iteritems())
+
+    for key in keys:
+        prefix = key[:5]
+        assert trie.items(prefix) == list(trie.iteritems(prefix))
+
 
 def test_has_keys_with_prefix():
     empty_trie = marisa_trie.Trie()

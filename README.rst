@@ -59,11 +59,16 @@ Check if key is in trie::
     False
 
 Each key is assigned an unique ID from 0 to (n - 1), where n is the
-number of keys; you can use this ID to store a value in a
-separate structure (e.g. python list)::
+number of keys::
 
     >>> trie.key_id(u'key2')
     1
+    >>> trie[u'key2']  # alternative syntax
+    1
+
+Note that you can't assign a value to a ``marisa_trie.Trie`` key,
+but can use the returned ID to store a value in a separate data structure
+(e.g. in a python list or numpy array).
 
 Key can be reconstructed from the ID::
 
@@ -84,6 +89,18 @@ Find all keys from this trie that starts with a given prefix::
     [u'key1', u'key12']
 
 (iterator version ``.iterkeys(prefix)`` is also available).
+
+Use ``items()`` method to return all (key, ID) pairs::
+
+    >>> trie.items()
+    [(u'key1', 0), (u'key12', 2), (u'key2', 1)]
+
+Filter them by prefix::
+
+    >>> trie.items(u'key1')
+    [(u'key1', 0), (u'key12', 2)]
+
+(iterator version ``.iteritems(prefix)`` is also available).
 
 marisa_trie.RecordTrie
 ----------------------

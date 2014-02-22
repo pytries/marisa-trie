@@ -264,6 +264,26 @@ cdef class Trie(_Trie):
             raise KeyError(key)
         return res
 
+    def __getitem__(self, unicode key):
+        return self.key_id(key)
+
+    def get(self, key, default=None):
+        """
+        Return a key id for a given key or ``default`` if the key is not found.
+        """
+        cdef bytes b_key
+        cdef int res
+
+        if isinstance(key, unicode):
+            b_key = (<unicode>key).encode('utf8')
+        else:
+            b_key = key
+
+        res = self._key_id(b_key)
+        if res == -1:
+            return default
+        return res
+
     cpdef restore_key(self, int index):
         """
         Return a key given its index (obtained by ``key_id`` method).
@@ -311,6 +331,29 @@ cdef class Trie(_Trie):
 
         while self._trie.common_prefix_search(ag):
             res.append(_get_key(ag))
+        return res
+
+    def iteritems(self, unicode prefix=""):
+        """
+        Return an iterator over items that have a prefix ``prefix``.
+        """
+        cdef bytes b_prefix = prefix.encode('utf8')
+        cdef agent.Agent ag
+        ag.set_query(b_prefix)
+
+        while self._trie.predictive_search(ag):
+            yield _get_key(ag), ag.key().id()
+
+    def items(self, unicode prefix=""):
+        # inlined for speed
+        cdef list res = []
+        cdef bytes b_prefix = prefix.encode('utf8')
+        cdef agent.Agent ag
+        ag.set_query(b_prefix)
+
+        while self._trie.predictive_search(ag):
+            res.append((_get_key(ag), ag.key().id()))
+
         return res
 
 

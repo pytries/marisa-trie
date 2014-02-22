@@ -2,6 +2,14 @@
 CHANGES
 =======
 
+0.6 (2014-02-22)
+----------------
+
+* New ``Trie`` methods: ``__getitem__``, ``get``, ``items``, ``iteritems``.
+  ``trie[u'key']`` is now the same as ``trie.key_id(u'key')``.
+* small optimization for ``BytesTrie.get``.
+* wrapper is rebuilt with Cython 0.20.1.
+
 0.5.3 (2014-02-08)
 ------------------
 

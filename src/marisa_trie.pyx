@@ -224,15 +224,12 @@ cdef class _Trie:
         """
         # non-generator inlined version of iterkeys()
         cdef list res = []
-        cdef unicode key
-
         cdef bytes b_prefix = prefix.encode('utf8')
         cdef agent.Agent ag
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            key = _get_key(ag)
-            res.append(key)
+            res.append(_get_key(ag))
 
         return res
 
@@ -244,7 +241,6 @@ cdef class _Trie:
         cdef bytes b_prefix = prefix.encode('utf8')
         ag.set_query(b_prefix)
         return self._trie.predictive_search(ag)
-
 
 
 cdef class Trie(_Trie):
@@ -309,9 +305,8 @@ cdef class Trie(_Trie):
         """
         Return an iterator of all prefixes of a given key.
         """
-        cdef agent.Agent ag
-
         cdef bytes b_key = key.encode('utf8')
+        cdef agent.Agent ag
         ag.set_query(b_key)
 
         while self._trie.common_prefix_search(ag):
@@ -323,10 +318,9 @@ cdef class Trie(_Trie):
         """
         # this an inlined version of ``list(self.iter_prefixes(key))``
 
-        cdef agent.Agent ag
         cdef list res = []
         cdef bytes b_key = key.encode('utf8')
-
+        cdef agent.Agent ag
         ag.set_query(b_key)
 
         while self._trie.common_prefix_search(ag):
@@ -621,6 +615,6 @@ cdef class RecordTrie(_UnpackTrie):
     cdef bytes _pack(self, value):
         return self._struct.pack(*value)
 
-    def __reduce__(self): # pickling support
+    def __reduce__(self):  # pickling support
         return self.__class__, (self._fmt,), self.tobytes()
 

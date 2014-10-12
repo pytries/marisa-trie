@@ -333,7 +333,7 @@ cdef class Trie(_Trie):
         Return the longest prefix of a given key.
         """
 
-        cdef unicode longest
+        cdef unicode longest = None
         cdef bytes b_key = key.encode('utf8')
         cdef agent.Agent ag
         ag.set_query(b_key)

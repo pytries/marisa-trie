@@ -77,7 +77,7 @@ cdef class _Trie:
         * an iterable with unicode keys;
         * None (if you're going to load a trie later).
 
-        Pass a ``weights`` iterable with expected lookup frequences
+        Pass a ``weights`` iterable with expected lookup frequencies
         to optimize lookup and prefix search speed.
         """
 
@@ -326,6 +326,22 @@ cdef class Trie(_Trie):
         while self._trie.common_prefix_search(ag):
             res.append(_get_key(ag))
         return res
+
+    # KCL
+    def prefix(self, unicode key):
+        """
+        Return the longest prefix of a given key.
+        """
+
+        cdef unicode longest
+        cdef bytes b_key = key.encode('utf8')
+        cdef agent.Agent ag
+        ag.set_query(b_key)
+
+        while self._trie.common_prefix_search(ag):
+            longest = _get_key(ag)
+        return longest
+    # KCL
 
     def iteritems(self, unicode prefix=""):
         """

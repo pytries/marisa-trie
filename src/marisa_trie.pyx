@@ -71,8 +71,8 @@ cdef class _Trie:
     cdef trie.Trie* _trie
 
     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
-                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
-                        weights=None):
+                       cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
+                       weights=None):
         """
         ``arg`` can be one of the following:
 
@@ -137,7 +137,6 @@ cdef class _Trie:
             elif not isinstance(other, _Trie):
                 return False
 
-            # I wonder why this doesn't work withou the '_Trie' annotation.
             return (<_Trie>self)._equals(other)
         elif op == 3:  # !=
             return not (self == other)
@@ -147,7 +146,9 @@ cdef class _Trie:
 
     cdef bint _equals(self, _Trie other) nogil:
         cdef int num_keys = self._trie.num_keys()
-        if other._trie.num_keys() != num_keys:
+        cdef base.NodeOrder node_order = self._trie.node_order()
+        if (other._trie.num_keys() != num_keys or
+            other._trie.node_order() != node_order):
             return False
 
         cdef agent.Agent ag1, ag2
@@ -160,8 +161,8 @@ cdef class _Trie:
             other._trie.predictive_search(ag2)
             key1 = ag1.key()
             key2 = ag2.key()
-            if not (key1.length() == key2.length() and
-                    strncmp(key1.ptr(), key2.ptr(), key1.length()) == 0):
+            if (key1.length() != key2.length() or
+                strncmp(key1.ptr(), key2.ptr(), key1.length()) != 0):
                 return False
         return True
 

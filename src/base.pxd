@@ -57,4 +57,7 @@ cdef extern from "../lib/marisa/base.h":
         MARISA_CONFIG_MASK
 
 
-
+cdef extern from "../lib/marisa/base.h" namespace "marisa":
+    ctypedef marisa_cache_level CacheLevel
+    ctypedef marisa_tail_mode TailMode
+    ctypedef marisa_node_order NodeOrder

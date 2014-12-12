@@ -146,6 +146,11 @@ def test_cmp():
     assert trie == marisa_trie.Trie(["foo", "bar"])
     assert trie != marisa_trie.Trie(["foo", "boo"])
 
+    lo_trie = marisa_trie.Trie(order=marisa_trie.LABEL_ORDER)
+    wo_trie = marisa_trie.Trie(order=marisa_trie.WEIGHT_ORDER)
+    assert lo_trie == lo_trie and wo_trie == wo_trie
+    assert lo_trie != wo_trie
+
     with pytest.raises(TypeError):
         marisa_trie.Trie() < marisa_trie.Trie()
 

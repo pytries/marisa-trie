@@ -10,13 +10,15 @@ cimport trie
 cimport iostream
 cimport base
 
-import struct
 import itertools
+import operator
+import struct
 
 try:
-    from itertools import izip
+    from itertools import izip, imap
 except ImportError:
     izip = zip
+    imap = map
 
 
 DEFAULT_CACHE = base.MARISA_DEFAULT_CACHE
@@ -127,6 +129,25 @@ cdef class _Trie:
             self._trie.build(ks[0], self._config_flags(**options))
         finally:
             del ks
+
+    def __richcmp__(self, other, int op):
+        if op == 2:    # ==
+            if other is self:
+                return True
+            elif not isinstance(other, _Trie):
+                return False
+
+            return all(imap(operator.eq, self.iterkeys(), other.iterkeys()))
+        elif op == 3:  # !=
+            return not (self == other)
+
+        # Note: we can output string representation of the operator,
+        # e.g. "<" or ">=", but I'm not sure if it's necessary.
+        raise TypeError("unorderable types: {} and {}".format(
+            self.__class__, other.__class__))
+
+    def __iter__(self):
+        return self.iterkeys()
 
     def __len__(self):
         return self._trie.num_keys()
@@ -617,4 +638,3 @@ cdef class RecordTrie(_UnpackTrie):
 
     def __reduce__(self):  # pickling support
         return self.__class__, (self._fmt,), self.tobytes()
-

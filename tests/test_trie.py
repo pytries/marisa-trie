@@ -137,6 +137,29 @@ def test_pickling():
         assert trie2.key_id(word) == trie.key_id(word)
 
 
+def test_cmp():
+    trie = marisa_trie.Trie()
+    assert trie == trie
+    assert trie == marisa_trie.Trie()
+
+    trie = marisa_trie.Trie(["foo", "bar"])
+    assert trie == marisa_trie.Trie(["foo", "bar"])
+    assert trie != marisa_trie.Trie(["foo", "boo"])
+
+    with pytest.raises(TypeError):
+        marisa_trie.Trie() < marisa_trie.Trie()
+
+    with pytest.raises(TypeError):
+        marisa_trie.Trie() > marisa_trie.Trie()
+
+    # not sure if it makes sense copy-pasting further.
+
+
+def test_iter():
+    trie = marisa_trie.Trie(["foo", "bar"])
+    assert list(trie) == list(trie.iterkeys())
+
+
 def test_len():
     trie = marisa_trie.Trie()
     assert len(trie) == 0

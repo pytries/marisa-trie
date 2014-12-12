@@ -12,14 +12,12 @@ cimport iostream
 cimport base
 
 import itertools
-import operator
 import struct
 
 try:
-    from itertools import izip, imap
+    from itertools import izip
 except ImportError:
     izip = zip
-    imap = map
 
 
 DEFAULT_CACHE = base.MARISA_DEFAULT_CACHE

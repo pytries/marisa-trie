@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from std_iostream cimport stringstream, istream, ostream
+from libc.string cimport strncmp
 cimport keyset
 cimport key
 cimport query
@@ -56,7 +57,6 @@ LABEL_ORDER = base.MARISA_LABEL_ORDER
 # matching.
 WEIGHT_ORDER = base.MARISA_WEIGHT_ORDER
 DEFAULT_ORDER = base.MARISA_DEFAULT_ORDER
-
 
 cdef unicode _get_key(agent.Agent& ag):
     return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
@@ -137,14 +137,33 @@ cdef class _Trie:
             elif not isinstance(other, _Trie):
                 return False
 
-            return all(imap(operator.eq, self.iterkeys(), other.iterkeys()))
+            # I wonder why this doesn't work withou the '_Trie' annotation.
+            return (<_Trie>self)._equals(other)
         elif op == 3:  # !=
             return not (self == other)
 
-        # Note: we can output string representation of the operator,
-        # e.g. "<" or ">=", but I'm not sure if it's necessary.
-        raise TypeError("unorderable types: {} and {}".format(
+        raise TypeError("unorderable types: {0} and {1}".format(
             self.__class__, other.__class__))
+
+    cdef bint _equals(self, _Trie other) nogil:
+        cdef int num_keys = self._trie.num_keys()
+        if other._trie.num_keys() != num_keys:
+            return False
+
+        cdef agent.Agent ag1, ag2
+        ag1.set_query(b"")
+        ag2.set_query(b"")
+        cdef int i
+        cdef key.Key key1, key2
+        for i in range(num_keys):
+            self._trie.predictive_search(ag1)
+            other._trie.predictive_search(ag2)
+            key1 = ag1.key()
+            key2 = ag2.key()
+            if not (key1.length() == key2.length() and
+                    strncmp(key1.ptr(), key2.ptr(), key1.length()) == 0):
+                return False
+        return True
 
     def __iter__(self):
         return self.iterkeys()

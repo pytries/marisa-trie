@@ -246,6 +246,14 @@ make trie functions return results in alphabetical oder::
 
     >>> trie = marisa_trie.RecordTrie(fmt, data, order=marisa_trie.LABEL_ORDER)
 
+Note that two tries constructed from identical data but with different ``order``
+arguments will compare unequal::
+
+    >>> t1 = marisa_trie.Trie(order=marisa_trie.LABEL_ORDER)
+    >>> t2 = marisa_trie.Trie(order=marisa_trie.WEIGHT_ORDER)
+    >>> t1 == t2
+    False
+
 
 Benchmarks
 ==========
@@ -418,6 +426,7 @@ Authors & Contributors
 
 * Mikhail Korobov <kmike84@gmail.com>
 * `Matt Hickford <https://github.com/matt-hickford>`_
+* Sergei Lebedev <superbobry@gmail.com>
 
 This module is based on `marisa-trie`_ C++ library by
 Susumu Yata & contributors.

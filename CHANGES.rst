@@ -2,6 +2,14 @@
 CHANGES
 =======
 
+0.7 (2014-12-15)
+----------------
+
+* ``trie1 == trie2`` and ``trie1 != trie2`` now work (thanks Sergei Lebedev);
+* ``for key in trie:`` is fixed (thanks Sergei Lebedev);
+* wrapper is rebuilt with Cython 0.21.1 (thanks Sergei Lebedev);
+* https://bitbucket.org/kmike/marisa-trie repo is no longer supported.
+
 0.6 (2014-02-22)
 ----------------
 

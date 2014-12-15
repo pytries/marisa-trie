@@ -1,5 +1,7 @@
-cimport keyset
 cimport agent
+cimport base
+cimport keyset
+
 
 cdef extern from "../lib/marisa/trie.h" namespace "marisa" nogil:
 
@@ -27,8 +29,8 @@ cdef extern from "../lib/marisa/trie.h" namespace "marisa" nogil:
         int num_keys() except +
         int num_nodes() except +
 
-#        TailMode tail_mode()
-#        NodeOrder node_order()
+        base.TailMode tail_mode()
+        base.NodeOrder node_order()
 
         bint empty() except +
         int size() except +
@@ -37,4 +39,3 @@ cdef extern from "../lib/marisa/trie.h" namespace "marisa" nogil:
 
         void clear() except +
         void swap(Trie &rhs) except +
-

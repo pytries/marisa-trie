@@ -371,15 +371,9 @@ Contributions are welcome!
 Contributing
 ============
 
-Development happens at github and bitbucket:
+Development happens at github: https://github.com/kmike/marisa-trie
 
-* https://github.com/kmike/marisa-trie
-* https://bitbucket.org/kmike/marisa-trie
-
-The main issue tracker is at github: https://github.com/kmike/marisa-trie/issues
-
-Feel free to submit ideas, bugs, pull requests (git or hg) or
-regular patches.
+Feel free to submit ideas, bug reports and pull requests.
 
 If you found a bug in a C++ part please report it to the original
 `bug tracker <https://code.google.com/p/marisa-trie/issues/list>`_.

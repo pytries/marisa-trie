@@ -2,6 +2,13 @@
 CHANGES
 =======
 
+0.7.1 (2015-04-21)
+------------------
+
+* setup.py is switched to setuptools;
+* a tiny speedup;
+* wrapper is rebuilt with Cython 0.22.
+
 0.7 (2014-12-15)
 ----------------
 

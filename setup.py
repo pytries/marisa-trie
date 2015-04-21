@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import glob
 import itertools
-from distutils.core import setup
+from setuptools import setup
 from distutils.extension import Extension
 
 MARISA_FILES = [

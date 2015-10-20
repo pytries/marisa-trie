@@ -1,8 +1,11 @@
-marisa-trie
+marisa-trie |travis| |appveyor|
 ===========
 
-.. image:: https://travis-ci.org/kmike/marisa-trie.png?branch=master
-    :target: https://travis-ci.org/kmike/marisa-trie
+.. |travis| image:: https://travis-ci.org/kmike/marisa-trie.png
+   :target: https://travis-ci.org/kmike/marisa-trie
+
+.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/uj38n3d09rtwbbbg?svg=true
+   :target: https://ci.appveyor.com/project/superbobry/marisa-trie
 
 Static memory-efficient Trie-like structures for Python (2.x and 3.x).
 

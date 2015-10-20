@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import tempfile
+
 import pickle
+import sys
+import tempfile
 
 import pytest
 
@@ -99,6 +101,8 @@ def test_saveload():
         assert word in trie2
 
 
+@pytest.mark.skipif(sys.platform == "win32",
+                    reason="unsupported by the C++ library")
 def test_mmap():
     fd, fname = tempfile.mkstemp()
     words = get_random_words(1000)

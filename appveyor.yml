@@ -69,6 +69,3 @@ test_script:
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
   - path: dist\*
-
-matrix:
-  fast_finish: true

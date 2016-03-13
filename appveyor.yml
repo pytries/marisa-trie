@@ -12,41 +12,41 @@ environment:
       PYTHON_VERSION: "2.6.x"
       PYTHON_ARCH: "32"
 
-    - PYTHON: "C:\\Python26-x64"
-      PYTHON_VERSION: "2.6.x"
-      PYTHON_ARCH: "64"
+    # - PYTHON: "C:\\Python26-x64"
+    #   PYTHON_VERSION: "2.6.x"
+    #   PYTHON_ARCH: "64"
 
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.x"
       PYTHON_ARCH: "32"
 
-    - PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7.x"
-      PYTHON_ARCH: "64"
+    # - PYTHON: "C:\\Python27-x64"
+    #   PYTHON_VERSION: "2.7.x"
+    #   PYTHON_ARCH: "64"
 
     - PYTHON: "C:\\Python33"
       PYTHON_VERSION: "3.3.x"
       PYTHON_ARCH: "32"
 
-    - PYTHON: "C:\\Python33-x64"
-      PYTHON_VERSION: "3.3.x"
-      PYTHON_ARCH: "64"
+    # - PYTHON: "C:\\Python33-x64"
+    #   PYTHON_VERSION: "3.3.x"
+    #   PYTHON_ARCH: "64"
 
     - PYTHON: "C:\\Python34"
       PYTHON_VERSION: "3.4.x"
       PYTHON_ARCH: "32"
 
-    - PYTHON: "C:\\Python34-x64"
-      PYTHON_VERSION: "3.4.x"
-      PYTHON_ARCH: "64"
+    # - PYTHON: "C:\\Python34-x64"
+    #   PYTHON_VERSION: "3.4.x"
+    #   PYTHON_ARCH: "64"
 
     - PYTHON: "C:\\Python35"
       PYTHON_VERSION: "3.5.x"
       PYTHON_ARCH: "32"
 
-    - PYTHON: "C:\\Python35-x64"
-      PYTHON_VERSION: "3.5.x"
-      PYTHON_ARCH: "64"
+    # - PYTHON: "C:\\Python35-x64"
+    #   PYTHON_VERSION: "3.5.x"
+    #   PYTHON_ARCH: "64"
 
 install:
   # Install Python (from the official .msi of http://python.org) and pip when
@@ -64,7 +64,15 @@ install:
 build: false
 
 test_script:
-  - "%CMD_IN_ENV% py.test"
+  # Change to a non-source folder to make sure we run the tests on the
+  # installed library.
+  - "mkdir empty_folder"
+  - "cd empty_folder"
+
+  - "python -c \"import pytest; pytest.main()\" -s -v datrie"
+
+  # Move back to the project folder
+  - "cd .."
 
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.

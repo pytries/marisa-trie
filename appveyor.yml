@@ -62,7 +62,7 @@ test_script:
   - "xcopy tests empty_folder /s /e"
   - "cd empty_folder"
 
-  - "python \"import pytest; pytest.main()\" -s -v"
+  - "python -c \"import pytest; pytest.main()\" -s -v"
 
   # Move back to the project folder
   - "cd .."

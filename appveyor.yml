@@ -43,30 +43,33 @@ environment:
 install:
   # Install Python (from the official .msi of http://python.org) and pip when
   # not already installed.
-  - "powershell ./continuous_integration/appveyor/install.ps1"
+  - ps: if (-not(Test-Path($env:PYTHON))) { & appveyor\install.ps1 }
+
+  # Prepend newly installed Python to the PATH of this build (this cannot be
+  # done from inside the powershell script as it would require to restart
+  # the parent CMD process).
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
 
+  # Upgrade to the latest version of pip to avoid it displaying warnings
+  # about it being out of date.
+  - "pip install --disable-pip-version-check --user --upgrade pip"
+
   # Install the build and runtime dependencies of the project.
-  - "%CMD_IN_ENV% pip install --timeout=60 -U pip"
   - "%CMD_IN_ENV% pip install --timeout=60 -r continuous_integration/appveyor/requirements.txt"
-  - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
 
-  # Install the genreated wheel package to test it
-  - "%CMD_IN_ENV% pip install --pre --no-index --find-links dist/ marisa-trie"
-
-build: false
+build_script:
+  # Build the compiled extension
+  - "%CMD_IN_ENV% python setup.py build"
 
 test_script:
-  # Change to a non-source folder to make sure we run the tests on the
-  # installed library.
-  - "mkdir empty_folder"
-  - "xcopy tests empty_folder /s /e"
-  - "cd empty_folder"
-
   - "%CMD_IN_ENV% python -c \"import pytest; pytest.main()\" -s -v"
 
-  # Move back to the project folder
-  - "cd .."
+after_test:
+  # If tests are successful, create a wheel for the project.
+  - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
+
+  # Install the genereated wheel package.
+  - "%CMD_IN_ENV% pip install --pre --no-index --find-links dist/ marisa-trie"
 
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.

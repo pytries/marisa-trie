@@ -47,11 +47,12 @@ install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
 
   # Install the build and runtime dependencies of the project.
+  - "%CMD_IN_ENV% pip install --timeout=60 -U pip"
   - "%CMD_IN_ENV% pip install --timeout=60 -r continuous_integration/appveyor/requirements.txt"
   - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
 
   # Install the genreated wheel package to test it
-  - "pip install --pre --no-index --find-links dist/ marisa-trie"
+  - "%CMD_IN_ENV% pip install --pre --no-index --find-links dist/ marisa-trie"
 
 build: false
 
@@ -62,7 +63,7 @@ test_script:
   - "xcopy tests empty_folder /s /e"
   - "cd empty_folder"
 
-  - "python -c \"import pytest; pytest.main()\" -s -v"
+  - "%CMD_IN_ENV% python -c \"import pytest; pytest.main()\" -s -v"
 
   # Move back to the project folder
   - "cd .."

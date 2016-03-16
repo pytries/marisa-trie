@@ -62,7 +62,7 @@ build_script:
   - "%CMD_IN_ENV% python setup.py build"
 
 test_script:
-  - "%CMD_IN_ENV% python -c \"import pytest; pytest.main()\" -s -v"
+  - "%CMD_IN_ENV% python setup.py test"
 
 after_test:
   # If tests are successful, create a wheel for the project.

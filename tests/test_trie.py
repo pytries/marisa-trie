@@ -239,15 +239,15 @@ def test_iteritems():
 
 def test_has_keys_with_prefix():
     empty_trie = marisa_trie.Trie()
-    assert empty_trie.has_keys_with_prefix('') == False
-    assert empty_trie.has_keys_with_prefix('ab') == False
+    assert not empty_trie.has_keys_with_prefix('')
+    assert not empty_trie.has_keys_with_prefix('ab')
 
     fruit_trie = marisa_trie.Trie(['apple', 'pear', 'peach'])
-    assert fruit_trie.has_keys_with_prefix('') == True
-    assert fruit_trie.has_keys_with_prefix('a') == True
-    assert fruit_trie.has_keys_with_prefix('pe') == True
-    assert fruit_trie.has_keys_with_prefix('pear') == True
-    assert fruit_trie.has_keys_with_prefix('x') == False
+    assert fruit_trie.has_keys_with_prefix('')
+    assert fruit_trie.has_keys_with_prefix('a')
+    assert fruit_trie.has_keys_with_prefix('pe')
+    assert fruit_trie.has_keys_with_prefix('pear')
+    assert not fruit_trie.has_keys_with_prefix('x')
 
 
 def test_invalid_file():

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <functional>
 #include <queue>
 
 #include "../algorithm.h"

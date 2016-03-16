@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+import os
 import pickle
-import sys
 import tempfile
 
 import pytest
@@ -90,10 +90,10 @@ def test_saveload():
     words = ['foo', 'bar', 'f']
     trie = marisa_trie.Trie(words)
 
-    with open(fname, 'w') as f:
+    with open(fname, 'wb') as f:
         trie.write(f)
 
-    with open(fname, 'r') as f:
+    with open(fname, 'rb') as f:
         trie2 = marisa_trie.Trie()
         trie2.read(f)
 
@@ -101,14 +101,15 @@ def test_saveload():
         assert word in trie2
 
 
-@pytest.mark.skipif(sys.platform == "win32",
-                    reason="unsupported by the C++ library")
 def test_mmap():
     fd, fname = tempfile.mkstemp()
     words = get_random_words(1000)
     trie = marisa_trie.Trie(words)
-    with open(fname, 'w') as f:
+    with open(fname, 'wb') as f:
         trie.write(f)
+
+    # See https://github.com/s-yata/marisa-trie/issues/3 for motivation.
+    os.close(fd)
 
     trie2 = marisa_trie.Trie()
     trie2.mmap(fname)

@@ -59,9 +59,10 @@ test_script:
   # Change to a non-source folder to make sure we run the tests on the
   # installed library.
   - "mkdir empty_folder"
+  - "xcopy tests empty_folder /s /e"
   - "cd empty_folder"
 
-  - "python -c \"import pytest; pytest.main()\" -s -v marisa-trie"
+  - "python \"import pytest; pytest.main()\" -s -v"
 
   # Move back to the project folder
   - "cd .."

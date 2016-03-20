@@ -1,8 +1,8 @@
 #ifndef MARISA_GRIMOIRE_VECTOR_BIT_VECTOR_H_
 #define MARISA_GRIMOIRE_VECTOR_BIT_VECTOR_H_
 
-#include "rank-index.h"
-#include "vector.h"
+#include "marisa/grimoire/vector/rank-index.h"
+#include "marisa/grimoire/vector/vector.h"
 
 namespace marisa {
 namespace grimoire {

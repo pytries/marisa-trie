@@ -1,5 +1,5 @@
-#include "pop-count.h"
-#include "bit-vector.h"
+#include "marisa/grimoire/vector/pop-count.h"
+#include "marisa/grimoire/vector/bit-vector.h"
 
 namespace marisa {
 namespace grimoire {
@@ -197,7 +197,6 @@ std::size_t select_bit(std::size_t i, std::size_t bit_id, UInt64 unit) {
   #ifdef _MSC_VER
   unsigned long skip;
   ::_BitScanForward64(&skip, (x & MASK_80) >> 7);
-  --skip;
   #else  // _MSC_VER
   const int skip = ::__builtin_ctzll((x & MASK_80) >> 7);
   #endif  // _MSC_VER
@@ -768,12 +767,12 @@ void BitVector::build_index(const BitVector &bv,
 
     if (bv[i]) {
       if (enables_select1 && ((num_1s % 512) == 0)) {
-        select1s_.push_back(i);
+        select1s_.push_back(static_cast<UInt32>(i));
       }
       ++num_1s;
     } else {
       if (enables_select0 && ((num_0s % 512) == 0)) {
-        select0s_.push_back(i);
+        select0s_.push_back(static_cast<UInt32>(i));
       }
       ++num_0s;
     }
@@ -812,11 +811,11 @@ void BitVector::build_index(const BitVector &bv,
 
   ranks_.back().set_abs(num_1s);
   if (enables_select0) {
-    select0s_.push_back(bv.size());
+    select0s_.push_back(static_cast<UInt32>(bv.size()));
     select0s_.shrink();
   }
   if (enables_select1) {
-    select1s_.push_back(bv.size());
+    select1s_.push_back(static_cast<UInt32>(bv.size()));
     select1s_.shrink();
   }
 }

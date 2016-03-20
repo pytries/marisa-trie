@@ -1,7 +1,7 @@
 #ifndef MARISA_GRIMOIRE_INTRIN_H_
 #define MARISA_GRIMOIRE_INTRIN_H_
 
-#include "../base.h"
+#include "marisa/base.h"
 
 #if defined(__x86_64__) || defined(_M_X64)
  #define MARISA_X64

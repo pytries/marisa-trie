@@ -1,7 +1,7 @@
 #ifndef MARISA_GRIMOIRE_TRIE_HEADER_H_
 #define MARISA_GRIMOIRE_TRIE_HEADER_H_
 
-#include "../io.h"
+#include "marisa/grimoire/io.h"
 
 namespace marisa {
 namespace grimoire {

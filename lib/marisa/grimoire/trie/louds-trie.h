@@ -1,13 +1,13 @@
 #ifndef MARISA_GRIMOIRE_TRIE_LOUDS_TRIE_H_
 #define MARISA_GRIMOIRE_TRIE_LOUDS_TRIE_H_
 
-#include "../../keyset.h"
-#include "../../agent.h"
-#include "../vector.h"
-#include "config.h"
-#include "key.h"
-#include "tail.h"
-#include "cache.h"
+#include "marisa/keyset.h"
+#include "marisa/agent.h"
+#include "marisa/grimoire/vector.h"
+#include "marisa/grimoire/trie/config.h"
+#include "marisa/grimoire/trie/key.h"
+#include "marisa/grimoire/trie/tail.h"
+#include "marisa/grimoire/trie/cache.h"
 
 namespace marisa {
 namespace grimoire {

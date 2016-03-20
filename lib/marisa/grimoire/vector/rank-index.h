@@ -1,7 +1,7 @@
 #ifndef MARISA_GRIMOIRE_VECTOR_RANK_INDEX_H_
 #define MARISA_GRIMOIRE_VECTOR_RANK_INDEX_H_
 
-#include "../../base.h"
+#include "marisa/base.h"
 
 namespace marisa {
 namespace grimoire {

@@ -1,7 +1,7 @@
 #include <new>
 
-#include "agent.h"
-#include "grimoire/trie.h"
+#include "marisa/agent.h"
+#include "marisa/grimoire/trie.h"
 
 namespace marisa {
 

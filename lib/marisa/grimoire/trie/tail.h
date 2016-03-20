@@ -1,9 +1,9 @@
 #ifndef MARISA_GRIMOIRE_TRIE_TAIL_H_
 #define MARISA_GRIMOIRE_TRIE_TAIL_H_
 
-#include "../../agent.h"
-#include "../vector.h"
-#include "entry.h"
+#include "marisa/agent.h"
+#include "marisa/grimoire/vector.h"
+#include "marisa/grimoire/trie/entry.h"
 
 namespace marisa {
 namespace grimoire {

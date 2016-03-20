@@ -1,6 +1,6 @@
-#include "../algorithm.h"
-#include "state.h"
-#include "tail.h"
+#include "marisa/grimoire/algorithm.h"
+#include "marisa/grimoire/trie/state.h"
+#include "marisa/grimoire/trie/tail.h"
 
 namespace marisa {
 namespace grimoire {

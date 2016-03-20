@@ -1,7 +1,7 @@
 #ifndef MARISA_GRIMOIRE_TRIE_RANGE_H_
 #define MARISA_GRIMOIRE_TRIE_RANGE_H_
 
-#include "../../base.h"
+#include "marisa/base.h"
 
 namespace marisa {
 namespace grimoire {
@@ -13,15 +13,15 @@ class Range {
 
   void set_begin(std::size_t begin) {
     MARISA_DEBUG_IF(begin > MARISA_UINT32_MAX, MARISA_SIZE_ERROR);
-    begin_ = begin;
+    begin_ = static_cast<UInt32>(begin);
   }
   void set_end(std::size_t end) {
     MARISA_DEBUG_IF(end > MARISA_UINT32_MAX, MARISA_SIZE_ERROR);
-    end_ = end;
+    end_ = static_cast<UInt32>(end);
   }
   void set_key_pos(std::size_t key_pos) {
     MARISA_DEBUG_IF(key_pos > MARISA_UINT32_MAX, MARISA_SIZE_ERROR);
-    key_pos_ = key_pos;
+    key_pos_ = static_cast<UInt32>(key_pos);
   }
 
   std::size_t begin() const {

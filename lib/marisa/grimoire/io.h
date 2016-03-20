@@ -1,9 +1,9 @@
 #ifndef MARISA_GRIMOIRE_IO_H_
 #define MARISA_GRIMOIRE_IO_H_
 
-#include "io/mapper.h"
-#include "io/reader.h"
-#include "io/writer.h"
+#include "marisa/grimoire/io/mapper.h"
+#include "marisa/grimoire/io/reader.h"
+#include "marisa/grimoire/io/writer.h"
 
 namespace marisa {
 namespace grimoire {

@@ -8,7 +8,7 @@
 
 #include <limits>
 
-#include "reader.h"
+#include "marisa/grimoire/io/reader.h"
 
 namespace marisa {
 namespace grimoire {

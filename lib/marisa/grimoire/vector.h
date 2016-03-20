@@ -1,9 +1,9 @@
 #ifndef MARISA_GRIMOIRE_VECTOR_H_
 #define MARISA_GRIMOIRE_VECTOR_H_
 
-#include "vector/vector.h"
-#include "vector/flat-vector.h"
-#include "vector/bit-vector.h"
+#include "marisa/grimoire/vector/vector.h"
+#include "marisa/grimoire/vector/flat-vector.h"
+#include "marisa/grimoire/vector/bit-vector.h"
 
 namespace marisa {
 namespace grimoire {

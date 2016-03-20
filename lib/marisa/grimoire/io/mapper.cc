@@ -10,7 +10,7 @@
  #include <unistd.h>
 #endif  // (defined _WIN32) || (defined _WIN64)
 
-#include "mapper.h"
+#include "marisa/grimoire/io/mapper.h"
 
 namespace marisa {
 namespace grimoire {

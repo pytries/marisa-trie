@@ -3,7 +3,7 @@
 
 #include <new>
 
-#include "../io.h"
+#include "marisa/grimoire/io.h"
 
 namespace marisa {
 namespace grimoire {

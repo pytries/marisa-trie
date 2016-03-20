@@ -3,7 +3,7 @@
 
 #include <cstdio>
 
-#include "../../base.h"
+#include "marisa/base.h"
 
 namespace marisa {
 namespace grimoire {

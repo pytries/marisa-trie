@@ -1,7 +1,7 @@
-#include "stdio.h"
-#include "iostream.h"
-#include "trie.h"
-#include "grimoire/trie.h"
+#include "marisa/stdio.h"
+#include "marisa/iostream.h"
+#include "marisa/trie.h"
+#include "marisa/grimoire/trie.h"
 
 namespace marisa {
 

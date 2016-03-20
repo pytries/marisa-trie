@@ -1,8 +1,8 @@
 #ifndef MARISA_GRIMOIRE_TRIE_STATE_H_
 #define MARISA_GRIMOIRE_TRIE_STATE_H_
 
-#include "../vector.h"
-#include "history.h"
+#include "marisa/grimoire/vector.h"
+#include "marisa/grimoire/trie/history.h"
 
 namespace marisa {
 namespace grimoire {

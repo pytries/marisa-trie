@@ -1,7 +1,7 @@
 #ifndef MARISA_GRIMOIRE_ALGORITHM_SORT_H_
 #define MARISA_GRIMOIRE_ALGORITHM_SORT_H_
 
-#include "../../base.h"
+#include "marisa/base.h"
 
 namespace marisa {
 namespace grimoire {

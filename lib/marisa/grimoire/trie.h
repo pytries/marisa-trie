@@ -1,8 +1,8 @@
 #ifndef MARISA_GRIMOIRE_TRIE_H_
 #define MARISA_GRIMOIRE_TRIE_H_
 
-#include "trie/state.h"
-#include "trie/louds-trie.h"
+#include "marisa/grimoire/trie/state.h"
+#include "marisa/grimoire/trie/louds-trie.h"
 
 namespace marisa {
 namespace grimoire {

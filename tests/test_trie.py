@@ -23,8 +23,10 @@ def test_init(keys, missing_key):
     assert missing_key not in trie
 
 
-@given(st.sets(text, min_size=1))
-def test_key_id(keys):
+@given(st.sets(text, min_size=1), text)
+def test_key_id(keys, missing_key):
+    assume(missing_key not in keys)
+
     trie = marisa_trie.Trie(keys)
     for key in keys:
         key_id = trie.key_id(key)
@@ -37,7 +39,7 @@ def test_key_id(keys):
         trie.restore_key(non_existing_id)
 
     with pytest.raises(KeyError):
-        trie.key_id("fo")
+        trie.key_id(missing_key)
 
 
 @given(st.sets(text, min_size=1), text)

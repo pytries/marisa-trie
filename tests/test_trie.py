@@ -1,168 +1,178 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import absolute_import, unicode_literals
 
-import os
 import pickle
-import tempfile
 
 import pytest
+import hypothesis.strategies as st
+from hypothesis import given, assume
 
 import marisa_trie
-from .utils import get_random_words
+from .utils import text
 
 
-def test_build():
-    keys = get_random_words(1000)
+@given(st.sets(text), text)
+def test_init(keys, missing_key):
+    assume(missing_key not in keys)
+
     trie = marisa_trie.Trie(keys)
-
     for key in keys:
         assert key in trie
 
-    non_key = '2135'
-    assert non_key not in trie
+    assert missing_key not in trie
 
 
-def test_contains():
-    trie = marisa_trie.Trie()
-    assert 'foo' not in trie
+@given(st.sets(text, min_size=1))
+def test_key_id(keys):
+    trie = marisa_trie.Trie(keys)
+    for key in keys:
+        key_id = trie.key_id(key)
+        assert trie.restore_key(key_id) == key
 
-    trie = marisa_trie.Trie(['foo'])
-    assert 'foo' in trie
-    assert 'f' not in trie
-
-
-def test_key_id():
-    words = ['foo', 'bar', 'f']
-    trie = marisa_trie.Trie(words)
-    for word in words:
-        key_id = trie.key_id(word)
-        assert trie.restore_key(key_id) == word
-
-    key_ids = [trie.key_id(word) for word in words]
+    key_ids = [trie.key_id(key) for key in keys]
     non_existing_id = max(key_ids) + 1
 
     with pytest.raises(KeyError):
         trie.restore_key(non_existing_id)
 
     with pytest.raises(KeyError):
-        print(trie.key_id('fo'))
+        trie.key_id("fo")
 
 
-def test_getitem():
-    words = ['foo', 'bar', 'f']
-    trie = marisa_trie.Trie(words)
-    for word in words:
-        key_id = trie[word]
-        assert trie.restore_key(key_id) == word
+@given(st.sets(text, min_size=1), text)
+def test_getitem(keys, missing_key):
+    assume(missing_key not in keys)
 
-    key_ids = [trie[word] for word in words]
+    trie = marisa_trie.Trie(keys)
+    for key in keys:
+        key_id = trie[key]
+        assert trie.restore_key(key_id) == key
+
+    key_ids = [trie[key] for key in keys]
     non_existing_id = max(key_ids) + 1
 
     with pytest.raises(KeyError):
         trie.restore_key(non_existing_id)
 
     with pytest.raises(KeyError):
-        print(trie['fo'])
+        trie[missing_key]
 
 
-def test_get():
-    words = ['foo', 'bar', 'f']
-    trie = marisa_trie.Trie(words)
-    for word in words:
-        key_id = trie.get(word)
-        assert trie.restore_key(key_id) == word
+@given(st.sets(text))
+def test_get(keys):
+    trie = marisa_trie.Trie(keys)
+    for key in keys:
+        key_id = trie.get(key)
+        assert trie.restore_key(key_id) == key
 
-        key_id = trie.get(word.encode('utf8'))
-        assert trie.restore_key(key_id) == word
+        key_id = trie.get(key.encode("utf8"))
+        assert trie.restore_key(key_id) == key
 
-        key_id = trie.get(word, 'default value')
-        assert trie.restore_key(key_id) == word
+        key_id = trie.get(key, "default value")
+        assert trie.restore_key(key_id) == key
 
-    assert trie.get('non_existing_key') is None
-    assert trie.get(b'non_existing_bytes_key') is None
-    assert trie.get('non_existing_key', 'default value') == 'default value'
-    assert trie.get(b'non_existing_bytes_key', 'default value') == 'default value'
+    assert trie.get("non_existing_key") is None
+    assert trie.get(b"non_existing_bytes_key") is None
+    assert trie.get("non_existing_key", "default value") == "default value"
+    assert trie.get(b"non_existing_bytes_key",
+                    "default value") == "default value"
 
 
-def test_saveload():
-    fd, fname = tempfile.mkstemp()
+@given(st.sets(text))
+def test_saveload(tmpdir, keys):
+    trie = marisa_trie.Trie(keys)
 
-    words = ['foo', 'bar', 'f']
-    trie = marisa_trie.Trie(words)
-
-    with open(fname, 'wb') as f:
+    path = str(tmpdir.join("trie.bin"))
+    with open(path, "wb") as f:
         trie.write(f)
 
-    with open(fname, 'rb') as f:
+    with open(path, "rb") as f:
         trie2 = marisa_trie.Trie()
         trie2.read(f)
 
-    for word in words:
-        assert word in trie2
+    for key in keys:
+        assert key in trie2
 
 
-def test_mmap():
-    fd, fname = tempfile.mkstemp()
-    words = get_random_words(1000)
-    trie = marisa_trie.Trie(words)
-    with open(fname, 'wb') as f:
+@given(st.sets(text))
+def test_mmap(tmpdir, keys):
+    trie = marisa_trie.Trie(keys)
+
+    path = str(tmpdir.join("trie.bin"))
+    with open(path, "wb") as f:
         trie.write(f)
 
-    # See https://github.com/s-yata/marisa-trie/issues/3 for motivation.
-    os.close(fd)
-
     trie2 = marisa_trie.Trie()
-    trie2.mmap(fname)
+    trie2.mmap(path)
 
-    for word in words:
-        assert word in trie2
+    for key in keys:
+        assert key in trie2
 
 
-def test_dumps_loads():
-    words = get_random_words(1000)
-    trie = marisa_trie.Trie(words)
+@given(st.sets(text))
+def test_tobytes_frombytes(keys):
+    trie = marisa_trie.Trie(keys)
     data = trie.tobytes()
 
     trie2 = marisa_trie.Trie().frombytes(data)
 
-    for word in words:
-        assert word in trie2
-        assert trie2.key_id(word) == trie.key_id(word)
+    for key in keys:
+        assert key in trie2
+        assert trie2.key_id(key) == trie.key_id(key)
 
 
-def test_pickling():
-    words = get_random_words(1000)
-    trie = marisa_trie.Trie(words)
-
+@given(st.sets(text))
+def test_dumps_loads(keys):
+    trie = marisa_trie.Trie(keys)
     data = pickle.dumps(trie)
+
     trie2 = pickle.loads(data)
 
-    for word in words:
-        assert word in trie2
-        assert trie2.key_id(word) == trie.key_id(word)
+    for key in keys:
+        assert key in trie2
+        assert trie2.key_id(key) == trie.key_id(key)
 
 
-def test_cmp():
+def test_contains_empty():
+    assert "foo" not in marisa_trie.Trie()
+
+
+def test_contains_singleton():
+    trie = marisa_trie.Trie(["foo"])
+    assert "foo" in trie
+    assert "f" not in trie
+
+
+def test_eq_self():
     trie = marisa_trie.Trie()
     assert trie == trie
     assert trie == marisa_trie.Trie()
 
+
+def test_eq_neq():
     trie = marisa_trie.Trie(["foo", "bar"])
     assert trie == marisa_trie.Trie(["foo", "bar"])
     assert trie != marisa_trie.Trie(["foo", "boo"])
 
+
+def test_neq_different_type():
+    assert marisa_trie.Trie(["foo", "bar"]) != {}
+
+
+def test_eq_neq_different_order():
     lo_trie = marisa_trie.Trie(order=marisa_trie.LABEL_ORDER)
     wo_trie = marisa_trie.Trie(order=marisa_trie.WEIGHT_ORDER)
     assert lo_trie == lo_trie and wo_trie == wo_trie
     assert lo_trie != wo_trie
 
+
+def test_gt_lt_exceptions():
     with pytest.raises(TypeError):
         marisa_trie.Trie() < marisa_trie.Trie()
 
     with pytest.raises(TypeError):
         marisa_trie.Trie() > marisa_trie.Trie()
-
-    # not sure if it makes sense copy-pasting further.
 
 
 def test_iter():
@@ -174,35 +184,35 @@ def test_len():
     trie = marisa_trie.Trie()
     assert len(trie) == 0
 
-    trie = marisa_trie.Trie(['foo', 'f', 'bar'])
+    trie = marisa_trie.Trie(["foo", "f", "bar"])
     assert len(trie) == 3
 
 
 def test_prefixes():
-    trie = marisa_trie.Trie(['foo', 'f', 'foobar', 'bar'])
-    assert trie.prefixes('foobar') == ['f', 'foo', 'foobar']
-    assert trie.prefixes('foo') == ['f', 'foo']
-    assert trie.prefixes('bar') == ['bar']
-    assert trie.prefixes('b') == []
+    trie = marisa_trie.Trie(["foo", "f", "foobar", "bar"])
+    assert trie.prefixes("foobar") == ["f", "foo", "foobar"]
+    assert trie.prefixes("foo") == ["f", "foo"]
+    assert trie.prefixes("bar") == ["bar"]
+    assert trie.prefixes("b") == []
 
-    assert list(trie.iter_prefixes('foobar')) == ['f', 'foo', 'foobar']
+    assert list(trie.iter_prefixes("foobar")) == ["f", "foo", "foobar"]
 
 
 def test_keys():
-    keys = ['foo', 'f', 'foobar', 'bar']
+    keys = ["foo", "f", "foobar", "bar"]
     trie = marisa_trie.Trie(keys)
     assert set(trie.keys()) == set(keys)
 
 
 def test_keys_prefix():
-    keys = ['foo', 'f', 'foobar', 'bar']
+    keys = ["foo", "f", "foobar", "bar"]
     trie = marisa_trie.Trie(keys)
-    assert set(trie.keys('fo')) == set(['foo', 'foobar'])
-    assert trie.keys('foobarz') == []
+    assert set(trie.keys("fo")) == set(["foo", "foobar"])
+    assert trie.keys("foobarz") == []
 
 
-def test_iterkeys():
-    keys = get_random_words(1000)
+@given(st.sets(text))
+def test_iterkeys(keys):
     trie = marisa_trie.Trie(keys)
     assert trie.keys() == list(trie.iterkeys())
 
@@ -212,23 +222,23 @@ def test_iterkeys():
 
 
 def test_items():
-    keys = ['foo', 'f', 'foobar', 'bar']
+    keys = ["foo", "f", "foobar", "bar"]
     trie = marisa_trie.Trie(keys)
     items = trie.items()
     assert set(items) == set(zip(keys, (trie[k] for k in keys)))
 
 
 def test_items_prefix():
-    keys = ['foo', 'f', 'foobar', 'bar']
+    keys = ["foo", "f", "foobar", "bar"]
     trie = marisa_trie.Trie(keys)
-    assert set(trie.items('fo')) == set([
-        ('foo', trie['foo']),
-        ('foobar', trie['foobar']),
+    assert set(trie.items("fo")) == set([
+        ("foo", trie["foo"]),
+        ("foobar", trie["foobar"]),
     ])
 
 
-def test_iteritems():
-    keys = get_random_words(1000)
+@given(st.sets(text))
+def test_iteritems(keys):
     trie = marisa_trie.Trie(keys)
     assert trie.items() == list(trie.iteritems())
 
@@ -237,12 +247,18 @@ def test_iteritems():
         assert trie.items(prefix) == list(trie.iteritems(prefix))
 
 
-def test_has_keys_with_prefix():
+def test_has_keys_with_prefix_empty():
     empty_trie = marisa_trie.Trie()
     assert not empty_trie.has_keys_with_prefix('')
     assert not empty_trie.has_keys_with_prefix('ab')
 
-    fruit_trie = marisa_trie.Trie(['apple', 'pear', 'peach'])
+
+def test_has_keys_with_prefix():
+    fruit_trie = marisa_trie.BytesTrie([
+        ('apple', b'foo'),
+        ('pear', b'bar'),
+        ('peach', b'baz'),
+    ])
     assert fruit_trie.has_keys_with_prefix('')
     assert fruit_trie.has_keys_with_prefix('a')
     assert fruit_trie.has_keys_with_prefix('pe')
@@ -256,19 +272,4 @@ def test_invalid_file():
     except RuntimeError as e:
         assert "MARISA_FORMAT_ERROR" in e.args[0]
     else:
-        raise AssertionError("Exception is not raised")
-
-
-#def test_int_trie():
-#    data = {'foo': 10, 'f': 20, 'foobar':30, 'bar': 40}
-#    trie = marisa_trie.IntTrie().build(data)
-#
-#    for key, value in data.items():
-#        assert trie[key] == value
-#
-#    trie['foo'] = 500
-#    assert trie['foo'] == 500
-#
-#    # trie is frozen, no new keys are allowed
-#    with pytest.raises(KeyError):
-#        trie['z'] = 200
+        pytest.fail("Exception is not raised")

@@ -13,7 +13,7 @@ import marisa_trie
 from .utils import text
 
 
-@given(st.lists(text), st.lists(st.binary()), text)
+@given(st.sets(text), st.lists(st.binary()), text)
 def test_contains(keys, values, missing_key):
     assume(missing_key not in keys)
 
@@ -26,7 +26,7 @@ def test_contains(keys, values, missing_key):
     assert missing_key not in trie
 
 
-@given(st.lists(text), st.lists(st.binary()), text)
+@given(st.sets(text), st.lists(st.binary()), text)
 def test_getitem(keys, values, missing_key):
     assume(missing_key not in keys)
 
@@ -84,7 +84,7 @@ def test_items():
     assert trie.items("bar") == []
 
 
-@given(st.lists(text), st.lists(st.binary()))
+@given(st.sets(text), st.lists(st.binary()))
 def test_iteritems(keys, values):
     trie = marisa_trie.BytesTrie(zip(keys, values))
     assert trie.items() == list(trie.iteritems())
@@ -110,7 +110,7 @@ def test_keys():
     assert trie.keys("bar") == []
 
 
-@given(st.lists(text), st.lists(st.binary()))
+@given(st.sets(text), st.lists(st.binary()))
 def test_iterkeys(keys, values):
     trie = marisa_trie.BytesTrie(zip(keys, values))
     assert trie.keys() == list(trie.iterkeys())

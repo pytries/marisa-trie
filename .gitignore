@@ -1,5 +1,6 @@
 MANIFEST
 src/*.html
+docs/_build
 
 *.py[cod]
 
@@ -12,6 +13,7 @@ src/*.html
 dist
 build
 eggs
+.eggs
 parts
 bin
 var
@@ -27,6 +29,7 @@ pip-log.txt
 
 # Unit test / coverage reports
 .coverage
+.hypothesis
+.cache
 .tox
 nosetests.xml
-

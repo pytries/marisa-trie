@@ -2,6 +2,13 @@
 CHANGES
 =======
 
+0.7.3
+-----
+
+* Deprecated ``Trie.has_keys_with_prefix`` which can be trivially implemented in
+  terms of ``Trieiterkeys``;
+* rebuilt Cython wrapper with Cython 0.23.4.
+
 0.7.2 (2015-04-21)
 ------------------
 

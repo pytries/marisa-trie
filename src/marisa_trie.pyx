@@ -13,6 +13,7 @@ cimport base
 
 import itertools
 import struct
+import warnings
 
 try:
     from itertools import izip
@@ -276,6 +277,10 @@ cdef class _Trie:
         """
         Returns True if any key in the trie begins with ``prefix``.
         """
+        warnings.warn("Trie.has_keys_with_prefix is deprecated and will "
+                      "be removed in marisa_trie 0.8.0. Please use "
+                      "Trie.iterkeys instead.", DeprecationWarning)
+
         cdef agent.Agent ag
         cdef bytes b_prefix = <bytes>prefix.encode('utf8')
         ag.set_query(b_prefix)

@@ -3,6 +3,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import pickle
+from collections import Mapping
 
 import pytest
 import hypothesis.strategies as st
@@ -275,3 +276,8 @@ def test_invalid_file():
         assert "MARISA_FORMAT_ERROR" in e.args[0]
     else:
         pytest.fail("Exception is not raised")
+
+
+def test_mutable_mapping():
+    for method in Mapping.__abstractmethods__:
+        assert hasattr(marisa_trie.Trie, method)

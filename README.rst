@@ -18,10 +18,10 @@ Based on `marisa-trie`_ C++ library.
 .. note::
 
     There are official SWIG-based Python bindings included
-    in C++ library distribution; this package provides an alternative
+    in C++ library distribution; this package provides alternative
     Cython-based pip-installable Python bindings.
 
-.. _marisa-trie: https://code.google.com/p/marisa-trie/
+.. _marisa-trie: https://github.com/s-yata/marisa-trie
 
 Installation
 ============
@@ -231,8 +231,8 @@ mapped I/O is an easy way to share dictionary data among processes.
 
 .. warning::
 
-    Memory mapped trie might cause a lot of random disk accesses which
-    considerably increase the search time.
+    Memory mapped trie might cause lots of random disk accesses which
+    considerably increases the search time.
 
 Trie storage options
 --------------------
@@ -374,7 +374,7 @@ Contributions are welcome!
 Contributing
 ============
 
-Development happens at github: https://github.com/kmike/marisa-trie
+Development happens at GitHub: https://github.com/kmike/marisa-trie
 
 Feel free to submit ideas, bug reports and pull requests.
 
@@ -407,7 +407,7 @@ Make sure `tox`_ is installed and run
     $ tox
 
 from the source checkout. Tests should pass under python 2.6, 2.7,
-3.2, 3.3 and 3.4.
+3.4 and 3.5.
 
 In order to run benchmarks, type
 
@@ -419,19 +419,10 @@ In order to run benchmarks, type
 .. _cython: http://cython.org
 .. _tox: http://tox.testrun.org
 
-Authors & Contributors
-----------------------
-
-* Mikhail Korobov <kmike84@gmail.com>
-* `Matt Hickford <https://github.com/matt-hickford>`_
-* Sergei Lebedev <superbobry@gmail.com>
-
-This module is based on `marisa-trie`_ C++ library by
-Susumu Yata & contributors.
-
 License
 =======
 
 Wrapper code is licensed under MIT License.
+
 Bundled `marisa-trie`_ C++ library is dual-licensed under
 LGPL and BSD 2-clause license.

@@ -1,4 +1,5 @@
 # cython: profile=False
+
 from __future__ import unicode_literals
 
 from std_iostream cimport stringstream, istream, ostream

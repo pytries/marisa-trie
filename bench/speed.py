@@ -1,40 +1,43 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 from __future__ import absolute_import, unicode_literals, division
+
+import gzip
+import os
 import random
 import string
-import timeit
-import os
-import zipfile
 import struct
-#import pstats
-#import cProfile
+import timeit
 
 import marisa_trie
+
 
 def words100k():
     zip_name = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
-        'words100k.txt.zip'
-    )
-    zf = zipfile.ZipFile(zip_name)
-    txt = zf.open(zf.namelist()[0]).read().decode('utf8')
-    return txt.splitlines()
+        'words100k.txt.gz')
+
+    return list(map(str.rstrip, gzip.open(zip_name, "rt")))
+
 
 def random_words(num):
     russian = 'абвгдеёжзиклмнопрстуфхцчъыьэюя'
     alphabet = '%s%s' % (russian, string.ascii_letters)
     return [
-        "".join([random.choice(alphabet) for x in range(random.randint(1,15))])
+        "".join(random.choice(alphabet)
+                for x in range(random.randint(1, 15)))
         for y in range(num)
     ]
+
 
 def truncated_words(words):
     return [word[:3] for word in words]
 
+
 def prefixes1k(words, prefix_len):
     words = [w for w in words if len(w) >= prefix_len]
-    every_nth = int(len(words)/1000)
+    every_nth = int(len(words) / 1000)
     _words = [w[:prefix_len] for w in words[::every_nth]]
     return _words[:1000]
 
@@ -51,6 +54,7 @@ def format_result(key, value, text_width):
     key = key.ljust(text_width)
     print("    %s %s" % (key, value))
 
+
 def bench(name, timer, descr='M ops/sec', op_count=0.1, repeats=3, runs=5,
           text_width=33):
     try:
@@ -59,26 +63,29 @@ def bench(name, timer, descr='M ops/sec', op_count=0.1, repeats=3, runs=5,
             times.append(timer.timeit(repeats))
 
         def op_time(time):
-            return op_count*repeats / time
+            return op_count * repeats / time
 
         val = "%0.3f%s" % (op_time(min(times)), descr)
         format_result(name, val, text_width)
     except (AttributeError, TypeError):
         format_result(name, "not supported", text_width)
 
+
 def create_trie():
-    words = words100k()
+    words = WORDS100k
     return marisa_trie.Trie(words)
 
+
 def create_bytes_trie():
-    words = words100k()
-    values = [struct.pack(str('<H'), len(word)) for word in words]
+    words = WORDS100k
+    values = (struct.pack('<H', len(word)) for word in words)
     return marisa_trie.BytesTrie(zip(words, values))
 
+
 def create_record_trie():
-    words = words100k()
-    values = [ [len(word)] for word in words]
-    return marisa_trie.RecordTrie(str('<H'), zip(words, values))
+    words = WORDS100k
+    values = ([len(word)] for word in words)
+    return marisa_trie.RecordTrie('<H', zip(words, values))
 
 
 def benchmark():
@@ -117,14 +124,19 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
 
     # common operations speed
     tests = [
-        ('__getitem__ (hits)', "for word in WORDS100k: data[word]", 'M ops/sec', 0.1, 3),
-        ('get() (hits)', "for word in WORDS100k: data.get(word)", 'M ops/sec', 0.1, 3),
-        ('get() (misses)', "for word in NON_WORDS_10k: data.get(word)", 'M ops/sec', 0.01, 5),
-        ('__contains__ (hits)', "for word in WORDS100k: word in data", 'M ops/sec', 0.1, 3),
-        ('__contains__ (misses)', "for word in NON_WORDS100k: word in data", 'M ops/sec', 0.1, 3),
+        ('__getitem__ (hits)',
+         "for word in WORDS100k: data[word]", 'M ops/sec', 0.1, 3),
+        ('get() (hits)', "for word in WORDS100k: data.get(word)",
+         'M ops/sec', 0.1, 3),
+        ('get() (misses)', "for word in NON_WORDS_10k: data.get(word)",
+         'M ops/sec', 0.01, 5),
+        ('__contains__ (hits)',
+         "for word in WORDS100k: word in data", 'M ops/sec', 0.1, 3),
+        ('__contains__ (misses)',
+         "for word in NON_WORDS100k: word in data", 'M ops/sec', 0.1, 3),
         ('items()', 'list(data.items())', ' ops/sec', 1, 1),
         ('keys()', 'list(data.keys())', ' ops/sec', 1, 1),
-#        ('values()', 'list(data.values())', ' ops/sec', 1, 1),
+        #        ('values()', 'list(data.values())', ' ops/sec', 1, 1),
     ]
 
     for test_name, test, descr, op_count, repeats in tests:
@@ -132,7 +144,6 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
             timer = timeit.Timer(test, setup)
             full_test_name = "%s %s" % (name, test_name)
             bench(full_test_name, timer, descr, op_count, repeats, 9)
-
 
     # trie-specific benchmarks
     for struct_name, setup in structures[1:]:
@@ -162,7 +173,7 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
             ('xxx', 'NON_EXISTING', 'NON_WORDS_1k'),
         ]
         for xxx, avg, data in _bench_data:
-            for meth in ['keys']: #('items', 'keys', 'values'):
+            for meth in ['keys']:  # ('items', 'keys', 'values'):
                 bench(
                     '%s.%s(prefix="%s"), %s' % (struct_name, meth, xxx, avg),
                     timeit.Timer(
@@ -175,26 +186,25 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
                     text_width=60,
                 )
 
+
 def check_trie(trie, words):
-    value = 0
-    for word in words:
-        value += trie[word]
-    if value != len(words):
-        raise Exception()
+    assert sum(trie[word] for word in words) == len(words)
+
 
 def profiling():
     import pstats
     import cProfile
     print('\n====== Profiling =======\n')
     trie = create_trie()
-    WORDS = words100k()
+    WORDS = WORDS100k
 
 #    def check_prefixes(trie, words):
 #        for word in words:
 #            trie.keys(word)
 #    cProfile.runctx("check_prefixes(trie, NON_WORDS_1k)", globals(), locals(), "Profile.prof")
 #
-    cProfile.runctx("check_trie(trie, WORDS)", globals(), locals(), "Profile.prof")
+    cProfile.runctx(
+        "check_trie(trie, WORDS)", globals(), locals(), "Profile.prof")
 
     s = pstats.Stats("Profile.prof")
     s.strip_dirs().sort_stats("time").print_stats(20)
@@ -202,5 +212,5 @@ def profiling():
 
 if __name__ == '__main__':
     benchmark()
-    #profiling()
+    # profiling()
     print('\n~~~~~~~~~~~~~~\n')

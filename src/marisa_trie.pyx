@@ -65,10 +65,13 @@ cdef unicode _get_key(agent.Agent& ag):
 cdef class _Trie:
     """
     Base MARISA-trie wrapper.
-    It can store unicode keys and assign an unque ID to each key.
+    It can store binary keys and assign an unque ID to each key.
     """
 
     cdef trie.Trie* _trie
+
+    cdef bytes _encode_key(self, key):
+        return key.encode('utf8')
 
     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -87,7 +90,7 @@ cdef class _Trie:
             return
         self._trie = new trie.Trie()
 
-        byte_keys = (key.encode('utf8') for key in (arg or []))
+        byte_keys = (self._encode_key(key) for key in (arg or []))
 
         self._build(
             byte_keys,
@@ -173,7 +176,7 @@ cdef class _Trie:
         return self._trie.num_keys()
 
     def __contains__(self, unicode key):
-        cdef bytes _key = <bytes>key.encode('utf8')
+        cdef bytes _key = self._encode_key(key)
         return self._contains(_key)
 
     cdef bint _contains(self, bytes key):
@@ -253,7 +256,7 @@ cdef class _Trie:
         Return an iterator over keys that have a prefix ``prefix``.
         """
         cdef agent.Agent ag
-        cdef bytes b_prefix = <bytes>prefix.encode('utf8')
+        cdef bytes b_prefix = self._encode_key(prefix)
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
@@ -265,7 +268,7 @@ cdef class _Trie:
         """
         # non-generator inlined version of iterkeys()
         cdef list res = []
-        cdef bytes b_prefix = <bytes>prefix.encode('utf8')
+        cdef bytes b_prefix = self._encode_key(prefix)
         cdef agent.Agent ag
         ag.set_query(b_prefix)
 
@@ -283,7 +286,7 @@ cdef class _Trie:
                       "Trie.iterkeys instead.", DeprecationWarning)
 
         cdef agent.Agent ag
-        cdef bytes b_prefix = <bytes>prefix.encode('utf8')
+        cdef bytes b_prefix = self._encode_key(prefix)
         ag.set_query(b_prefix)
         return self._trie.predictive_search(ag)
 

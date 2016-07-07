@@ -3877,7 +3877,7 @@ static int __pyx_pf_11marisa_trie_5_Trie_14__contains__(struct __pyx_obj_11maris
  * 
  *     cdef bint _contains(self, bytes key):             # <<<<<<<<<<<<<<
  *         cdef agent.Agent ag
- *         ag.set_query(key)
+ *         ag.set_query(key, len(key))
  */
 
 static int __pyx_f_11marisa_trie_5_Trie__contains(struct __pyx_obj_11marisa_trie__Trie *__pyx_v_self, PyObject *__pyx_v_key) {
@@ -3885,33 +3885,39 @@ static int __pyx_f_11marisa_trie_5_Trie__contains(struct __pyx_obj_11marisa_trie
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   char *__pyx_t_1;
-  int __pyx_t_2;
+  Py_ssize_t __pyx_t_2;
+  int __pyx_t_3;
   __Pyx_RefNannySetupContext("_contains", 0);
 
   /* "marisa_trie.pyx":184
  *     cdef bint _contains(self, bytes key):
  *         cdef agent.Agent ag
- *         ag.set_query(key)             # <<<<<<<<<<<<<<
+ *         ag.set_query(key, len(key))             # <<<<<<<<<<<<<<
  *         return self._trie.lookup(ag)
  * 
  */
   __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_key); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 184, __pyx_L1_error)
-  __pyx_v_ag.set_query(__pyx_t_1);
+  if (unlikely(__pyx_v_key == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
+    __PYX_ERR(0, 184, __pyx_L1_error)
+  }
+  __pyx_t_2 = PyBytes_GET_SIZE(__pyx_v_key); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(0, 184, __pyx_L1_error)
+  __pyx_v_ag.set_query(__pyx_t_1, __pyx_t_2);
 
   /* "marisa_trie.pyx":185
  *         cdef agent.Agent ag
- *         ag.set_query(key)
+ *         ag.set_query(key, len(key))
  *         return self._trie.lookup(ag)             # <<<<<<<<<<<<<<
  * 
  *     def read(self, f):
  */
   try {
-    __pyx_t_2 = __pyx_v_self->_trie->lookup(__pyx_v_ag);
+    __pyx_t_3 = __pyx_v_self->_trie->lookup(__pyx_v_ag);
   } catch(...) {
     __Pyx_CppExn2PyErr();
     __PYX_ERR(0, 185, __pyx_L1_error)
   }
-  __pyx_r = __pyx_t_2;
+  __pyx_r = __pyx_t_3;
   goto __pyx_L0;
 
   /* "marisa_trie.pyx":182
@@ -3919,7 +3925,7 @@ static int __pyx_f_11marisa_trie_5_Trie__contains(struct __pyx_obj_11marisa_trie
  * 
  *     cdef bint _contains(self, bytes key):             # <<<<<<<<<<<<<<
  *         cdef agent.Agent ag
- *         ag.set_query(key)
+ *         ag.set_query(key, len(key))
  */
 
   /* function exit code */
@@ -5374,8 +5380,9 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_36generator(__pyx_CoroutineObject
   PyObject *__pyx_r = NULL;
   PyObject *__pyx_t_1 = NULL;
   char *__pyx_t_2;
-  int __pyx_t_3;
+  Py_ssize_t __pyx_t_3;
   int __pyx_t_4;
+  int __pyx_t_5;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("None", 0);
   switch (__pyx_generator->resume_label) {
@@ -5392,7 +5399,7 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_36generator(__pyx_CoroutineObject
  *         """
  *         cdef agent.Agent ag
  *         cdef bytes b_prefix = self._encode_key(prefix)             # <<<<<<<<<<<<<<
- *         ag.set_query(b_prefix)
+ *         ag.set_query(b_prefix, len(b_prefix))
  * 
  */
   __pyx_t_1 = ((struct __pyx_vtabstruct_11marisa_trie__Trie *)__pyx_cur_scope->__pyx_v_self->__pyx_vtab)->_encode_key(__pyx_cur_scope->__pyx_v_self, __pyx_cur_scope->__pyx_v_prefix); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 259, __pyx_L1_error)
@@ -5404,15 +5411,20 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_36generator(__pyx_CoroutineObject
   /* "marisa_trie.pyx":260
  *         cdef agent.Agent ag
  *         cdef bytes b_prefix = self._encode_key(prefix)
- *         ag.set_query(b_prefix)             # <<<<<<<<<<<<<<
+ *         ag.set_query(b_prefix, len(b_prefix))             # <<<<<<<<<<<<<<
  * 
  *         while self._trie.predictive_search(ag):
  */
   __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_cur_scope->__pyx_v_b_prefix); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 260, __pyx_L1_error)
-  __pyx_cur_scope->__pyx_v_ag.set_query(__pyx_t_2);
+  if (unlikely(__pyx_cur_scope->__pyx_v_b_prefix == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
+    __PYX_ERR(0, 260, __pyx_L1_error)
+  }
+  __pyx_t_3 = PyBytes_GET_SIZE(__pyx_cur_scope->__pyx_v_b_prefix); if (unlikely(__pyx_t_3 == -1)) __PYX_ERR(0, 260, __pyx_L1_error)
+  __pyx_cur_scope->__pyx_v_ag.set_query(__pyx_t_2, __pyx_t_3);
 
   /* "marisa_trie.pyx":262
- *         ag.set_query(b_prefix)
+ *         ag.set_query(b_prefix, len(b_prefix))
  * 
  *         while self._trie.predictive_search(ag):             # <<<<<<<<<<<<<<
  *             yield self._get_key(ag)
@@ -5420,13 +5432,13 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_36generator(__pyx_CoroutineObject
  */
   while (1) {
     try {
-      __pyx_t_3 = __pyx_cur_scope->__pyx_v_self->_trie->predictive_search(__pyx_cur_scope->__pyx_v_ag);
+      __pyx_t_4 = __pyx_cur_scope->__pyx_v_self->_trie->predictive_search(__pyx_cur_scope->__pyx_v_ag);
     } catch(...) {
       __Pyx_CppExn2PyErr();
       __PYX_ERR(0, 262, __pyx_L1_error)
     }
-    __pyx_t_4 = (__pyx_t_3 != 0);
-    if (!__pyx_t_4) break;
+    __pyx_t_5 = (__pyx_t_4 != 0);
+    if (!__pyx_t_5) break;
 
     /* "marisa_trie.pyx":263
  * 
@@ -5492,9 +5504,10 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   char *__pyx_t_6;
-  int __pyx_t_7;
+  Py_ssize_t __pyx_t_7;
   int __pyx_t_8;
   int __pyx_t_9;
+  int __pyx_t_10;
   __Pyx_RefNannySetupContext("keys", 0);
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
@@ -5561,7 +5574,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
  *         cdef list res = []
  *         cdef bytes b_prefix = self._encode_key(prefix)             # <<<<<<<<<<<<<<
  *         cdef agent.Agent ag
- *         ag.set_query(b_prefix)
+ *         ag.set_query(b_prefix, len(b_prefix))
  */
   __pyx_t_1 = ((struct __pyx_vtabstruct_11marisa_trie__Trie *)__pyx_v_self->__pyx_vtab)->_encode_key(__pyx_v_self, __pyx_v_prefix); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 271, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -5571,15 +5584,20 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
   /* "marisa_trie.pyx":273
  *         cdef bytes b_prefix = self._encode_key(prefix)
  *         cdef agent.Agent ag
- *         ag.set_query(b_prefix)             # <<<<<<<<<<<<<<
+ *         ag.set_query(b_prefix, len(b_prefix))             # <<<<<<<<<<<<<<
  * 
  *         while self._trie.predictive_search(ag):
  */
   __pyx_t_6 = __Pyx_PyObject_AsString(__pyx_v_b_prefix); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(0, 273, __pyx_L1_error)
-  __pyx_v_ag.set_query(__pyx_t_6);
+  if (unlikely(__pyx_v_b_prefix == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
+    __PYX_ERR(0, 273, __pyx_L1_error)
+  }
+  __pyx_t_7 = PyBytes_GET_SIZE(__pyx_v_b_prefix); if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(0, 273, __pyx_L1_error)
+  __pyx_v_ag.set_query(__pyx_t_6, __pyx_t_7);
 
   /* "marisa_trie.pyx":275
- *         ag.set_query(b_prefix)
+ *         ag.set_query(b_prefix, len(b_prefix))
  * 
  *         while self._trie.predictive_search(ag):             # <<<<<<<<<<<<<<
  *             res.append(self._get_key(ag))
@@ -5587,13 +5605,13 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
  */
   while (1) {
     try {
-      __pyx_t_7 = __pyx_v_self->_trie->predictive_search(__pyx_v_ag);
+      __pyx_t_8 = __pyx_v_self->_trie->predictive_search(__pyx_v_ag);
     } catch(...) {
       __Pyx_CppExn2PyErr();
       __PYX_ERR(0, 275, __pyx_L1_error)
     }
-    __pyx_t_8 = (__pyx_t_7 != 0);
-    if (!__pyx_t_8) break;
+    __pyx_t_9 = (__pyx_t_8 != 0);
+    if (!__pyx_t_9) break;
 
     /* "marisa_trie.pyx":276
  * 
@@ -5604,7 +5622,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
  */
     __pyx_t_1 = ((struct __pyx_vtabstruct_11marisa_trie__Trie *)__pyx_v_self->__pyx_vtab)->_get_key(__pyx_v_self, __pyx_v_ag); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 276, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_res, __pyx_t_1); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(0, 276, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyList_Append(__pyx_v_res, __pyx_t_1); if (unlikely(__pyx_t_10 == -1)) __PYX_ERR(0, 276, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
@@ -5856,7 +5874,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_39has_keys_with_prefix(struct __p
  * 
  *         cdef agent.Agent ag
  *         cdef bytes b_prefix = self._encode_key(prefix)             # <<<<<<<<<<<<<<
- *         ag.set_query(b_prefix)
+ *         ag.set_query(b_prefix, len(b_prefix))
  *         return self._trie.predictive_search(ag)
  */
   __pyx_t_1 = ((struct __pyx_vtabstruct_11marisa_trie__Trie *)__pyx_v_self->__pyx_vtab)->_encode_key(__pyx_v_self, __pyx_v_prefix); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
@@ -5867,16 +5885,21 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_39has_keys_with_prefix(struct __p
   /* "marisa_trie.pyx":290
  *         cdef agent.Agent ag
  *         cdef bytes b_prefix = self._encode_key(prefix)
- *         ag.set_query(b_prefix)             # <<<<<<<<<<<<<<
+ *         ag.set_query(b_prefix, len(b_prefix))             # <<<<<<<<<<<<<<
  *         return self._trie.predictive_search(ag)
  * 
  */
   __pyx_t_6 = __Pyx_PyObject_AsString(__pyx_v_b_prefix); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(0, 290, __pyx_L1_error)
-  __pyx_v_ag.set_query(__pyx_t_6);
+  if (unlikely(__pyx_v_b_prefix == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
+    __PYX_ERR(0, 290, __pyx_L1_error)
+  }
+  __pyx_t_4 = PyBytes_GET_SIZE(__pyx_v_b_prefix); if (unlikely(__pyx_t_4 == -1)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_v_ag.set_query(__pyx_t_6, __pyx_t_4);
 
   /* "marisa_trie.pyx":291
  *         cdef bytes b_prefix = self._encode_key(prefix)
- *         ag.set_query(b_prefix)
+ *         ag.set_query(b_prefix, len(b_prefix))
  *         return self._trie.predictive_search(ag)             # <<<<<<<<<<<<<<
  * 
  * 

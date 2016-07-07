@@ -181,7 +181,7 @@ cdef class _Trie:
 
     cdef bint _contains(self, bytes key):
         cdef agent.Agent ag
-        ag.set_query(key)
+        ag.set_query(key, len(key))
         return self._trie.lookup(ag)
 
     def read(self, f):
@@ -257,7 +257,7 @@ cdef class _Trie:
         """
         cdef agent.Agent ag
         cdef bytes b_prefix = self._encode_key(prefix)
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             yield self._get_key(ag)
@@ -270,7 +270,7 @@ cdef class _Trie:
         cdef list res = []
         cdef bytes b_prefix = self._encode_key(prefix)
         cdef agent.Agent ag
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             res.append(self._get_key(ag))
@@ -287,7 +287,7 @@ cdef class _Trie:
 
         cdef agent.Agent ag
         cdef bytes b_prefix = self._encode_key(prefix)
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
         return self._trie.predictive_search(ag)
 
 

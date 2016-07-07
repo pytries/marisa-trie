@@ -529,7 +529,7 @@ struct __pyx_opt_args_11marisa_trie_9BytesTrie_keys;
 struct __pyx_opt_args_11marisa_trie_11_UnpackTrie_items;
 
 /* "marisa_trie.pyx":265
- *             yield _get_key(ag)
+ *             yield self._get_key(ag)
  * 
  *     cpdef list keys(self, unicode prefix=""):             # <<<<<<<<<<<<<<
  *         """
@@ -588,7 +588,7 @@ struct __pyx_opt_args_11marisa_trie_11_UnpackTrie_items {
   PyObject *prefix;
 };
 
-/* "marisa_trie.pyx":65
+/* "marisa_trie.pyx":62
  * 
  * 
  * cdef class _Trie:             # <<<<<<<<<<<<<<
@@ -655,7 +655,7 @@ struct __pyx_obj_11marisa_trie_RecordTrie {
 
 
 /* "marisa_trie.pyx":76
- *         return key.encode('utf8')
+ *         return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
  * 
  *     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,             # <<<<<<<<<<<<<<
  *                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -870,7 +870,7 @@ struct __pyx_obj_11marisa_trie___pyx_scope_struct_12_genexpr {
 
 
 
-/* "marisa_trie.pyx":65
+/* "marisa_trie.pyx":62
  * 
  * 
  * cdef class _Trie:             # <<<<<<<<<<<<<<
@@ -880,6 +880,7 @@ struct __pyx_obj_11marisa_trie___pyx_scope_struct_12_genexpr {
 
 struct __pyx_vtabstruct_11marisa_trie__Trie {
   PyObject *(*_encode_key)(struct __pyx_obj_11marisa_trie__Trie *, PyObject *);
+  PyObject *(*_get_key)(struct __pyx_obj_11marisa_trie__Trie *, marisa::Agent &);
   int (*_equals)(struct __pyx_obj_11marisa_trie__Trie *, struct __pyx_obj_11marisa_trie__Trie *);
   int (*_contains)(struct __pyx_obj_11marisa_trie__Trie *, PyObject *);
   PyObject *(*tobytes)(struct __pyx_obj_11marisa_trie__Trie *, int __pyx_skip_dispatch);
@@ -1038,6 +1039,13 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_GetAttrStr(PyObject* obj, PyObject
 /* GetBuiltinName.proto */
 static PyObject *__Pyx_GetBuiltinName(PyObject *name);
 
+/* PyObjectCall.proto */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
+#else
+#define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
+#endif
+
 /* IncludeStringH.proto */
 #include <string.h>
 
@@ -1046,13 +1054,6 @@ static CYTHON_INLINE PyObject* __Pyx_decode_c_string(
          const char* cstring, Py_ssize_t start, Py_ssize_t stop,
          const char* encoding, const char* errors,
          PyObject* (*decode_func)(const char *s, Py_ssize_t size, const char *errors));
-
-/* PyObjectCall.proto */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
-#else
-#define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
-#endif
 
 /* RaiseDoubleKeywords.proto */
 static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_name);
@@ -1431,6 +1432,7 @@ static int __Pyx_check_binary_version(void);
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 static PyObject *__pyx_f_11marisa_trie_5_Trie__encode_key(CYTHON_UNUSED struct __pyx_obj_11marisa_trie__Trie *__pyx_v_self, PyObject *__pyx_v_key); /* proto*/
+static PyObject *__pyx_f_11marisa_trie_5_Trie__get_key(CYTHON_UNUSED struct __pyx_obj_11marisa_trie__Trie *__pyx_v_self, marisa::Agent &__pyx_v_ag); /* proto*/
 static int __pyx_f_11marisa_trie_5_Trie__equals(struct __pyx_obj_11marisa_trie__Trie *__pyx_v_self, struct __pyx_obj_11marisa_trie__Trie *__pyx_v_other); /* proto*/
 static int __pyx_f_11marisa_trie_5_Trie__contains(struct __pyx_obj_11marisa_trie__Trie *__pyx_v_self, PyObject *__pyx_v_key); /* proto*/
 static PyObject *__pyx_f_11marisa_trie_5_Trie_tobytes(struct __pyx_obj_11marisa_trie__Trie *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
@@ -1494,7 +1496,6 @@ static PyTypeObject *__pyx_ptype_11marisa_trie___pyx_scope_struct_10_genexpr = 0
 static PyTypeObject *__pyx_ptype_11marisa_trie___pyx_scope_struct_11_iteritems = 0;
 static PyTypeObject *__pyx_ptype_11marisa_trie___pyx_scope_struct_12_genexpr = 0;
 static PyObject *__pyx_v_11marisa_trie__VALUE_SEPARATOR = 0;
-static PyObject *__pyx_f_11marisa_trie__get_key(marisa::Agent &); /*proto*/
 static CYTHON_INLINE PyObject *__pyx_convert_PyObject_string_to_py_std__in_string(std::string const &); /*proto*/
 static CYTHON_INLINE PyObject *__pyx_convert_PyUnicode_string_to_py_std__in_string(std::string const &); /*proto*/
 static CYTHON_INLINE PyObject *__pyx_convert_PyStr_string_to_py_std__in_string(std::string const &); /*proto*/
@@ -1788,55 +1789,7 @@ static PyObject *__pyx_tuple__8;
 static PyObject *__pyx_tuple__9;
 static PyObject *__pyx_tuple__10;
 
-/* "marisa_trie.pyx":61
- * DEFAULT_ORDER = base.MARISA_DEFAULT_ORDER
- * 
- * cdef unicode _get_key(agent.Agent& ag):             # <<<<<<<<<<<<<<
- *     return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
- * 
- */
-
-static PyObject *__pyx_f_11marisa_trie__get_key(marisa::Agent &__pyx_v_ag) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("_get_key", 0);
-
-  /* "marisa_trie.pyx":62
- * 
- * cdef unicode _get_key(agent.Agent& ag):
- *     return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))             # <<<<<<<<<<<<<<
- * 
- * 
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_decode_c_string(__pyx_v_ag.key().ptr(), 0, __pyx_v_ag.key().length(), NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_INCREF(((PyObject*)__pyx_t_1));
-  __pyx_r = ((PyObject*)__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "marisa_trie.pyx":61
- * DEFAULT_ORDER = base.MARISA_DEFAULT_ORDER
- * 
- * cdef unicode _get_key(agent.Agent& ag):             # <<<<<<<<<<<<<<
- *     return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("marisa_trie._get_key", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "marisa_trie.pyx":73
+/* "marisa_trie.pyx":70
  *     cdef trie.Trie* _trie
  * 
  *     cdef bytes _encode_key(self, key):             # <<<<<<<<<<<<<<
@@ -1851,25 +1804,25 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie__encode_key(CYTHON_UNUSED struct _
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("_encode_key", 0);
 
-  /* "marisa_trie.pyx":74
+  /* "marisa_trie.pyx":71
  * 
  *     cdef bytes _encode_key(self, key):
  *         return key.encode('utf8')             # <<<<<<<<<<<<<<
  * 
- *     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
+ *     cdef _get_key(self, agent.Agent& ag):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_key, __pyx_n_s_encode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_key, __pyx_n_s_encode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 74, __pyx_L1_error)
+  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 71, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "marisa_trie.pyx":73
+  /* "marisa_trie.pyx":70
  *     cdef trie.Trie* _trie
  * 
  *     cdef bytes _encode_key(self, key):             # <<<<<<<<<<<<<<
@@ -1889,8 +1842,56 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie__encode_key(CYTHON_UNUSED struct _
   return __pyx_r;
 }
 
-/* "marisa_trie.pyx":76
+/* "marisa_trie.pyx":73
  *         return key.encode('utf8')
+ * 
+ *     cdef _get_key(self, agent.Agent& ag):             # <<<<<<<<<<<<<<
+ *         return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
+ * 
+ */
+
+static PyObject *__pyx_f_11marisa_trie_5_Trie__get_key(CYTHON_UNUSED struct __pyx_obj_11marisa_trie__Trie *__pyx_v_self, marisa::Agent &__pyx_v_ag) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("_get_key", 0);
+
+  /* "marisa_trie.pyx":74
+ * 
+ *     cdef _get_key(self, agent.Agent& ag):
+ *         return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))             # <<<<<<<<<<<<<<
+ * 
+ *     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_decode_c_string(__pyx_v_ag.key().ptr(), 0, __pyx_v_ag.key().length(), NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_INCREF(((PyObject*)__pyx_t_1));
+  __pyx_r = __pyx_t_1;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "marisa_trie.pyx":73
+ *         return key.encode('utf8')
+ * 
+ *     cdef _get_key(self, agent.Agent& ag):             # <<<<<<<<<<<<<<
+ *         return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
+ * 
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("marisa_trie._Trie._get_key", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "marisa_trie.pyx":76
+ *         return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
  * 
  *     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,             # <<<<<<<<<<<<<<
  *                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -2009,7 +2010,7 @@ static int __pyx_pw_11marisa_trie_5_Trie_1__init__(PyObject *__pyx_v_self, PyObj
   __pyx_r = __pyx_pf_11marisa_trie_5_Trie___init__(((struct __pyx_obj_11marisa_trie__Trie *)__pyx_v_self), __pyx_v_arg, __pyx_v_num_tries, __pyx_v_binary, __pyx_v_cache_size, __pyx_v_order, __pyx_v_weights);
 
   /* "marisa_trie.pyx":76
- *         return key.encode('utf8')
+ *         return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
  * 
  *     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,             # <<<<<<<<<<<<<<
  *                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -2179,7 +2180,7 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_8__init___2generator5(__pyx_Corou
 }
 
 /* "marisa_trie.pyx":76
- *         return key.encode('utf8')
+ *         return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
  * 
  *     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,             # <<<<<<<<<<<<<<
  *                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -2339,7 +2340,7 @@ static int __pyx_pf_11marisa_trie_5_Trie___init__(struct __pyx_obj_11marisa_trie
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
   /* "marisa_trie.pyx":76
- *         return key.encode('utf8')
+ *         return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
  * 
  *     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,             # <<<<<<<<<<<<<<
  *                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -5399,7 +5400,7 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_36generator(__pyx_CoroutineObject
  *         ag.set_query(b_prefix)
  * 
  *         while self._trie.predictive_search(ag):             # <<<<<<<<<<<<<<
- *             yield _get_key(ag)
+ *             yield self._get_key(ag)
  * 
  */
   while (1) {
@@ -5415,11 +5416,11 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_36generator(__pyx_CoroutineObject
     /* "marisa_trie.pyx":263
  * 
  *         while self._trie.predictive_search(ag):
- *             yield _get_key(ag)             # <<<<<<<<<<<<<<
+ *             yield self._get_key(ag)             # <<<<<<<<<<<<<<
  * 
  *     cpdef list keys(self, unicode prefix=""):
  */
-    __pyx_t_1 = __pyx_f_11marisa_trie__get_key(__pyx_cur_scope->__pyx_v_ag); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
+    __pyx_t_1 = ((struct __pyx_vtabstruct_11marisa_trie__Trie *)__pyx_cur_scope->__pyx_v_self->__pyx_vtab)->_get_key(__pyx_cur_scope->__pyx_v_self, __pyx_cur_scope->__pyx_v_ag); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
@@ -5455,7 +5456,7 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_36generator(__pyx_CoroutineObject
 }
 
 /* "marisa_trie.pyx":265
- *             yield _get_key(ag)
+ *             yield self._get_key(ag)
  * 
  *     cpdef list keys(self, unicode prefix=""):             # <<<<<<<<<<<<<<
  *         """
@@ -5566,7 +5567,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
  *         ag.set_query(b_prefix)
  * 
  *         while self._trie.predictive_search(ag):             # <<<<<<<<<<<<<<
- *             res.append(_get_key(ag))
+ *             res.append(self._get_key(ag))
  * 
  */
   while (1) {
@@ -5582,18 +5583,18 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
     /* "marisa_trie.pyx":276
  * 
  *         while self._trie.predictive_search(ag):
- *             res.append(_get_key(ag))             # <<<<<<<<<<<<<<
+ *             res.append(self._get_key(ag))             # <<<<<<<<<<<<<<
  * 
  *         return res
  */
-    __pyx_t_1 = __pyx_f_11marisa_trie__get_key(__pyx_v_ag); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 276, __pyx_L1_error)
+    __pyx_t_1 = ((struct __pyx_vtabstruct_11marisa_trie__Trie *)__pyx_v_self->__pyx_vtab)->_get_key(__pyx_v_self, __pyx_v_ag); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 276, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_res, __pyx_t_1); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(0, 276, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
   /* "marisa_trie.pyx":278
- *             res.append(_get_key(ag))
+ *             res.append(self._get_key(ag))
  * 
  *         return res             # <<<<<<<<<<<<<<
  * 
@@ -5605,7 +5606,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
   goto __pyx_L0;
 
   /* "marisa_trie.pyx":265
- *             yield _get_key(ag)
+ *             yield self._get_key(ag)
  * 
  *     cpdef list keys(self, unicode prefix=""):             # <<<<<<<<<<<<<<
  *         """
@@ -6535,7 +6536,7 @@ static PyObject *__pyx_f_11marisa_trie_4Trie_restore_key(struct __pyx_obj_11mari
  *             self._trie.reverse_lookup(ag)
  *         except KeyError:             # <<<<<<<<<<<<<<
  *             raise KeyError(index)
- *         return _get_key(ag)
+ *         return self._get_key(ag)
  */
     __pyx_t_10 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_KeyError);
     if (__pyx_t_10) {
@@ -6549,7 +6550,7 @@ static PyObject *__pyx_f_11marisa_trie_4Trie_restore_key(struct __pyx_obj_11mari
  *             self._trie.reverse_lookup(ag)
  *         except KeyError:
  *             raise KeyError(index)             # <<<<<<<<<<<<<<
- *         return _get_key(ag)
+ *         return self._get_key(ag)
  * 
  */
       __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_index); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 340, __pyx_L5_except_error)
@@ -6588,12 +6589,12 @@ static PyObject *__pyx_f_11marisa_trie_4Trie_restore_key(struct __pyx_obj_11mari
   /* "marisa_trie.pyx":341
  *         except KeyError:
  *             raise KeyError(index)
- *         return _get_key(ag)             # <<<<<<<<<<<<<<
+ *         return self._get_key(ag)             # <<<<<<<<<<<<<<
  * 
  *     cdef int _key_id(self, char* key):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __pyx_f_11marisa_trie__get_key(__pyx_v_ag); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 341, __pyx_L1_error)
+  __pyx_t_4 = ((struct __pyx_vtabstruct_11marisa_trie_Trie *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._get_key(((struct __pyx_obj_11marisa_trie__Trie *)__pyx_v_self), __pyx_v_ag); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 341, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
@@ -6671,7 +6672,7 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_6restore_key(struct __pyx_obj_11ma
 }
 
 /* "marisa_trie.pyx":343
- *         return _get_key(ag)
+ *         return self._get_key(ag)
  * 
  *     cdef int _key_id(self, char* key):             # <<<<<<<<<<<<<<
  *         cdef bint res
@@ -6750,7 +6751,7 @@ static int __pyx_f_11marisa_trie_4Trie__key_id(struct __pyx_obj_11marisa_trie_Tr
   goto __pyx_L0;
 
   /* "marisa_trie.pyx":343
- *         return _get_key(ag)
+ *         return self._get_key(ag)
  * 
  *     cdef int _key_id(self, char* key):             # <<<<<<<<<<<<<<
  *         cdef bint res
@@ -6883,7 +6884,7 @@ static PyObject *__pyx_gb_11marisa_trie_4Trie_10generator1(__pyx_CoroutineObject
  *         ag.set_query(b_key)
  * 
  *         while self._trie.common_prefix_search(ag):             # <<<<<<<<<<<<<<
- *             yield _get_key(ag)
+ *             yield self._get_key(ag)
  * 
  */
   while (1) {
@@ -6899,11 +6900,11 @@ static PyObject *__pyx_gb_11marisa_trie_4Trie_10generator1(__pyx_CoroutineObject
     /* "marisa_trie.pyx":361
  * 
  *         while self._trie.common_prefix_search(ag):
- *             yield _get_key(ag)             # <<<<<<<<<<<<<<
+ *             yield self._get_key(ag)             # <<<<<<<<<<<<<<
  * 
  *     def prefixes(self, unicode key):
  */
-    __pyx_t_2 = __pyx_f_11marisa_trie__get_key(__pyx_cur_scope->__pyx_v_ag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 361, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_11marisa_trie_Trie *)__pyx_cur_scope->__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._get_key(((struct __pyx_obj_11marisa_trie__Trie *)__pyx_cur_scope->__pyx_v_self), __pyx_cur_scope->__pyx_v_ag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 361, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_r = __pyx_t_2;
     __pyx_t_2 = 0;
@@ -6940,7 +6941,7 @@ static PyObject *__pyx_gb_11marisa_trie_4Trie_10generator1(__pyx_CoroutineObject
 }
 
 /* "marisa_trie.pyx":363
- *             yield _get_key(ag)
+ *             yield self._get_key(ag)
  * 
  *     def prefixes(self, unicode key):             # <<<<<<<<<<<<<<
  *         """
@@ -7025,7 +7026,7 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_11prefixes(struct __pyx_obj_11mari
  *         ag.set_query(b_key)
  * 
  *         while self._trie.common_prefix_search(ag):             # <<<<<<<<<<<<<<
- *             res.append(_get_key(ag))
+ *             res.append(self._get_key(ag))
  *         return res
  */
   while (1) {
@@ -7041,11 +7042,11 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_11prefixes(struct __pyx_obj_11mari
     /* "marisa_trie.pyx":375
  * 
  *         while self._trie.common_prefix_search(ag):
- *             res.append(_get_key(ag))             # <<<<<<<<<<<<<<
+ *             res.append(self._get_key(ag))             # <<<<<<<<<<<<<<
  *         return res
  * 
  */
-    __pyx_t_2 = __pyx_f_11marisa_trie__get_key(__pyx_v_ag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 375, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_11marisa_trie_Trie *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._get_key(((struct __pyx_obj_11marisa_trie__Trie *)__pyx_v_self), __pyx_v_ag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 375, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_6 = __Pyx_PyList_Append(__pyx_v_res, __pyx_t_2); if (unlikely(__pyx_t_6 == -1)) __PYX_ERR(0, 375, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -7053,7 +7054,7 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_11prefixes(struct __pyx_obj_11mari
 
   /* "marisa_trie.pyx":376
  *         while self._trie.common_prefix_search(ag):
- *             res.append(_get_key(ag))
+ *             res.append(self._get_key(ag))
  *         return res             # <<<<<<<<<<<<<<
  * 
  *     def iteritems(self, unicode prefix=""):
@@ -7064,7 +7065,7 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_11prefixes(struct __pyx_obj_11mari
   goto __pyx_L0;
 
   /* "marisa_trie.pyx":363
- *             yield _get_key(ag)
+ *             yield self._get_key(ag)
  * 
  *     def prefixes(self, unicode key):             # <<<<<<<<<<<<<<
  *         """
@@ -7244,7 +7245,7 @@ static PyObject *__pyx_gb_11marisa_trie_4Trie_15generator2(__pyx_CoroutineObject
  *         ag.set_query(b_prefix)
  * 
  *         while self._trie.predictive_search(ag):             # <<<<<<<<<<<<<<
- *             yield _get_key(ag), ag.key().id()
+ *             yield self._get_key(ag), ag.key().id()
  * 
  */
   while (1) {
@@ -7260,11 +7261,11 @@ static PyObject *__pyx_gb_11marisa_trie_4Trie_15generator2(__pyx_CoroutineObject
     /* "marisa_trie.pyx":387
  * 
  *         while self._trie.predictive_search(ag):
- *             yield _get_key(ag), ag.key().id()             # <<<<<<<<<<<<<<
+ *             yield self._get_key(ag), ag.key().id()             # <<<<<<<<<<<<<<
  * 
  *     def items(self, unicode prefix=""):
  */
-    __pyx_t_2 = __pyx_f_11marisa_trie__get_key(__pyx_cur_scope->__pyx_v_ag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 387, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_11marisa_trie_Trie *)__pyx_cur_scope->__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._get_key(((struct __pyx_obj_11marisa_trie__Trie *)__pyx_cur_scope->__pyx_v_self), __pyx_cur_scope->__pyx_v_ag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 387, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_cur_scope->__pyx_v_ag.key().id()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 387, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
@@ -7312,7 +7313,7 @@ static PyObject *__pyx_gb_11marisa_trie_4Trie_15generator2(__pyx_CoroutineObject
 }
 
 /* "marisa_trie.pyx":389
- *             yield _get_key(ag), ag.key().id()
+ *             yield self._get_key(ag), ag.key().id()
  * 
  *     def items(self, unicode prefix=""):             # <<<<<<<<<<<<<<
  *         # inlined for speed
@@ -7438,7 +7439,7 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_16items(struct __pyx_obj_11marisa_
  *         ag.set_query(b_prefix)
  * 
  *         while self._trie.predictive_search(ag):             # <<<<<<<<<<<<<<
- *             res.append((_get_key(ag), ag.key().id()))
+ *             res.append((self._get_key(ag), ag.key().id()))
  * 
  */
   while (1) {
@@ -7454,11 +7455,11 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_16items(struct __pyx_obj_11marisa_
     /* "marisa_trie.pyx":397
  * 
  *         while self._trie.predictive_search(ag):
- *             res.append((_get_key(ag), ag.key().id()))             # <<<<<<<<<<<<<<
+ *             res.append((self._get_key(ag), ag.key().id()))             # <<<<<<<<<<<<<<
  * 
  *         return res
  */
-    __pyx_t_2 = __pyx_f_11marisa_trie__get_key(__pyx_v_ag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 397, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_11marisa_trie_Trie *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._get_key(((struct __pyx_obj_11marisa_trie__Trie *)__pyx_v_self), __pyx_v_ag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 397, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_ag.key().id()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
@@ -7475,7 +7476,7 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_16items(struct __pyx_obj_11marisa_
   }
 
   /* "marisa_trie.pyx":399
- *             res.append((_get_key(ag), ag.key().id()))
+ *             res.append((self._get_key(ag), ag.key().id()))
  * 
  *         return res             # <<<<<<<<<<<<<<
  * 
@@ -7487,7 +7488,7 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_16items(struct __pyx_obj_11marisa_
   goto __pyx_L0;
 
   /* "marisa_trie.pyx":389
- *             yield _get_key(ag), ag.key().id()
+ *             yield self._get_key(ag), ag.key().id()
  * 
  *     def items(self, unicode prefix=""):             # <<<<<<<<<<<<<<
  *         # inlined for speed
@@ -14712,14 +14713,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "marisa_trie.pyx":74
+  /* "marisa_trie.pyx":71
  * 
  *     cdef bytes _encode_key(self, key):
  *         return key.encode('utf8')             # <<<<<<<<<<<<<<
  * 
- *     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
+ *     cdef _get_key(self, agent.Agent& ag):
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_n_u_utf8); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_n_u_utf8); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
@@ -14863,16 +14864,17 @@ PyMODINIT_FUNC PyInit_marisa_trie(void)
   /*--- Type init code ---*/
   __pyx_vtabptr_11marisa_trie__Trie = &__pyx_vtable_11marisa_trie__Trie;
   __pyx_vtable_11marisa_trie__Trie._encode_key = (PyObject *(*)(struct __pyx_obj_11marisa_trie__Trie *, PyObject *))__pyx_f_11marisa_trie_5_Trie__encode_key;
+  __pyx_vtable_11marisa_trie__Trie._get_key = (PyObject *(*)(struct __pyx_obj_11marisa_trie__Trie *, marisa::Agent &))__pyx_f_11marisa_trie_5_Trie__get_key;
   __pyx_vtable_11marisa_trie__Trie._equals = (int (*)(struct __pyx_obj_11marisa_trie__Trie *, struct __pyx_obj_11marisa_trie__Trie *))__pyx_f_11marisa_trie_5_Trie__equals;
   __pyx_vtable_11marisa_trie__Trie._contains = (int (*)(struct __pyx_obj_11marisa_trie__Trie *, PyObject *))__pyx_f_11marisa_trie_5_Trie__contains;
   __pyx_vtable_11marisa_trie__Trie.tobytes = (PyObject *(*)(struct __pyx_obj_11marisa_trie__Trie *, int __pyx_skip_dispatch))__pyx_f_11marisa_trie_5_Trie_tobytes;
   __pyx_vtable_11marisa_trie__Trie.frombytes = (PyObject *(*)(struct __pyx_obj_11marisa_trie__Trie *, PyObject *, int __pyx_skip_dispatch))__pyx_f_11marisa_trie_5_Trie_frombytes;
   __pyx_vtable_11marisa_trie__Trie.keys = (PyObject *(*)(struct __pyx_obj_11marisa_trie__Trie *, int __pyx_skip_dispatch, struct __pyx_opt_args_11marisa_trie_5_Trie_keys *__pyx_optional_args))__pyx_f_11marisa_trie_5_Trie_keys;
-  if (PyType_Ready(&__pyx_type_11marisa_trie__Trie) < 0) __PYX_ERR(0, 65, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_11marisa_trie__Trie) < 0) __PYX_ERR(0, 62, __pyx_L1_error)
   __pyx_type_11marisa_trie__Trie.tp_print = 0;
   #if CYTHON_COMPILING_IN_CPYTHON
   {
-    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_11marisa_trie__Trie, "__init__"); if (unlikely(!wrapper)) __PYX_ERR(0, 65, __pyx_L1_error)
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_11marisa_trie__Trie, "__init__"); if (unlikely(!wrapper)) __PYX_ERR(0, 62, __pyx_L1_error)
     if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
       __pyx_wrapperbase_11marisa_trie_5_Trie___init__ = *((PyWrapperDescrObject *)wrapper)->d_base;
       __pyx_wrapperbase_11marisa_trie_5_Trie___init__.doc = __pyx_doc_11marisa_trie_5_Trie___init__;
@@ -14880,8 +14882,8 @@ PyMODINIT_FUNC PyInit_marisa_trie(void)
     }
   }
   #endif
-  if (__Pyx_SetVtable(__pyx_type_11marisa_trie__Trie.tp_dict, __pyx_vtabptr_11marisa_trie__Trie) < 0) __PYX_ERR(0, 65, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "_Trie", (PyObject *)&__pyx_type_11marisa_trie__Trie) < 0) __PYX_ERR(0, 65, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_11marisa_trie__Trie.tp_dict, __pyx_vtabptr_11marisa_trie__Trie) < 0) __PYX_ERR(0, 62, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "_Trie", (PyObject *)&__pyx_type_11marisa_trie__Trie) < 0) __PYX_ERR(0, 62, __pyx_L1_error)
   __pyx_ptype_11marisa_trie__Trie = &__pyx_type_11marisa_trie__Trie;
   __pyx_vtabptr_11marisa_trie_Trie = &__pyx_vtable_11marisa_trie_Trie;
   __pyx_vtable_11marisa_trie_Trie.__pyx_base = *__pyx_vtabptr_11marisa_trie__Trie;
@@ -15315,7 +15317,7 @@ PyMODINIT_FUNC PyInit_marisa_trie(void)
  * WEIGHT_ORDER = base.MARISA_WEIGHT_ORDER
  * DEFAULT_ORDER = base.MARISA_DEFAULT_ORDER             # <<<<<<<<<<<<<<
  * 
- * cdef unicode _get_key(agent.Agent& ag):
+ * 
  */
   __pyx_t_7 = __Pyx_PyInt_From_marisa_node_order(MARISA_DEFAULT_ORDER); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
@@ -15323,7 +15325,7 @@ PyMODINIT_FUNC PyInit_marisa_trie(void)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "marisa_trie.pyx":76
- *         return key.encode('utf8')
+ *         return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
  * 
  *     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,             # <<<<<<<<<<<<<<
  *                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -15481,6 +15483,26 @@ static PyObject *__Pyx_GetBuiltinName(PyObject *name) {
     return result;
 }
 
+/* PyObjectCall */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
+    PyObject *result;
+    ternaryfunc call = func->ob_type->tp_call;
+    if (unlikely(!call))
+        return PyObject_Call(func, arg, kw);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = (*call)(func, arg, kw);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
+    }
+    return result;
+}
+#endif
+
 /* decode_c_string */
 static CYTHON_INLINE PyObject* __Pyx_decode_c_string(
          const char* cstring, Py_ssize_t start, Py_ssize_t stop,
@@ -15513,26 +15535,6 @@ static CYTHON_INLINE PyObject* __Pyx_decode_c_string(
         return PyUnicode_Decode(cstring, length, encoding, errors);
     }
 }
-
-/* PyObjectCall */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
-    PyObject *result;
-    ternaryfunc call = func->ob_type->tp_call;
-    if (unlikely(!call))
-        return PyObject_Call(func, arg, kw);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = (*call)(func, arg, kw);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
 
 /* RaiseDoubleKeywords */
 static void __Pyx_RaiseDoubleKeywordsError(

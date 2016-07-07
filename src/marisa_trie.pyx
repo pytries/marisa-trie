@@ -58,9 +58,6 @@ LABEL_ORDER = base.MARISA_LABEL_ORDER
 WEIGHT_ORDER = base.MARISA_WEIGHT_ORDER
 DEFAULT_ORDER = base.MARISA_DEFAULT_ORDER
 
-cdef unicode _get_key(agent.Agent& ag):
-    return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
-
 
 cdef class _Trie:
     """
@@ -72,6 +69,9 @@ cdef class _Trie:
 
     cdef bytes _encode_key(self, key):
         return key.encode('utf8')
+
+    cdef _get_key(self, agent.Agent& ag):
+        return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
 
     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -260,7 +260,7 @@ cdef class _Trie:
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            yield _get_key(ag)
+            yield self._get_key(ag)
 
     cpdef list keys(self, unicode prefix=""):
         """
@@ -273,7 +273,7 @@ cdef class _Trie:
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            res.append(_get_key(ag))
+            res.append(self._get_key(ag))
 
         return res
 
@@ -338,7 +338,7 @@ cdef class Trie(_Trie):
             self._trie.reverse_lookup(ag)
         except KeyError:
             raise KeyError(index)
-        return _get_key(ag)
+        return self._get_key(ag)
 
     cdef int _key_id(self, char* key):
         cdef bint res
@@ -358,7 +358,7 @@ cdef class Trie(_Trie):
         ag.set_query(b_key)
 
         while self._trie.common_prefix_search(ag):
-            yield _get_key(ag)
+            yield self._get_key(ag)
 
     def prefixes(self, unicode key):
         """
@@ -372,7 +372,7 @@ cdef class Trie(_Trie):
         ag.set_query(b_key)
 
         while self._trie.common_prefix_search(ag):
-            res.append(_get_key(ag))
+            res.append(self._get_key(ag))
         return res
 
     def iteritems(self, unicode prefix=""):
@@ -384,7 +384,7 @@ cdef class Trie(_Trie):
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            yield _get_key(ag), ag.key().id()
+            yield self._get_key(ag), ag.key().id()
 
     def items(self, unicode prefix=""):
         # inlined for speed
@@ -394,7 +394,7 @@ cdef class Trie(_Trie):
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            res.append((_get_key(ag), ag.key().id()))
+            res.append((self._get_key(ag), ag.key().id()))
 
         return res
 

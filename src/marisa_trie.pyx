@@ -251,24 +251,28 @@ cdef class _Trie:
         self._trie.mmap(c_path)
         return self
 
-    def iterkeys(self, prefix=""):
+    def iterkeys(self, prefix=None):
         """
         Return an iterator over keys that have a prefix ``prefix``.
         """
         cdef agent.Agent ag
-        cdef bytes b_prefix = self._encode_key(prefix)
+        cdef bytes b_prefix = b''
+        if prefix is not None:
+            b_prefix = self._encode_key(prefix)
         ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             yield self._get_key(ag)
 
-    cpdef list keys(self, prefix=""):
+    cpdef list keys(self, prefix=None):
         """
         Return a list with all keys with a prefix ``prefix``.
         """
         # non-generator inlined version of iterkeys()
         cdef list res = []
-        cdef bytes b_prefix = self._encode_key(prefix)
+        cdef bytes b_prefix = b''
+        if prefix is not None:
+            b_prefix = self._encode_key(prefix)
         cdef agent.Agent ag
         ag.set_query(b_prefix, len(b_prefix))
 

@@ -79,7 +79,7 @@ cdef class _Trie:
         """
         ``arg`` can be one of the following:
 
-        * an iterable with unicode keys;
+        * an iterable with bytes keys;
         * None (if you're going to load a trie later).
 
         Pass a ``weights`` iterable with expected lookup frequences
@@ -175,7 +175,7 @@ cdef class _Trie:
     def __len__(self):
         return self._trie.num_keys()
 
-    def __contains__(self, unicode key):
+    def __contains__(self, key):
         cdef bytes _key = self._encode_key(key)
         return self._contains(_key)
 
@@ -251,7 +251,7 @@ cdef class _Trie:
         self._trie.mmap(c_path)
         return self
 
-    def iterkeys(self, unicode prefix=""):
+    def iterkeys(self, prefix=""):
         """
         Return an iterator over keys that have a prefix ``prefix``.
         """
@@ -262,7 +262,7 @@ cdef class _Trie:
         while self._trie.predictive_search(ag):
             yield self._get_key(ag)
 
-    cpdef list keys(self, unicode prefix=""):
+    cpdef list keys(self, prefix=""):
         """
         Return a list with all keys with a prefix ``prefix``.
         """
@@ -277,7 +277,7 @@ cdef class _Trie:
 
         return res
 
-    def has_keys_with_prefix(self, unicode prefix=""):
+    def has_keys_with_prefix(self, prefix=""):
         """
         Returns True if any key in the trie begins with ``prefix``.
         """
@@ -572,7 +572,7 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
 
             yield key, value
 
-    cpdef list keys(self, unicode prefix=""):
+    cpdef list keys(self, prefix=""):
         # copied from iterkeys for speed
         cdef bytes b_prefix = <bytes>prefix.encode('utf8')
         cdef unicode key

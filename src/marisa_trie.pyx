@@ -68,10 +68,10 @@ cdef class _Trie:
     cdef trie.Trie* _trie
 
     cdef bytes _encode_key(self, key):
-        return key.encode('utf8')
+        return key
 
     cdef _get_key(self, agent.Agent& ag):
-        return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
+        return ag.key().ptr()[:ag.key().length()]
 
     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -291,7 +291,18 @@ cdef class _Trie:
         return self._trie.predictive_search(ag)
 
 
-cdef class Trie(_Trie):
+cdef class _UnicodeKeyedTrie(_Trie):
+    """
+    MARISA-trie wrapper for unicode keys.
+    """
+    cdef bytes _encode_key(self, key):
+        return key.encode('utf8')
+
+    cdef _get_key(self, agent.Agent& ag):
+        return <unicode>_Trie._get_key(self, ag).decode('utf8')
+
+
+cdef class Trie(_UnicodeKeyedTrie):
     """
     This trie stores unicode keys and assigns an unque ID to each key.
     """
@@ -406,7 +417,7 @@ cdef class Trie(_Trie):
 cdef bytes _VALUE_SEPARATOR = b'\xff'
 
 
-cdef class BytesTrie(_Trie):
+cdef class BytesTrie(_UnicodeKeyedTrie):
     """
     This class implements read-only Trie-based
     {unicode -> list of bytes objects} mapping.

@@ -58,17 +58,20 @@ LABEL_ORDER = base.MARISA_LABEL_ORDER
 WEIGHT_ORDER = base.MARISA_WEIGHT_ORDER
 DEFAULT_ORDER = base.MARISA_DEFAULT_ORDER
 
-cdef unicode _get_key(agent.Agent& ag):
-    return <unicode>(ag.key().ptr()[:ag.key().length()].decode('utf8'))
-
 
 cdef class _Trie:
     """
     Base MARISA-trie wrapper.
-    It can store unicode keys and assign an unque ID to each key.
+    It can store binary keys and assign an unque ID to each key.
     """
 
     cdef trie.Trie* _trie
+
+    cdef bytes _encode_key(self, key):
+        return key
+
+    cdef _get_key(self, agent.Agent& ag):
+        return ag.key().ptr()[:ag.key().length()]
 
     def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
                        cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER,
@@ -76,7 +79,7 @@ cdef class _Trie:
         """
         ``arg`` can be one of the following:
 
-        * an iterable with unicode keys;
+        * an iterable with bytes keys;
         * None (if you're going to load a trie later).
 
         Pass a ``weights`` iterable with expected lookup frequences
@@ -87,7 +90,7 @@ cdef class _Trie:
             return
         self._trie = new trie.Trie()
 
-        byte_keys = (key.encode('utf8') for key in (arg or []))
+        byte_keys = (self._encode_key(key) for key in (arg or []))
 
         self._build(
             byte_keys,
@@ -172,13 +175,13 @@ cdef class _Trie:
     def __len__(self):
         return self._trie.num_keys()
 
-    def __contains__(self, unicode key):
-        cdef bytes _key = <bytes>key.encode('utf8')
+    def __contains__(self, key):
+        cdef bytes _key = self._encode_key(key)
         return self._contains(_key)
 
     cdef bint _contains(self, bytes key):
         cdef agent.Agent ag
-        ag.set_query(key)
+        ag.set_query(key, len(key))
         return self._trie.lookup(ag)
 
     def read(self, f):
@@ -248,33 +251,37 @@ cdef class _Trie:
         self._trie.mmap(c_path)
         return self
 
-    def iterkeys(self, unicode prefix=""):
+    def iterkeys(self, prefix=None):
         """
         Return an iterator over keys that have a prefix ``prefix``.
         """
         cdef agent.Agent ag
-        cdef bytes b_prefix = <bytes>prefix.encode('utf8')
-        ag.set_query(b_prefix)
+        cdef bytes b_prefix = b''
+        if prefix is not None:
+            b_prefix = self._encode_key(prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
-            yield _get_key(ag)
+            yield self._get_key(ag)
 
-    cpdef list keys(self, unicode prefix=""):
+    cpdef list keys(self, prefix=None):
         """
         Return a list with all keys with a prefix ``prefix``.
         """
         # non-generator inlined version of iterkeys()
         cdef list res = []
-        cdef bytes b_prefix = <bytes>prefix.encode('utf8')
+        cdef bytes b_prefix = b''
+        if prefix is not None:
+            b_prefix = self._encode_key(prefix)
         cdef agent.Agent ag
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
-            res.append(_get_key(ag))
+            res.append(self._get_key(ag))
 
         return res
 
-    def has_keys_with_prefix(self, unicode prefix=""):
+    def has_keys_with_prefix(self, prefix=""):
         """
         Returns True if any key in the trie begins with ``prefix``.
         """
@@ -283,12 +290,120 @@ cdef class _Trie:
                       "Trie.iterkeys instead.", DeprecationWarning)
 
         cdef agent.Agent ag
-        cdef bytes b_prefix = <bytes>prefix.encode('utf8')
-        ag.set_query(b_prefix)
+        cdef bytes b_prefix = self._encode_key(prefix)
+        ag.set_query(b_prefix, len(b_prefix))
         return self._trie.predictive_search(ag)
 
 
-cdef class Trie(_Trie):
+cdef class BinaryTrie(_Trie):
+    """
+    This trie stores binary keys and assigns a unique ID to each key.
+    """
+
+    # key_id method is not in _Trie because it won't work for BytesTrie
+    cpdef int key_id(self, bytes key) except -1:
+        """
+        Return unique auto-generated key index for a ``key``.
+        Raises KeyError if key is not in this trie.
+        """
+        cdef int res = self._key_id(key, len(key))
+        if res == -1:
+            raise KeyError(key)
+        return res
+
+    cdef int _key_id(self, char* key, int len):
+        cdef bint res
+        cdef agent.Agent ag
+        ag.set_query(key, len)
+        res = self._trie.lookup(ag)
+        if not res:
+            return -1
+        return ag.key().id()
+
+    cpdef restore_key(self, int index):
+        """
+        Return a key given its index (obtained by ``key_id`` method).
+        """
+        cdef agent.Agent ag
+        ag.set_query(index)
+        try:
+            self._trie.reverse_lookup(ag)
+        except KeyError:
+            raise KeyError(index)
+        return self._get_key(ag)
+
+    def __getitem__(self, bytes key):
+        return self.key_id(key)
+
+    def get(self, bytes key, default=None):
+        """
+        Return a key id for a given key or ``default`` if the key is not found.
+        """
+        cdef int res
+
+        res = self._key_id(key, len(key))
+        if res == -1:
+            return default
+        return res
+
+    def iter_prefixes(self, bytes key):
+        """
+        Return an iterator of all prefixes of a given key.
+        """
+        cdef agent.Agent ag
+        ag.set_query(key, len(key))
+
+        while self._trie.common_prefix_search(ag):
+            yield self._get_key(ag)
+
+    def prefixes(self, bytes key):
+        """
+        Return a list with all prefixes of a given key.
+        """
+        # this an inlined version of ``list(self.iter_prefixes(key))``
+
+        cdef list res = []
+        cdef agent.Agent ag
+        ag.set_query(key, len(key))
+
+        while self._trie.common_prefix_search(ag):
+            res.append(self._get_key(ag))
+        return res
+
+    def items(self, bytes prefix=b""):
+        # inlined for speed
+        cdef list res = []
+        cdef agent.Agent ag
+        ag.set_query(prefix, len(prefix))
+
+        while self._trie.predictive_search(ag):
+            res.append((self._get_key(ag), ag.key().id()))
+
+        return res
+
+    def iteritems(self, bytes prefix=b""):
+        """
+        Return an iterator over items that have a prefix ``prefix``.
+        """
+        cdef agent.Agent ag
+        ag.set_query(prefix, len(prefix))
+
+        while self._trie.predictive_search(ag):
+            yield self._get_key(ag), ag.key().id()
+
+
+cdef class _UnicodeKeyedTrie(_Trie):
+    """
+    MARISA-trie wrapper for unicode keys.
+    """
+    cdef bytes _encode_key(self, key):
+        return key.encode('utf8')
+
+    cdef _get_key(self, agent.Agent& ag):
+        return <unicode>_Trie._get_key(self, ag).decode('utf8')
+
+
+cdef class Trie(_UnicodeKeyedTrie):
     """
     This trie stores unicode keys and assigns an unque ID to each key.
     """
@@ -335,7 +450,7 @@ cdef class Trie(_Trie):
             self._trie.reverse_lookup(ag)
         except KeyError:
             raise KeyError(index)
-        return _get_key(ag)
+        return self._get_key(ag)
 
     cdef int _key_id(self, char* key):
         cdef bint res
@@ -355,7 +470,7 @@ cdef class Trie(_Trie):
         ag.set_query(b_key)
 
         while self._trie.common_prefix_search(ag):
-            yield _get_key(ag)
+            yield self._get_key(ag)
 
     def prefixes(self, unicode key):
         """
@@ -369,7 +484,7 @@ cdef class Trie(_Trie):
         ag.set_query(b_key)
 
         while self._trie.common_prefix_search(ag):
-            res.append(_get_key(ag))
+            res.append(self._get_key(ag))
         return res
 
     def iteritems(self, unicode prefix=""):
@@ -381,7 +496,7 @@ cdef class Trie(_Trie):
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            yield _get_key(ag), ag.key().id()
+            yield self._get_key(ag), ag.key().id()
 
     def items(self, unicode prefix=""):
         # inlined for speed
@@ -391,7 +506,7 @@ cdef class Trie(_Trie):
         ag.set_query(b_prefix)
 
         while self._trie.predictive_search(ag):
-            res.append((_get_key(ag), ag.key().id()))
+            res.append((self._get_key(ag), ag.key().id()))
 
         return res
 
@@ -403,7 +518,7 @@ cdef class Trie(_Trie):
 cdef bytes _VALUE_SEPARATOR = b'\xff'
 
 
-cdef class BytesTrie(_Trie):
+cdef class BytesTrie(_UnicodeKeyedTrie):
     """
     This class implements read-only Trie-based
     {unicode -> list of bytes objects} mapping.
@@ -558,7 +673,7 @@ cdef class BytesTrie(_Trie):
 
             yield key, value
 
-    cpdef list keys(self, unicode prefix=""):
+    cpdef list keys(self, prefix=""):
         # copied from iterkeys for speed
         cdef bytes b_prefix = <bytes>prefix.encode('utf8')
         cdef unicode key

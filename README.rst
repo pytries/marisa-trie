@@ -1,7 +1,7 @@
 marisa-trie |travis| |appveyor|
 ===========
 
-.. |travis| image:: https://travis-ci.org/pytries/marisa-trie.png
+.. |travis| image:: https://travis-ci.org/pytries/marisa-trie.svg
    :target: https://travis-ci.org/pytries/marisa-trie
 
 .. |appveyor| image:: https://ci.appveyor.com/api/projects/status/p887ad4jbdg6u7yo?svg=true

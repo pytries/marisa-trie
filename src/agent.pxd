@@ -1,6 +1,6 @@
 cimport query, key
 
-cdef extern from "../lib/marisa/agent.h" namespace "marisa" nogil:
+cdef extern from "<marisa/agent.h>" namespace "marisa" nogil:
     cdef cppclass Agent:
         Agent() except +
 
@@ -20,4 +20,3 @@ cdef extern from "../lib/marisa/agent.h" namespace "marisa" nogil:
         void init_state()
 
         void swap(Agent &rhs)
-

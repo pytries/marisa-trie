@@ -1,4 +1,4 @@
-# cython: profile=False
+# cython: profile=False, embedsignature=True
 
 from __future__ import unicode_literals
 

@@ -1,6 +1,6 @@
 cimport query, key
 
-cdef extern from "../lib/marisa/keyset.h" namespace "marisa" nogil:
+cdef extern from "<marisa/keyset.h>" namespace "marisa" nogil:
     cdef cppclass Keyset:
 
 #        cdef enum constants:

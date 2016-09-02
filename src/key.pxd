@@ -1,4 +1,4 @@
-cdef extern from "../lib/marisa/key.h" namespace "marisa" nogil:
+cdef extern from "<marisa/key.h>" namespace "marisa" nogil:
 
     cdef cppclass Key:
         Key()

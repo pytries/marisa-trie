@@ -1,4 +1,4 @@
-cdef extern from "../lib/marisa/query.h" namespace "marisa" nogil:
+cdef extern from "<marisa/query.h>" namespace "marisa" nogil:
 
     cdef cppclass Query:
         Query()

@@ -3,19 +3,24 @@
 
 import glob
 import itertools
+import os.path
 
 from setuptools import setup, Extension
 
-MARISA_DIR = "lib"
+MARISA_ROOT_DIR = "marisa-trie"
+MARISA_SOURCE_DIR = os.path.join(MARISA_ROOT_DIR, "lib")
+MARISA_INCLUDE_DIR = os.path.join(MARISA_ROOT_DIR, "include")
 MARISA_FILES = [
-    "lib/marisa/*.cc",
-    "lib/marisa/grimoire.cc",
-    "lib/marisa/grimoire/io/*.cc",
-    "lib/marisa/grimoire/trie/*.cc",
-    "lib/marisa/grimoire/vector/*.cc",
+    "marisa/*.cc",
+    "marisa/grimoire.cc",
+    "marisa/grimoire/io/*.cc",
+    "marisa/grimoire/trie/*.cc",
+    "marisa/grimoire/vector/*.cc",
 ]
 
-MARISA_FILES = list(itertools.chain(*(glob.glob(path) for path in MARISA_FILES)))
+MARISA_FILES[:] = itertools.chain(
+    *(glob.glob(os.path.join(MARISA_SOURCE_DIR, path))
+      for path in MARISA_FILES))
 
 DESCRIPTION = __doc__
 LONG_DESCRIPTION = open("README.rst").read() + open("CHANGES.rst").read()
@@ -51,7 +56,7 @@ setup(name="marisa-trie",
       classifiers=CLASSIFIERS,
       libraries=[("libmarisa-trie", {
           "sources": MARISA_FILES,
-          "include_dirs": [MARISA_DIR]
+          "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR]
       })],
       ext_modules=[
           Extension("marisa_trie", [
@@ -64,7 +69,7 @@ setup(name="marisa-trie",
               "src/query.cpp",
               "src/std_iostream.cpp",
               "src/trie.cpp"
-          ], include_dirs=[MARISA_DIR])
+          ], include_dirs=[MARISA_INCLUDE_DIR])
       ],
 
       setup_requires=["pytest-runner"],

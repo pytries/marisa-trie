@@ -1,9 +1,10 @@
-Welcome to marisa-trie's documentation!
-=======================================
+.. include:: ../README.rst
 
 .. toctree::
    :hidden:
 
    tutorial
+   benchmarks
    api
+   contributing
    changelog

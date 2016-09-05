@@ -544,7 +544,7 @@ struct __pyx_opt_args_11marisa_trie_11_UnpackTrie_items;
  *             yield self._get_key(ag)
  * 
  *     cpdef list keys(self, prefix=None):             # <<<<<<<<<<<<<<
- *         """Returns a list of trie keys starting with a given ``prefix``."""
+ *         """Return a list of trie keys starting with a given ``prefix``."""
  *         # non-generator inlined version of iterkeys()
  */
 struct __pyx_opt_args_11marisa_trie_5_Trie_keys {
@@ -726,7 +726,7 @@ struct __pyx_obj_11marisa_trie___pyx_scope_struct_1_genexpr {
  * 
  *     def iterkeys(self, prefix=None):             # <<<<<<<<<<<<<<
  *         """
- *         Returns an iterator over trie keys starting with a given ``prefix``.
+ *         Return an iterator over trie keys starting with a given ``prefix``.
  */
 struct __pyx_obj_11marisa_trie___pyx_scope_struct_2_iterkeys {
   PyObject_HEAD
@@ -2025,7 +2025,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie__get_key(CYTHON_UNUSED struct __py
 
 /* Python wrapper */
 static int __pyx_pw_11marisa_trie_5_Trie_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie___init__[] = "\n        ``arg`` can be one of the following:\n\n        * an iterable with bytes keys;\n        * None (if you're going to load a trie later).\n\n        Pass a ``weights`` iterable with expected lookup frequences\n        to optimize lookup and prefix search speed.\n        ";
+static char __pyx_doc_11marisa_trie_5_Trie___init__[] = "\n        ``arg`` can be one of the following:\n\n        * an iterable with bytes keys;\n        * None (if you're going to load a trie later).\n\n        Pass a ``weights`` iterable with expected lookup frequencies\n        to optimize lookup and prefix search speed.\n        ";
 #if CYTHON_COMPILING_IN_CPYTHON
 struct wrapperbase __pyx_wrapperbase_11marisa_trie_5_Trie___init__;
 #endif
@@ -4048,13 +4048,13 @@ static int __pyx_f_11marisa_trie_5_Trie__contains(struct __pyx_obj_11marisa_trie
  *         return self._trie.lookup(ag)
  * 
  *     def read(self, f):             # <<<<<<<<<<<<<<
- *         """Reads a trie from an open file.
+ *         """Read a trie from an open file.
  * 
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_17read(PyObject *__pyx_v_self, PyObject *__pyx_v_f); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie_16read[] = "_Trie.read(self, f)\nReads a trie from an open file.\n\n        :param file f: a \"real\" on-disk file object. Passing a *file-like*\n                       object would result in an error.\n        ";
+static char __pyx_doc_11marisa_trie_5_Trie_16read[] = "_Trie.read(self, f)\nRead a trie from an open file.\n\n        :param file f: a \"real\" on-disk file object. Passing a *file-like*\n                       object would result in an error.\n        ";
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_17read(PyObject *__pyx_v_self, PyObject *__pyx_v_f) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -4127,7 +4127,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_16read(struct __pyx_obj_11marisa_
  *         return self._trie.lookup(ag)
  * 
  *     def read(self, f):             # <<<<<<<<<<<<<<
- *         """Reads a trie from an open file.
+ *         """Read a trie from an open file.
  * 
  */
 
@@ -4148,13 +4148,13 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_16read(struct __pyx_obj_11marisa_
  *         return self
  * 
  *     def write(self, f):             # <<<<<<<<<<<<<<
- *         """Writes a trie to an open file.
+ *         """Write a trie to an open file.
  * 
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_19write(PyObject *__pyx_v_self, PyObject *__pyx_v_f); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie_18write[] = "_Trie.write(self, f)\nWrites a trie to an open file.\n\n        :param file f: a \"real\" on-disk file object. Passing a *file-like*\n                       object would result in an error.\n        ";
+static char __pyx_doc_11marisa_trie_5_Trie_18write[] = "_Trie.write(self, f)\nWrite a trie to an open file.\n\n        :param file f: a \"real\" on-disk file object. Passing a *file-like*\n                       object would result in an error.\n        ";
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_19write(PyObject *__pyx_v_self, PyObject *__pyx_v_f) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -4215,7 +4215,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_18write(struct __pyx_obj_11marisa
  *         return self
  * 
  *     def write(self, f):             # <<<<<<<<<<<<<<
- *         """Writes a trie to an open file.
+ *         """Write a trie to an open file.
  * 
  */
 
@@ -4238,13 +4238,13 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_18write(struct __pyx_obj_11marisa
  *         self._trie.write(f.fileno())
  * 
  *     def save(self, path):             # <<<<<<<<<<<<<<
- *         """Saves a trie to a specified path."""
+ *         """Save a trie to a specified path."""
  *         with open(path, 'w') as f:
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_21save(PyObject *__pyx_v_self, PyObject *__pyx_v_path); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie_20save[] = "_Trie.save(self, path)\nSaves a trie to a specified path.";
+static char __pyx_doc_11marisa_trie_5_Trie_20save[] = "_Trie.save(self, path)\nSave a trie to a specified path.";
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_21save(PyObject *__pyx_v_self, PyObject *__pyx_v_path) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -4275,7 +4275,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_20save(struct __pyx_obj_11marisa_
 
   /* "marisa_trie.pyx":197
  *     def save(self, path):
- *         """Saves a trie to a specified path."""
+ *         """Save a trie to a specified path."""
  *         with open(path, 'w') as f:             # <<<<<<<<<<<<<<
  *             self.write(f)
  * 
@@ -4330,7 +4330,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_20save(struct __pyx_obj_11marisa_
           __pyx_t_4 = 0;
 
           /* "marisa_trie.pyx":198
- *         """Saves a trie to a specified path."""
+ *         """Save a trie to a specified path."""
  *         with open(path, 'w') as f:
  *             self.write(f)             # <<<<<<<<<<<<<<
  * 
@@ -4367,7 +4367,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_20save(struct __pyx_obj_11marisa_
 
           /* "marisa_trie.pyx":197
  *     def save(self, path):
- *         """Saves a trie to a specified path."""
+ *         """Save a trie to a specified path."""
  *         with open(path, 'w') as f:             # <<<<<<<<<<<<<<
  *             self.write(f)
  * 
@@ -4453,7 +4453,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_20save(struct __pyx_obj_11marisa_
  *         self._trie.write(f.fileno())
  * 
  *     def save(self, path):             # <<<<<<<<<<<<<<
- *         """Saves a trie to a specified path."""
+ *         """Save a trie to a specified path."""
  *         with open(path, 'w') as f:
  */
 
@@ -4478,13 +4478,13 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_20save(struct __pyx_obj_11marisa_
  *             self.write(f)
  * 
  *     def load(self, path):             # <<<<<<<<<<<<<<
- *         """Loads a trie from a specified path."""
+ *         """Load a trie from a specified path."""
  *         with open(path, 'r') as f:
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_23load(PyObject *__pyx_v_self, PyObject *__pyx_v_path); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie_22load[] = "_Trie.load(self, path)\nLoads a trie from a specified path.";
+static char __pyx_doc_11marisa_trie_5_Trie_22load[] = "_Trie.load(self, path)\nLoad a trie from a specified path.";
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_23load(PyObject *__pyx_v_self, PyObject *__pyx_v_path) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -4515,7 +4515,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_22load(struct __pyx_obj_11marisa_
 
   /* "marisa_trie.pyx":202
  *     def load(self, path):
- *         """Loads a trie from a specified path."""
+ *         """Load a trie from a specified path."""
  *         with open(path, 'r') as f:             # <<<<<<<<<<<<<<
  *             self.read(f)
  *         return self
@@ -4570,7 +4570,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_22load(struct __pyx_obj_11marisa_
           __pyx_t_4 = 0;
 
           /* "marisa_trie.pyx":203
- *         """Loads a trie from a specified path."""
+ *         """Load a trie from a specified path."""
  *         with open(path, 'r') as f:
  *             self.read(f)             # <<<<<<<<<<<<<<
  *         return self
@@ -4607,7 +4607,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_22load(struct __pyx_obj_11marisa_
 
           /* "marisa_trie.pyx":202
  *     def load(self, path):
- *         """Loads a trie from a specified path."""
+ *         """Load a trie from a specified path."""
  *         with open(path, 'r') as f:             # <<<<<<<<<<<<<<
  *             self.read(f)
  *         return self
@@ -4705,7 +4705,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_22load(struct __pyx_obj_11marisa_
  *             self.write(f)
  * 
  *     def load(self, path):             # <<<<<<<<<<<<<<
- *         """Loads a trie from a specified path."""
+ *         """Load a trie from a specified path."""
  *         with open(path, 'r') as f:
  */
 
@@ -4728,7 +4728,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_22load(struct __pyx_obj_11marisa_
  *         return self
  * 
  *     cpdef bytes tobytes(self) except +:             # <<<<<<<<<<<<<<
- *         """Returns raw trie content as bytes."""
+ *         """Return raw trie content as bytes."""
  *         cdef stringstream stream
  */
 
@@ -4780,7 +4780,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_tobytes(struct __pyx_obj_11marisa_
   }
 
   /* "marisa_trie.pyx":209
- *         """Returns raw trie content as bytes."""
+ *         """Return raw trie content as bytes."""
  *         cdef stringstream stream
  *         iostream.write((<ostream *> &stream)[0], self._trie[0])             # <<<<<<<<<<<<<<
  *         cdef bytes res = stream.str()
@@ -4816,7 +4816,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_tobytes(struct __pyx_obj_11marisa_
  *         return self
  * 
  *     cpdef bytes tobytes(self) except +:             # <<<<<<<<<<<<<<
- *         """Returns raw trie content as bytes."""
+ *         """Return raw trie content as bytes."""
  *         cdef stringstream stream
  */
 
@@ -4837,7 +4837,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_tobytes(struct __pyx_obj_11marisa_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_25tobytes(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie_24tobytes[] = "_Trie.tobytes(self) -> bytes\nReturns raw trie content as bytes.";
+static char __pyx_doc_11marisa_trie_5_Trie_24tobytes[] = "_Trie.tobytes(self) -> bytes\nReturn raw trie content as bytes.";
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_25tobytes(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -4881,7 +4881,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_24tobytes(struct __pyx_obj_11mari
  *         return res
  * 
  *     cpdef frombytes(self, bytes data) except +:             # <<<<<<<<<<<<<<
- *         """Loads a trie from raw bytes generated by :meth:`tobytes`."""
+ *         """Load a trie from raw bytes generated by :meth:`tobytes`."""
  *         cdef stringstream* stream = new stringstream(data)
  */
 
@@ -4941,7 +4941,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_frombytes(struct __pyx_obj_11maris
 
   /* "marisa_trie.pyx":215
  *     cpdef frombytes(self, bytes data) except +:
- *         """Loads a trie from raw bytes generated by :meth:`tobytes`."""
+ *         """Load a trie from raw bytes generated by :meth:`tobytes`."""
  *         cdef stringstream* stream = new stringstream(data)             # <<<<<<<<<<<<<<
  *         try:
  *             iostream.read((<istream *> stream)[0], self._trie)
@@ -4950,7 +4950,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_frombytes(struct __pyx_obj_11maris
   __pyx_v_stream = new std::stringstream(__pyx_t_6);
 
   /* "marisa_trie.pyx":216
- *         """Loads a trie from raw bytes generated by :meth:`tobytes`."""
+ *         """Load a trie from raw bytes generated by :meth:`tobytes`."""
  *         cdef stringstream* stream = new stringstream(data)
  *         try:             # <<<<<<<<<<<<<<
  *             iostream.read((<istream *> stream)[0], self._trie)
@@ -4999,7 +4999,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_frombytes(struct __pyx_obj_11maris
  *         return res
  * 
  *     cpdef frombytes(self, bytes data) except +:             # <<<<<<<<<<<<<<
- *         """Loads a trie from raw bytes generated by :meth:`tobytes`."""
+ *         """Load a trie from raw bytes generated by :meth:`tobytes`."""
  *         cdef stringstream* stream = new stringstream(data)
  */
 
@@ -5020,7 +5020,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_frombytes(struct __pyx_obj_11maris
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_27frombytes(PyObject *__pyx_v_self, PyObject *__pyx_v_data); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie_26frombytes[] = "_Trie.frombytes(self, bytes data)\nLoads a trie from raw bytes generated by :meth:`tobytes`.";
+static char __pyx_doc_11marisa_trie_5_Trie_26frombytes[] = "_Trie.frombytes(self, bytes data)\nLoad a trie from raw bytes generated by :meth:`tobytes`.";
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_27frombytes(PyObject *__pyx_v_self, PyObject *__pyx_v_data) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -5321,12 +5321,12 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_34generator(__pyx_CoroutineObject
  * 
  *     def iterkeys(self, prefix=None):             # <<<<<<<<<<<<<<
  *         """
- *         Returns an iterator over trie keys starting with a given ``prefix``.
+ *         Return an iterator over trie keys starting with a given ``prefix``.
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_33iterkeys(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie_32iterkeys[] = "_Trie.iterkeys(self, prefix=None)\n\n        Returns an iterator over trie keys starting with a given ``prefix``.\n        ";
+static char __pyx_doc_11marisa_trie_5_Trie_32iterkeys[] = "_Trie.iterkeys(self, prefix=None)\n\n        Return an iterator over trie keys starting with a given ``prefix``.\n        ";
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_33iterkeys(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_prefix = 0;
   PyObject *__pyx_r = 0;
@@ -5536,7 +5536,7 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_34generator(__pyx_CoroutineObject
  * 
  *     def iterkeys(self, prefix=None):             # <<<<<<<<<<<<<<
  *         """
- *         Returns an iterator over trie keys starting with a given ``prefix``.
+ *         Return an iterator over trie keys starting with a given ``prefix``.
  */
 
   /* function exit code */
@@ -5557,7 +5557,7 @@ static PyObject *__pyx_gb_11marisa_trie_5_Trie_34generator(__pyx_CoroutineObject
  *             yield self._get_key(ag)
  * 
  *     cpdef list keys(self, prefix=None):             # <<<<<<<<<<<<<<
- *         """Returns a list of trie keys starting with a given ``prefix``."""
+ *         """Return a list of trie keys starting with a given ``prefix``."""
  *         # non-generator inlined version of iterkeys()
  */
 
@@ -5629,7 +5629,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
   }
 
   /* "marisa_trie.pyx":254
- *         """Returns a list of trie keys starting with a given ``prefix``."""
+ *         """Return a list of trie keys starting with a given ``prefix``."""
  *         # non-generator inlined version of iterkeys()
  *         cdef list res = []             # <<<<<<<<<<<<<<
  *         cdef bytes b_prefix = b''
@@ -5743,7 +5743,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
  *             yield self._get_key(ag)
  * 
  *     cpdef list keys(self, prefix=None):             # <<<<<<<<<<<<<<
- *         """Returns a list of trie keys starting with a given ``prefix``."""
+ *         """Return a list of trie keys starting with a given ``prefix``."""
  *         # non-generator inlined version of iterkeys()
  */
 
@@ -5766,7 +5766,7 @@ static PyObject *__pyx_f_11marisa_trie_5_Trie_keys(struct __pyx_obj_11marisa_tri
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_36keys(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie_35keys[] = "_Trie.keys(self, prefix=None) -> list\nReturns a list of trie keys starting with a given ``prefix``.";
+static char __pyx_doc_11marisa_trie_5_Trie_35keys[] = "_Trie.keys(self, prefix=None) -> list\nReturn a list of trie keys starting with a given ``prefix``.";
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_36keys(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_prefix = 0;
   PyObject *__pyx_r = 0;
@@ -5850,12 +5850,12 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_35keys(struct __pyx_obj_11marisa_
  * 
  *     def has_keys_with_prefix(self, prefix=""):             # <<<<<<<<<<<<<<
  *         """
- *         Returns ``True`` if any key in the trie begins with ``prefix``.
+ *         Return ``True`` if any key in the trie begins with ``prefix``.
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_38has_keys_with_prefix(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_11marisa_trie_5_Trie_37has_keys_with_prefix[] = "_Trie.has_keys_with_prefix(self, prefix=u'')\n\n        Returns ``True`` if any key in the trie begins with ``prefix``.\n\n        .. deprecated:: 0.7.3\n\n           The method will be removed in version 0.8.0. Please use\n           :meth:`iterkeys` instead.\n        ";
+static char __pyx_doc_11marisa_trie_5_Trie_37has_keys_with_prefix[] = "_Trie.has_keys_with_prefix(self, prefix=u'')\n\n        Return ``True`` if any key in the trie begins with ``prefix``.\n\n        .. deprecated:: 0.7.3\n\n           The method will be removed in version 0.8.0. Please use\n           :meth:`iterkeys` instead.\n        ";
 static PyObject *__pyx_pw_11marisa_trie_5_Trie_38has_keys_with_prefix(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_prefix = 0;
   PyObject *__pyx_r = 0;
@@ -6023,7 +6023,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_37has_keys_with_prefix(struct __p
  * 
  *     def has_keys_with_prefix(self, prefix=""):             # <<<<<<<<<<<<<<
  *         """
- *         Returns ``True`` if any key in the trie begins with ``prefix``.
+ *         Return ``True`` if any key in the trie begins with ``prefix``.
  */
 
   /* function exit code */
@@ -6045,7 +6045,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_37has_keys_with_prefix(struct __p
  * 
  *     # key_id method is not in _Trie because it won't work for BytesTrie
  *     cpdef int key_id(self, bytes key) except -1:             # <<<<<<<<<<<<<<
- *         """Returns an ID generated for a given ``key``.
+ *         """Return an ID generated for a given ``key``.
  * 
  */
 
@@ -6173,7 +6173,7 @@ static int __pyx_f_11marisa_trie_10BinaryTrie_key_id(struct __pyx_obj_11marisa_t
  * 
  *     # key_id method is not in _Trie because it won't work for BytesTrie
  *     cpdef int key_id(self, bytes key) except -1:             # <<<<<<<<<<<<<<
- *         """Returns an ID generated for a given ``key``.
+ *         """Return an ID generated for a given ``key``.
  * 
  */
 
@@ -6193,7 +6193,7 @@ static int __pyx_f_11marisa_trie_10BinaryTrie_key_id(struct __pyx_obj_11marisa_t
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_10BinaryTrie_1key_id(PyObject *__pyx_v_self, PyObject *__pyx_v_key); /*proto*/
-static char __pyx_doc_11marisa_trie_10BinaryTrie_key_id[] = "BinaryTrie.key_id(self, bytes key) -> int\nReturns an ID generated for a given ``key``.\n\n        :raises KeyError: if key is not present in this trie.\n        ";
+static char __pyx_doc_11marisa_trie_10BinaryTrie_key_id[] = "BinaryTrie.key_id(self, bytes key) -> int\nReturn an ID generated for a given ``key``.\n\n        :raises KeyError: if key is not present in this trie.\n        ";
 static PyObject *__pyx_pw_11marisa_trie_10BinaryTrie_1key_id(PyObject *__pyx_v_self, PyObject *__pyx_v_key) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -6335,7 +6335,7 @@ static int __pyx_f_11marisa_trie_10BinaryTrie__key_id(struct __pyx_obj_11marisa_
  *         return ag.key().id()
  * 
  *     cpdef restore_key(self, int index):             # <<<<<<<<<<<<<<
- *         """Returns a key corresponding to a given ID."""
+ *         """Return a key corresponding to a given ID."""
  *         cdef agent.Agent ag
  */
 
@@ -6401,7 +6401,7 @@ static PyObject *__pyx_f_11marisa_trie_10BinaryTrie_restore_key(struct __pyx_obj
   }
 
   /* "marisa_trie.pyx":311
- *         """Returns a key corresponding to a given ID."""
+ *         """Return a key corresponding to a given ID."""
  *         cdef agent.Agent ag
  *         ag.set_query(index)             # <<<<<<<<<<<<<<
  *         try:
@@ -6533,7 +6533,7 @@ static PyObject *__pyx_f_11marisa_trie_10BinaryTrie_restore_key(struct __pyx_obj
  *         return ag.key().id()
  * 
  *     cpdef restore_key(self, int index):             # <<<<<<<<<<<<<<
- *         """Returns a key corresponding to a given ID."""
+ *         """Return a key corresponding to a given ID."""
  *         cdef agent.Agent ag
  */
 
@@ -6555,7 +6555,7 @@ static PyObject *__pyx_f_11marisa_trie_10BinaryTrie_restore_key(struct __pyx_obj
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_10BinaryTrie_3restore_key(PyObject *__pyx_v_self, PyObject *__pyx_arg_index); /*proto*/
-static char __pyx_doc_11marisa_trie_10BinaryTrie_2restore_key[] = "BinaryTrie.restore_key(self, int index)\nReturns a key corresponding to a given ID.";
+static char __pyx_doc_11marisa_trie_10BinaryTrie_2restore_key[] = "BinaryTrie.restore_key(self, int index)\nReturn a key corresponding to a given ID.";
 static PyObject *__pyx_pw_11marisa_trie_10BinaryTrie_3restore_key(PyObject *__pyx_v_self, PyObject *__pyx_arg_index) {
   int __pyx_v_index;
   PyObject *__pyx_r = 0;
@@ -6672,12 +6672,12 @@ static PyObject *__pyx_pf_11marisa_trie_10BinaryTrie_4__getitem__(struct __pyx_o
  * 
  *     def get(self, bytes key, default=None):             # <<<<<<<<<<<<<<
  *         """
- *         Returns an ID for a given ``key`` or ``default`` if ``key`` is
+ *         Return an ID for a given ``key`` or ``default`` if ``key`` is
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_10BinaryTrie_7get(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_11marisa_trie_10BinaryTrie_6get[] = "BinaryTrie.get(self, bytes key, default=None)\n\n        Returns an ID for a given ``key`` or ``default`` if ``key`` is\n        not present in this trie.\n        ";
+static char __pyx_doc_11marisa_trie_10BinaryTrie_6get[] = "BinaryTrie.get(self, bytes key, default=None)\n\n        Return an ID for a given ``key`` or ``default`` if ``key`` is\n        not present in this trie.\n        ";
 static PyObject *__pyx_pw_11marisa_trie_10BinaryTrie_7get(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_key = 0;
   PyObject *__pyx_v_default = 0;
@@ -6817,7 +6817,7 @@ static PyObject *__pyx_pf_11marisa_trie_10BinaryTrie_6get(struct __pyx_obj_11mar
  * 
  *     def get(self, bytes key, default=None):             # <<<<<<<<<<<<<<
  *         """
- *         Returns an ID for a given ``key`` or ``default`` if ``key`` is
+ *         Return an ID for a given ``key`` or ``default`` if ``key`` is
  */
 
   /* function exit code */
@@ -7626,7 +7626,7 @@ static PyObject *__pyx_f_11marisa_trie_17_UnicodeKeyedTrie__get_key(struct __pyx
  * 
  *     # key_id method is not in _Trie because it won't work for BytesTrie
  *     cpdef int key_id(self, unicode key) except -1:             # <<<<<<<<<<<<<<
- *         """Returns an ID generated for a given ``key``.
+ *         """Return an ID generated for a given ``key``.
  * 
  */
 
@@ -7768,7 +7768,7 @@ static int __pyx_f_11marisa_trie_4Trie_key_id(struct __pyx_obj_11marisa_trie_Tri
  * 
  *     # key_id method is not in _Trie because it won't work for BytesTrie
  *     cpdef int key_id(self, unicode key) except -1:             # <<<<<<<<<<<<<<
- *         """Returns an ID generated for a given ``key``.
+ *         """Return an ID generated for a given ``key``.
  * 
  */
 
@@ -7789,7 +7789,7 @@ static int __pyx_f_11marisa_trie_4Trie_key_id(struct __pyx_obj_11marisa_trie_Tri
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_4Trie_1key_id(PyObject *__pyx_v_self, PyObject *__pyx_v_key); /*proto*/
-static char __pyx_doc_11marisa_trie_4Trie_key_id[] = "Trie.key_id(self, unicode key) -> int\nReturns an ID generated for a given ``key``.\n\n        :raises KeyError: if key is not present in this trie.\n        ";
+static char __pyx_doc_11marisa_trie_4Trie_key_id[] = "Trie.key_id(self, unicode key) -> int\nReturn an ID generated for a given ``key``.\n\n        :raises KeyError: if key is not present in this trie.\n        ";
 static PyObject *__pyx_pw_11marisa_trie_4Trie_1key_id(PyObject *__pyx_v_self, PyObject *__pyx_v_key) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -7903,12 +7903,12 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_2__getitem__(struct __pyx_obj_11ma
  * 
  *     def get(self, key, default=None):             # <<<<<<<<<<<<<<
  *         """
- *         Returns an ID for a given ``key`` or ``default`` if ``key`` is
+ *         Return an ID for a given ``key`` or ``default`` if ``key`` is
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_4Trie_5get(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_11marisa_trie_4Trie_4get[] = "Trie.get(self, key, default=None)\n\n        Returns an ID for a given ``key`` or ``default`` if ``key`` is\n        not present in this trie.\n        ";
+static char __pyx_doc_11marisa_trie_4Trie_4get[] = "Trie.get(self, key, default=None)\n\n        Return an ID for a given ``key`` or ``default`` if ``key`` is\n        not present in this trie.\n        ";
 static PyObject *__pyx_pw_11marisa_trie_4Trie_5get(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_key = 0;
   PyObject *__pyx_v_default = 0;
@@ -8096,7 +8096,7 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_4get(struct __pyx_obj_11marisa_tri
  * 
  *     def get(self, key, default=None):             # <<<<<<<<<<<<<<
  *         """
- *         Returns an ID for a given ``key`` or ``default`` if ``key`` is
+ *         Return an ID for a given ``key`` or ``default`` if ``key`` is
  */
 
   /* function exit code */
@@ -8116,7 +8116,7 @@ static PyObject *__pyx_pf_11marisa_trie_4Trie_4get(struct __pyx_obj_11marisa_tri
  *         return res
  * 
  *     cpdef restore_key(self, int index):             # <<<<<<<<<<<<<<
- *         """Returns a key corresponding to a given ID."""
+ *         """Return a key corresponding to a given ID."""
  *         cdef agent.Agent ag
  */
 
@@ -8182,7 +8182,7 @@ static PyObject *__pyx_f_11marisa_trie_4Trie_restore_key(struct __pyx_obj_11mari
   }
 
   /* "marisa_trie.pyx":429
- *         """Returns a key corresponding to a given ID."""
+ *         """Return a key corresponding to a given ID."""
  *         cdef agent.Agent ag
  *         ag.set_query(index)             # <<<<<<<<<<<<<<
  *         try:
@@ -8314,7 +8314,7 @@ static PyObject *__pyx_f_11marisa_trie_4Trie_restore_key(struct __pyx_obj_11mari
  *         return res
  * 
  *     cpdef restore_key(self, int index):             # <<<<<<<<<<<<<<
- *         """Returns a key corresponding to a given ID."""
+ *         """Return a key corresponding to a given ID."""
  *         cdef agent.Agent ag
  */
 
@@ -8336,7 +8336,7 @@ static PyObject *__pyx_f_11marisa_trie_4Trie_restore_key(struct __pyx_obj_11mari
 
 /* Python wrapper */
 static PyObject *__pyx_pw_11marisa_trie_4Trie_7restore_key(PyObject *__pyx_v_self, PyObject *__pyx_arg_index); /*proto*/
-static char __pyx_doc_11marisa_trie_4Trie_6restore_key[] = "Trie.restore_key(self, int index)\nReturns a key corresponding to a given ID.";
+static char __pyx_doc_11marisa_trie_4Trie_6restore_key[] = "Trie.restore_key(self, int index)\nReturn a key corresponding to a given ID.";
 static PyObject *__pyx_pw_11marisa_trie_4Trie_7restore_key(PyObject *__pyx_v_self, PyObject *__pyx_arg_index) {
   int __pyx_v_index;
   PyObject *__pyx_r = 0;
@@ -16870,7 +16870,7 @@ static int __Pyx_InitCachedConstants(void) {
 
   /* "marisa_trie.pyx":197
  *     def save(self, path):
- *         """Saves a trie to a specified path."""
+ *         """Save a trie to a specified path."""
  *         with open(path, 'w') as f:             # <<<<<<<<<<<<<<
  *             self.write(f)
  * 
@@ -16881,7 +16881,7 @@ static int __Pyx_InitCachedConstants(void) {
 
   /* "marisa_trie.pyx":202
  *     def load(self, path):
- *         """Loads a trie from a specified path."""
+ *         """Load a trie from a specified path."""
  *         with open(path, 'r') as f:             # <<<<<<<<<<<<<<
  *             self.read(f)
  *         return self

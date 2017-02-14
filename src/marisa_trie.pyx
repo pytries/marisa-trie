@@ -180,7 +180,15 @@ cdef class _Trie:
 
         :param file f: a "real" on-disk file object. Passing a *file-like*
                        object would result in an error.
+
+        .. deprecated:: 0.7.3
+
+           The method will be removed in version 0.8.0. Please use
+           :meth:`load` instead.
         """
+        warnings.warn("Trie.save is deprecated and will "
+                      "be removed in marisa_trie 0.8.0. Please use "
+                      "Trie.load instead.", DeprecationWarning)
         self._trie.read(f.fileno())
         return self
 
@@ -189,7 +197,15 @@ cdef class _Trie:
 
         :param file f: a "real" on-disk file object. Passing a *file-like*
                        object would result in an error.
+
+        .. deprecated:: 0.7.3
+
+           The method will be removed in version 0.8.0. Please use
+           :meth:`save` instead.
         """
+        warnings.warn("Trie.write is deprecated and will "
+                      "be removed in marisa_trie 0.8.0. Please use "
+                      "Trie.save instead.", DeprecationWarning)
         self._trie.write(f.fileno())
 
     def save(self, path):

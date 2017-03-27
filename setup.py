@@ -73,4 +73,4 @@ setup(name="marisa-trie",
       ],
 
       setup_requires=["pytest-runner"],
-      tests_require=["pytest", "hypothesis==2.0"])
+      tests_require=["pytest", "hypothesis==2.0.0"])

@@ -2,6 +2,13 @@
 CHANGES
 =======
 
+0.7.4 (2017-03-27)
+------------------
+
+* Fixed packaging issue, ``MANIFEST.in`` was not updated after ``libmarisa-trie``
+  became a submodule.
+
+
 0.7.3 (2017-02-14)
 ------------------
 

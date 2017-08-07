@@ -2,7 +2,7 @@ Contributing
 ============
 
 Contributions are welcome! Development happens at
-`GitHub <https://github.com/pyties/marisa-trie>`_. Feel free to submit
+`GitHub <https://github.com/pytries/marisa-trie>`_. Feel free to submit
 ideas, bug reports and pull requests.
 
 If you found a bug in a C++ part please report it to the original

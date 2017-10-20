@@ -281,3 +281,9 @@ def test_invalid_file():
 def test_mutable_mapping():
     for method in Mapping.__abstractmethods__:
         assert hasattr(marisa_trie.Trie, method)
+
+
+def test_repeated_keys():
+    keys = ["1", "1"]
+    trie = marisa_trie.Trie(keys)
+    assert trie.keys() == ["1"]

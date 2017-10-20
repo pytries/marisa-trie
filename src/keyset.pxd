@@ -1,4 +1,4 @@
-cimport query, key
+cimport key
 
 cdef extern from "<marisa/keyset.h>" namespace "marisa" nogil:
     cdef cppclass Keyset:

@@ -1,4 +1,4 @@
-from libcpp.string cimport string
+gitfrom libcpp.string cimport string
 
 cdef extern from "<istream>" namespace "std" nogil:
     cdef cppclass istream:

@@ -6,7 +6,6 @@ from std_iostream cimport stringstream, istream, ostream
 from libc.string cimport strncmp
 cimport keyset
 cimport key
-cimport query
 cimport agent
 cimport trie
 cimport iostream

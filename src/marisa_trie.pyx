@@ -672,8 +672,8 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
         cdef bytes b_prefix = <bytes>prefix.encode('utf8')
         cdef unicode key
         cdef unsigned char* raw_key
-        cdef list res = []
         cdef int i
+        cdef set res_keys = set()
 
         cdef agent.Agent ag
         ag.set_query(b_prefix)
@@ -684,15 +684,18 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
             for i in range(0, ag.key().length()):
                 if raw_key[i] == self._c_value_separator:
                     key = raw_key[:i].decode('utf8')
-                    res.append(key)
+                    if key not in res_keys:
+                        res_keys.add(key)
                     break
-        return res
+
+        return list(res_keys)
 
     def iterkeys(self, unicode prefix=""):
         cdef bytes b_prefix = <bytes>prefix.encode('utf8')
         cdef unicode key
         cdef unsigned char* raw_key
         cdef int i
+        cdef set yielded_keys = set()
 
         cdef agent.Agent ag
         ag.set_query(b_prefix)
@@ -702,7 +705,10 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
 
             for i in range(0, ag.key().length()):
                 if raw_key[i] == self._c_value_separator:
-                    yield raw_key[:i].decode('utf8')
+                    key = raw_key[:i].decode('utf8')
+                    if key not in yielded_keys:
+                        yielded_keys.add(key)
+                        yield key
                     break
 
 

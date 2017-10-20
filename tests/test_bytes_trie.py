@@ -102,10 +102,10 @@ def test_keys():
     ])
 
     # FIXME: ordering?
-    assert trie.keys() == ["foo", "foo", "fo"]
-    assert trie.keys("f") == ["foo", "foo", "fo"]
-    assert trie.keys("fo") == ["foo", "foo", "fo"]
-    assert trie.keys("foo") == ["foo", "foo"]
+    assert trie.keys() == ["foo", "fo"]
+    assert trie.keys("f") == ["foo", "fo"]
+    assert trie.keys("fo") == ["foo", "fo"]
+    assert trie.keys("foo") == ["foo"]
     assert trie.keys("food") == []
     assert trie.keys("bar") == []
 

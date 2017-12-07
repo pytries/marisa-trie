@@ -34,11 +34,11 @@ CLASSIFIERS = [
     "Programming Language :: Cython",
     "Programming Language :: Python",
     "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.6",
     "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.4",
     "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Scientific/Engineering :: Information Analysis",
@@ -72,5 +72,6 @@ setup(name="marisa-trie",
           ], include_dirs=[MARISA_INCLUDE_DIR])
       ],
 
+      python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
       setup_requires=["pytest-runner"],
       tests_require=["pytest", "hypothesis==2.0.0"])

@@ -34,7 +34,7 @@ Make sure `tox`_ is installed and run
 
     $ tox
 
-from the source checkout. Tests should pass under Python 2.6, 2.7,
+from the source checkout. Tests should pass under Python 2.7,
 3.4 and 3.5.
 
 In order to run benchmarks, type

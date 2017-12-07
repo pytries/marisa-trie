@@ -32,3 +32,6 @@ pip-log.txt
 .cache
 .tox
 nosetests.xml
+
+# IDE
+.idea

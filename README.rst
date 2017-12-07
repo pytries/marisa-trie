@@ -1,5 +1,8 @@
-marisa-trie |travis| |appveyor|
-===============================
+marisa-trie |pyversions| |travis| |appveyor|
+============================================
+
+.. |pyversions| image:: https://img.shields.io/pypi/pyversions/marisa-trie.svg
+   :target: https://pypi.python.org/pypi/marisa-trie
 
 .. |travis| image:: https://travis-ci.org/pytries/marisa-trie.svg
    :target: https://travis-ci.org/pytries/marisa-trie
@@ -7,7 +10,7 @@ marisa-trie |travis| |appveyor|
 .. |appveyor| image:: https://ci.appveyor.com/api/projects/status/p887ad4jbdg6u7yo?svg=true
    :target: https://ci.appveyor.com/project/superbobry/marisa-trie-75wx1
 
-Static memory-efficient Trie-like structures for Python (2.x and 3.x)
+Static memory-efficient Trie-like structures for Python (2.7 and 3.4+)
 based on `marisa-trie`_ C++ library.
 
 String data in a MARISA-trie may take up to 50x-100x less memory than

@@ -210,12 +210,12 @@ cdef class _Trie:
     def save(self, path):
         """Save a trie to a specified path."""
         with open(path, 'w') as f:
-            self.write(f)
+            self._trie.write(f.fileno())
 
     def load(self, path):
         """Load a trie from a specified path."""
         with open(path, 'r') as f:
-            self.read(f)
+            self._trie.read(f.fileno())
         return self
 
     cpdef bytes tobytes(self) except +:

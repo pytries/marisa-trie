@@ -2,6 +2,14 @@
 CHANGES
 =======
 
+0.7.5 (2018-04-10)
+------------------
+
+* Removed redundant ``DeprecationWarning`` messages in ``Trie.save`` and
+  ``Trie.load``.
+* Dropped support for Python 2.6.
+* Rebuild Cython wrapper with Cython 0.28.1.
+
 0.7.4 (2017-03-27)
 ------------------
 

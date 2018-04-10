@@ -46,7 +46,7 @@ CLASSIFIERS = [
 ]
 
 setup(name="marisa-trie",
-      version="0.7.4",
+      version="0.7.5",
       description=DESCRIPTION,
       long_description=LONG_DESCRIPTION,
       author="Mikhail Korobov",

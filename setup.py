@@ -45,6 +45,8 @@ CLASSIFIERS = [
     "Topic :: Text Processing :: Linguistic",
 ]
 
+extra_compile_args = ["-stdlib=libstdc++"]
+
 setup(name="marisa-trie",
       version="0.7.5",
       description=DESCRIPTION,
@@ -54,10 +56,6 @@ setup(name="marisa-trie",
       license=LICENSE,
       url="https://github.com/kmike/marisa-trie",
       classifiers=CLASSIFIERS,
-      libraries=[("libmarisa-trie", {
-          "sources": MARISA_FILES,
-          "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR]
-      })],
       ext_modules=[
           Extension("marisa_trie", [
               "src/agent.cpp",
@@ -69,7 +67,9 @@ setup(name="marisa-trie",
               "src/query.cpp",
               "src/std_iostream.cpp",
               "src/trie.cpp"
-          ], include_dirs=[MARISA_INCLUDE_DIR])
+          ] + MARISA_FILES, include_dirs=[MARISA_INCLUDE_DIR, MARISA_SOURCE_DIR],
+            extra_compile_args=extra_compile_args
+          )
       ],
 
       python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',

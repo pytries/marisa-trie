@@ -53,7 +53,7 @@ master_doc = "index"
 # General information about the project.
 project = "marisa-trie"
 copyright = "2012-2021, authors and contributors"
-author = "Mikhail Korobov"
+author = "authors and contributors"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

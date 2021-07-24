@@ -6,6 +6,16 @@ import os.path
 
 from setuptools import setup, Extension
 
+# Note: keep requirements here to ease distributions packaging
+tests_require = [
+    'pytest',
+    'hypothesis',
+]
+install_requires = [
+    'setuptools',
+    'wheel',
+]
+
 MARISA_ROOT_DIR = "marisa-trie"
 MARISA_SOURCE_DIR = os.path.join(MARISA_ROOT_DIR, "lib")
 MARISA_INCLUDE_DIR = os.path.join(MARISA_ROOT_DIR, "include")
@@ -62,6 +72,10 @@ setup(name="marisa-trie",
           "sources": MARISA_FILES,
           "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR]
       })],
+      install_requires=install_requires,
+      extras_require = {
+          'test': tests_require,
+      },
       ext_modules=[
           Extension("marisa_trie", [
               "src/agent.cpp",

@@ -1,14 +1,5 @@
-marisa-trie |pyversions| |travis| |appveyor|
-============================================
-
-.. |pyversions| image:: https://img.shields.io/pypi/pyversions/marisa-trie.svg
-   :target: https://pypi.python.org/pypi/marisa-trie
-
-.. |travis| image:: https://travis-ci.org/pytries/marisa-trie.svg
-   :target: https://travis-ci.org/pytries/marisa-trie
-
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/p887ad4jbdg6u7yo?svg=true
-   :target: https://ci.appveyor.com/project/superbobry/marisa-trie-75wx1
+MARISA Trie for Python
+======================
 
 Static memory-efficient Trie-like structures for Python (2.7 and 3.4+)
 based on `marisa-trie`_ C++ library.
@@ -30,7 +21,7 @@ Installation
 
 ::
 
-    pip install marisa-trie
+    python -m pip install --upgrade marisa-trie
 
 Usage
 =====

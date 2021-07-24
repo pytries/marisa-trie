@@ -77,8 +77,7 @@ def test_get(keys):
         assert trie.restore_key(key_id) == key
 
     assert trie.get(b"non_existing_bytes_key") is None
-    assert trie.get(b"non_existing_bytes_key",
-                    "default value") == "default value"
+    assert trie.get(b"non_existing_bytes_key", "default value") == "default value"
 
 
 @given(st.sets(text))
@@ -235,10 +234,12 @@ def test_items():
 def test_items_prefix():
     keys = [b"foo", b"f", b"foobar", b"bar"]
     trie = marisa_trie.BinaryTrie(keys)
-    assert set(trie.items(b"fo")) == set([
-        (b"foo", trie[b"foo"]),
-        (b"foobar", trie[b"foobar"]),
-    ])
+    assert set(trie.items(b"fo")) == set(
+        [
+            (b"foo", trie[b"foo"]),
+            (b"foobar", trie[b"foobar"]),
+        ]
+    )
 
 
 @given(st.sets(text))
@@ -253,8 +254,8 @@ def test_iteritems(keys):
 
 def test_has_keys_with_prefix_empty():
     empty_trie = marisa_trie.BinaryTrie()
-    assert not empty_trie.has_keys_with_prefix(b'')
-    assert not empty_trie.has_keys_with_prefix(b'ab')
+    assert not empty_trie.has_keys_with_prefix(b"")
+    assert not empty_trie.has_keys_with_prefix(b"ab")
 
 
 def test_invalid_file():

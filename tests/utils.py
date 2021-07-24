@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import string
+
 try:
     from collections.abc import Mapping
 except ImportError:

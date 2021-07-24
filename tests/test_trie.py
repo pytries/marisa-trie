@@ -78,8 +78,7 @@ def test_get(keys):
     assert trie.get("non_existing_key") is None
     assert trie.get(b"non_existing_bytes_key") is None
     assert trie.get("non_existing_key", "default value") == "default value"
-    assert trie.get(b"non_existing_bytes_key",
-                    "default value") == "default value"
+    assert trie.get(b"non_existing_bytes_key", "default value") == "default value"
 
 
 @given(st.sets(text))
@@ -236,10 +235,12 @@ def test_items():
 def test_items_prefix():
     keys = ["foo", "f", "foobar", "bar"]
     trie = marisa_trie.Trie(keys)
-    assert set(trie.items("fo")) == set([
-        ("foo", trie["foo"]),
-        ("foobar", trie["foobar"]),
-    ])
+    assert set(trie.items("fo")) == set(
+        [
+            ("foo", trie["foo"]),
+            ("foobar", trie["foobar"]),
+        ]
+    )
 
 
 @given(st.sets(text))
@@ -254,21 +255,23 @@ def test_iteritems(keys):
 
 def test_has_keys_with_prefix_empty():
     empty_trie = marisa_trie.Trie()
-    assert not empty_trie.has_keys_with_prefix('')
-    assert not empty_trie.has_keys_with_prefix('ab')
+    assert not empty_trie.has_keys_with_prefix("")
+    assert not empty_trie.has_keys_with_prefix("ab")
 
 
 def test_has_keys_with_prefix():
-    fruit_trie = marisa_trie.BytesTrie([
-        ('apple', b'foo'),
-        ('pear', b'bar'),
-        ('peach', b'baz'),
-    ])
-    assert fruit_trie.has_keys_with_prefix('')
-    assert fruit_trie.has_keys_with_prefix('a')
-    assert fruit_trie.has_keys_with_prefix('pe')
-    assert fruit_trie.has_keys_with_prefix('pear')
-    assert not fruit_trie.has_keys_with_prefix('x')
+    fruit_trie = marisa_trie.BytesTrie(
+        [
+            ("apple", b"foo"),
+            ("pear", b"bar"),
+            ("peach", b"baz"),
+        ]
+    )
+    assert fruit_trie.has_keys_with_prefix("")
+    assert fruit_trie.has_keys_with_prefix("a")
+    assert fruit_trie.has_keys_with_prefix("pe")
+    assert fruit_trie.has_keys_with_prefix("pear")
+    assert not fruit_trie.has_keys_with_prefix("x")
 
 
 def test_invalid_file():

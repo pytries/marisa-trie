@@ -8,12 +8,12 @@ from setuptools import setup, Extension
 
 # Note: keep requirements here to ease distributions packaging
 tests_require = [
-    'pytest',
-    'hypothesis',
+    "pytest",
+    "hypothesis",
 ]
 install_requires = [
-    'setuptools',
-    'wheel',
+    "setuptools",
+    "wheel",
 ]
 
 MARISA_ROOT_DIR = "marisa-trie"
@@ -28,8 +28,8 @@ MARISA_FILES = [
 ]
 
 MARISA_FILES[:] = itertools.chain(
-    *(glob.glob(os.path.join(MARISA_SOURCE_DIR, path))
-      for path in MARISA_FILES))
+    *(glob.glob(os.path.join(MARISA_SOURCE_DIR, path)) for path in MARISA_FILES)
+)
 
 DESCRIPTION = __doc__
 with open("README.rst") as f1, open("CHANGES.rst") as f2:
@@ -59,36 +59,46 @@ CLASSIFIERS = [
     "Topic :: Text Processing :: Linguistic",
 ]
 
-setup(name="marisa-trie",
-      version="0.7.6",
-      description=DESCRIPTION,
-      long_description=LONG_DESCRIPTION,
-      author="Mikhail Korobov",
-      author_email="kmike84@gmail.com",
-      license=LICENSE,
-      url="https://github.com/kmike/marisa-trie",
-      classifiers=CLASSIFIERS,
-      libraries=[("libmarisa-trie", {
-          "sources": MARISA_FILES,
-          "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR]
-      })],
-      install_requires=install_requires,
-      extras_require = {
-          'test': tests_require,
-      },
-      ext_modules=[
-          Extension("marisa_trie", [
-              "src/agent.cpp",
-              "src/base.cpp",
-              "src/iostream.cpp",
-              "src/key.cpp",
-              "src/keyset.cpp",
-              "src/marisa_trie.cpp",
-              "src/query.cpp",
-              "src/std_iostream.cpp",
-              "src/trie.cpp"
-          ], include_dirs=[MARISA_INCLUDE_DIR])
-      ],
-
-      python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-      tests_require=["pytest", "hypothesis"])
+setup(
+    name="marisa-trie",
+    version="0.7.6",
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
+    author="Mikhail Korobov",
+    author_email="kmike84@gmail.com",
+    license=LICENSE,
+    url="https://github.com/kmike/marisa-trie",
+    classifiers=CLASSIFIERS,
+    libraries=[
+        (
+            "libmarisa-trie",
+            {
+                "sources": MARISA_FILES,
+                "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR],
+            },
+        )
+    ],
+    install_requires=install_requires,
+    extras_require={
+        "test": tests_require,
+    },
+    ext_modules=[
+        Extension(
+            "marisa_trie",
+            [
+                "src/agent.cpp",
+                "src/base.cpp",
+                "src/iostream.cpp",
+                "src/key.cpp",
+                "src/keyset.cpp",
+                "src/marisa_trie.cpp",
+                "src/query.cpp",
+                "src/std_iostream.cpp",
+                "src/trie.cpp",
+            ],
+            include_dirs=[MARISA_INCLUDE_DIR],
+        )
+    ],
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+    tests_require=["pytest", "hypothesis"],
+)

@@ -3,6 +3,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import pickle
+from uuid import uuid4
 from collections import Mapping
 
 import pytest
@@ -82,10 +83,11 @@ def test_get(keys):
 
 
 @given(st.sets(text))
-def test_saveload(tmpdir, keys):
+def test_saveload(tmpdir_factory, keys):
     trie = marisa_trie.Trie(keys)
 
-    path = str(tmpdir.join("trie.bin"))
+    dirname = str(uuid4()) + "_"
+    path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
     with open(path, "wb") as f:
         trie.write(f)
 
@@ -98,10 +100,11 @@ def test_saveload(tmpdir, keys):
 
 
 @given(st.sets(text))
-def test_mmap(tmpdir, keys):
+def test_mmap(tmpdir_factory, keys):
     trie = marisa_trie.Trie(keys)
 
-    path = str(tmpdir.join("trie.bin"))
+    dirname = str(uuid4()) + "_"
+    path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
     with open(path, "wb") as f:
         trie.write(f)
 

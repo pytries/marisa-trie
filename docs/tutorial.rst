@@ -80,8 +80,7 @@ Create a new trie from a list of ``(key, data)`` pairs::
     >>> trie = marisa_trie.RecordTrie(fmt, zip(keys, values))
 
 Each data tuple would be converted to bytes using :func:`struct.pack`. Take a
-look at available format strings
-`here <http://docs.python.org/library/struct.html#format-strings>`_.
+look at available `format strings <https://docs.python.org/3/library/struct.html#format-strings>`_.
 
 Check if a key is present::
 

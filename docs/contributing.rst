@@ -28,21 +28,17 @@ There are 4 folders in repository:
 Running tests and benchmarks
 ----------------------------
 
-Make sure `tox`_ is installed and run
+Make sure ``pytest`` is installed and run
 
 ::
 
-    $ tox
+    $ python -m pytest
 
 from the source checkout. Tests should pass under Python 2.7,
-3.4 and 3.5.
+3.4 and newer.
 
 In order to run benchmarks, type
 
 ::
 
-    $ tox -c bench.ini
-
-
-.. _cython: http://cython.org
-.. _tox: http://tox.testrun.org
+    $ python bench/speed.py

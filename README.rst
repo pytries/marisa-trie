@@ -1,14 +1,11 @@
-marisa-trie |pyversions| |travis| |appveyor|
-============================================
+marisa-trie |pyversions| |github|
+=================================
 
 .. |pyversions| image:: https://img.shields.io/pypi/pyversions/marisa-trie.svg
    :target: https://pypi.python.org/pypi/marisa-trie
 
-.. |travis| image:: https://travis-ci.org/pytries/marisa-trie.svg
-   :target: https://travis-ci.org/pytries/marisa-trie
-
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/p887ad4jbdg6u7yo?svg=true
-   :target: https://ci.appveyor.com/project/superbobry/marisa-trie-75wx1
+.. |github| image:: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml
 
 Static memory-efficient Trie-like structures for Python (2.7 and 3.4+)
 based on `marisa-trie`_ C++ library.
@@ -30,12 +27,15 @@ Installation
 
 ::
 
-    pip install marisa-trie
+    python -m pip install -U marisa-trie
 
 Usage
 =====
 
-See :ref:`Tutorial <tutorial>` and :ref:`API <api>` for details.
+See `tutorial`_ and `API`_ for details.
+
+.. _tutorial: https://marisa-trie.readthedocs.io/en/latest/tutorial.html
+.. _API: https://marisa-trie.readthedocs.io/en/latest/api.html
 
 Current limitations
 ===================

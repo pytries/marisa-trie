@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 """Static memory-efficient and fast Trie-like structures for Python."""
 
 import glob
@@ -6,6 +5,15 @@ import itertools
 import os.path
 
 from setuptools import setup, Extension
+
+# Note: keep requirements here to ease distributions packaging
+tests_require = [
+    "pytest",
+    "hypothesis",
+]
+install_requires = [
+    "setuptools",
+]
 
 MARISA_ROOT_DIR = "marisa-trie"
 MARISA_SOURCE_DIR = os.path.join(MARISA_ROOT_DIR, "lib")
@@ -85,6 +93,8 @@ setup(
         )
     ],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest", "hypothesis==2.0.0"],
+    install_requires=install_requires,
+    extras_require={
+        "test": tests_require,
+    },
 )

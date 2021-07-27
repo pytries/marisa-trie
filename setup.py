@@ -19,11 +19,13 @@ MARISA_FILES = [
 ]
 
 MARISA_FILES[:] = itertools.chain(
-    *(glob.glob(os.path.join(MARISA_SOURCE_DIR, path))
-      for path in MARISA_FILES))
+    *(glob.glob(os.path.join(MARISA_SOURCE_DIR, path)) for path in MARISA_FILES)
+)
 
 DESCRIPTION = __doc__
-with open("README.rst", encoding="utf-8") as f1, open("CHANGES.rst", encoding="utf-8") as f2:
+with open("README.rst", encoding="utf-8") as f1, open(
+    "CHANGES.rst", encoding="utf-8"
+) as f2:
     LONG_DESCRIPTION = f1.read() + f2.read()
 LICENSE = "MIT"
 
@@ -46,33 +48,43 @@ CLASSIFIERS = [
     "Topic :: Text Processing :: Linguistic",
 ]
 
-setup(name="marisa-trie",
-      version="0.7.5",
-      description=DESCRIPTION,
-      long_description=LONG_DESCRIPTION,
-      author="Mikhail Korobov",
-      author_email="kmike84@gmail.com",
-      license=LICENSE,
-      url="https://github.com/kmike/marisa-trie",
-      classifiers=CLASSIFIERS,
-      libraries=[("libmarisa-trie", {
-          "sources": MARISA_FILES,
-          "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR]
-      })],
-      ext_modules=[
-          Extension("marisa_trie", [
-              "src/agent.cpp",
-              "src/base.cpp",
-              "src/iostream.cpp",
-              "src/key.cpp",
-              "src/keyset.cpp",
-              "src/marisa_trie.cpp",
-              "src/query.cpp",
-              "src/std_iostream.cpp",
-              "src/trie.cpp"
-          ], include_dirs=[MARISA_INCLUDE_DIR])
-      ],
-
-      python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-      setup_requires=["pytest-runner"],
-      tests_require=["pytest", "hypothesis==2.0.0"])
+setup(
+    name="marisa-trie",
+    version="0.7.5",
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
+    author="Mikhail Korobov",
+    author_email="kmike84@gmail.com",
+    license=LICENSE,
+    url="https://github.com/kmike/marisa-trie",
+    classifiers=CLASSIFIERS,
+    libraries=[
+        (
+            "libmarisa-trie",
+            {
+                "sources": MARISA_FILES,
+                "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR],
+            },
+        )
+    ],
+    ext_modules=[
+        Extension(
+            "marisa_trie",
+            [
+                "src/agent.cpp",
+                "src/base.cpp",
+                "src/iostream.cpp",
+                "src/key.cpp",
+                "src/keyset.cpp",
+                "src/marisa_trie.cpp",
+                "src/query.cpp",
+                "src/std_iostream.cpp",
+                "src/trie.cpp",
+            ],
+            include_dirs=[MARISA_INCLUDE_DIR],
+        )
+    ],
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+    setup_requires=["pytest-runner"],
+    tests_require=["pytest", "hypothesis==2.0.0"],
+)

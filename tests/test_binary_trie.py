@@ -85,12 +85,10 @@ def test_saveload(tmpdir_factory, keys):
 
     dirname = str(uuid4()) + "_"
     path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
-    with open(path, "wb") as f:
-        trie.write(f)
+    trie.save(path)
 
-    with open(path, "rb") as f:
-        trie2 = marisa_trie.BinaryTrie()
-        trie2.read(f)
+    trie2 = marisa_trie.BinaryTrie()
+    trie2.load(path)
 
     for key in keys:
         assert key in trie2
@@ -102,8 +100,7 @@ def test_mmap(tmpdir_factory, keys):
 
     dirname = str(uuid4()) + "_"
     path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
-    with open(path, "wb") as f:
-        trie.write(f)
+    trie.save(path)
 
     trie2 = marisa_trie.BinaryTrie()
     trie2.mmap(path)
@@ -251,6 +248,7 @@ def test_iteritems(keys):
         assert trie.items(prefix) == list(trie.iteritems(prefix))
 
 
+@pytest.mark.filterwarnings("ignore:Trie.has_keys_with_prefix is deprecated")
 def test_has_keys_with_prefix_empty():
     empty_trie = marisa_trie.BinaryTrie()
     assert not empty_trie.has_keys_with_prefix(b"")

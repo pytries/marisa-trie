@@ -2279,7 +2279,7 @@ static const char __pyx_k_BinaryTrie_iter_prefixes[] = "BinaryTrie.iter_prefixes
 static const char __pyx_k_iteritems_locals_genexpr[] = "iteritems.<locals>.genexpr";
 static const char __pyx_k_unorderable_types_0_and_1[] = "unorderable types: {0} and {1}";
 static const char __pyx_k_Trie_has_keys_with_prefix_is_dep[] = "Trie.has_keys_with_prefix is deprecated and will be removed in marisa_trie 0.8.0. Please use Trie.iterkeys instead.";
-static const char __pyx_k_Trie_save_is_deprecated_and_will[] = "Trie.save is deprecated and will be removed in marisa_trie 0.8.0. Please use Trie.load instead.";
+static const char __pyx_k_Trie_read_is_deprecated_and_will[] = "Trie.read is deprecated and will be removed in marisa_trie 0.8.0. Please use Trie.load instead.";
 static const char __pyx_k_Trie_write_is_deprecated_and_wil[] = "Trie.write is deprecated and will be removed in marisa_trie 0.8.0. Please use Trie.save instead.";
 static PyObject *__pyx_n_s_BINARY_TAIL;
 static PyObject *__pyx_n_s_BinaryTrie;
@@ -2312,7 +2312,7 @@ static PyObject *__pyx_kp_u_Trie_has_keys_with_prefix_is_dep;
 static PyObject *__pyx_n_s_Trie_iter_prefixes;
 static PyObject *__pyx_n_s_Trie_iteritems;
 static PyObject *__pyx_n_s_Trie_iterkeys;
-static PyObject *__pyx_kp_u_Trie_save_is_deprecated_and_will;
+static PyObject *__pyx_kp_u_Trie_read_is_deprecated_and_will;
 static PyObject *__pyx_kp_u_Trie_write_is_deprecated_and_wil;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_n_s_UnicodeKeyedTrie;
@@ -4809,7 +4809,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_16read(struct __pyx_obj_11marisa_
   /* "marisa_trie.pyx":188
  *            :meth:`load` instead.
  *         """
- *         warnings.warn("Trie.save is deprecated and will "             # <<<<<<<<<<<<<<
+ *         warnings.warn("Trie.read is deprecated and will "             # <<<<<<<<<<<<<<
  *                       "be removed in marisa_trie 0.8.0. Please use "
  *                       "Trie.load instead.", DeprecationWarning)
  */
@@ -4820,7 +4820,7 @@ static PyObject *__pyx_pf_11marisa_trie_5_Trie_16read(struct __pyx_obj_11marisa_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "marisa_trie.pyx":190
- *         warnings.warn("Trie.save is deprecated and will "
+ *         warnings.warn("Trie.read is deprecated and will "
  *                       "be removed in marisa_trie 0.8.0. Please use "
  *                       "Trie.load instead.", DeprecationWarning)             # <<<<<<<<<<<<<<
  *         self._trie.read(f.fileno())
@@ -18330,7 +18330,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_Trie_iter_prefixes, __pyx_k_Trie_iter_prefixes, sizeof(__pyx_k_Trie_iter_prefixes), 0, 0, 1, 1},
   {&__pyx_n_s_Trie_iteritems, __pyx_k_Trie_iteritems, sizeof(__pyx_k_Trie_iteritems), 0, 0, 1, 1},
   {&__pyx_n_s_Trie_iterkeys, __pyx_k_Trie_iterkeys, sizeof(__pyx_k_Trie_iterkeys), 0, 0, 1, 1},
-  {&__pyx_kp_u_Trie_save_is_deprecated_and_will, __pyx_k_Trie_save_is_deprecated_and_will, sizeof(__pyx_k_Trie_save_is_deprecated_and_will), 0, 1, 0, 0},
+  {&__pyx_kp_u_Trie_read_is_deprecated_and_will, __pyx_k_Trie_read_is_deprecated_and_will, sizeof(__pyx_k_Trie_read_is_deprecated_and_will), 0, 1, 0, 0},
   {&__pyx_kp_u_Trie_write_is_deprecated_and_wil, __pyx_k_Trie_write_is_deprecated_and_wil, sizeof(__pyx_k_Trie_write_is_deprecated_and_wil), 0, 1, 0, 0},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_n_s_UnicodeKeyedTrie, __pyx_k_UnicodeKeyedTrie, sizeof(__pyx_k_UnicodeKeyedTrie), 0, 0, 1, 1},
@@ -18438,11 +18438,11 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "marisa_trie.pyx":188
  *            :meth:`load` instead.
  *         """
- *         warnings.warn("Trie.save is deprecated and will "             # <<<<<<<<<<<<<<
+ *         warnings.warn("Trie.read is deprecated and will "             # <<<<<<<<<<<<<<
  *                       "be removed in marisa_trie 0.8.0. Please use "
  *                       "Trie.load instead.", DeprecationWarning)
  */
-  __pyx_tuple__7 = PyTuple_Pack(2, __pyx_kp_u_Trie_save_is_deprecated_and_will, __pyx_builtin_DeprecationWarning); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(2, __pyx_kp_u_Trie_read_is_deprecated_and_will, __pyx_builtin_DeprecationWarning); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 188, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 

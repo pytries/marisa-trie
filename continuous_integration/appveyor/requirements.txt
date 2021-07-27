@@ -1,3 +1,0 @@
-pytest
-hypothesis==2.0
-wheel

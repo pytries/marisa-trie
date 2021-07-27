@@ -185,7 +185,7 @@ cdef class _Trie:
            The method will be removed in version 0.8.0. Please use
            :meth:`load` instead.
         """
-        warnings.warn("Trie.save is deprecated and will "
+        warnings.warn("Trie.read is deprecated and will "
                       "be removed in marisa_trie 0.8.0. Please use "
                       "Trie.load instead.", DeprecationWarning)
         self._trie.read(f.fileno())

@@ -23,7 +23,8 @@ MARISA_FILES[:] = itertools.chain(
       for path in MARISA_FILES))
 
 DESCRIPTION = __doc__
-LONG_DESCRIPTION = open("README.rst").read() + open("CHANGES.rst").read()
+with open("README.rst", encoding="utf-8") as f1, open("CHANGES.rst", encoding="utf-8") as f2:
+    LONG_DESCRIPTION = f1.read() + f2.read()
 LICENSE = "MIT"
 
 CLASSIFIERS = [

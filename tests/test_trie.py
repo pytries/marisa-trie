@@ -4,14 +4,13 @@ from __future__ import absolute_import, unicode_literals
 
 import pickle
 from uuid import uuid4
-from collections import Mapping
 
 import pytest
 import hypothesis.strategies as st
 from hypothesis import given, assume
 
 import marisa_trie
-from .utils import text
+from .utils import text, Mapping
 
 
 @given(st.sets(text), text)

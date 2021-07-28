@@ -11,7 +11,7 @@ on:
       branch:
         description: "The branch, tag or SHA to release from"
         required: true
-        default: "main"
+        default: "master"
 
 jobs:
   os-built-distributions:

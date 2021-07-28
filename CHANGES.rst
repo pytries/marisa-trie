@@ -12,7 +12,7 @@ CHANGES
 * Rebuild Cython wrapper with Cython 0.29.24.
 * Updated ``libmarisa-trie`` to the latest version (0.2.6).
 * Fixed failing tests and usage of deprecated methods.
-* Expanded supported Python version (2.6 - 3.10).
+* Expanded supported Python version (2.7, 3.4 - 3.10).
 
 
 0.7.5 (2018-04-10)

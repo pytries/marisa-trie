@@ -1,9 +1,7 @@
 include README.rst
 include CHANGES.rst
 include LICENSE
-include tox.ini
 include update_cpp.sh
-include lib/COPYING
 
 recursive-include src *.cpp *.pxd *.pyx
 recursive-include marisa-trie/lib/marisa *.h *.cc

@@ -65,6 +65,7 @@ setup(
     version="0.7.5",
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type="text/x-rst",
     author="Mikhail Korobov",
     author_email="kmike84@gmail.com",
     license=LICENSE,

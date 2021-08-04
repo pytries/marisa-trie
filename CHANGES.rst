@@ -6,7 +6,7 @@ CHANGES
 ------------------
 
 * Restored Python 2.7 support.
-
+* Fixed README image references not working on Windows.
 
 0.7.6 (2021-07-28)
 ------------------
@@ -19,7 +19,6 @@ CHANGES
 * Updated ``libmarisa-trie`` to the latest version (0.2.6).
 * Fixed failing tests and usage of deprecated methods.
 * Expanded supported Python version (2.7, 3.4 - 3.10).
-
 
 0.7.5 (2018-04-10)
 ------------------
@@ -34,7 +33,6 @@ CHANGES
 
 * Fixed packaging issue, ``MANIFEST.in`` was not updated after ``libmarisa-trie``
   became a submodule.
-
 
 0.7.3 (2017-02-14)
 ------------------

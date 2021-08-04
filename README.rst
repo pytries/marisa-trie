@@ -1,11 +1,11 @@
-marisa-trie |pyversions| |github|
-=================================
+MARISA Trie
+===========
 
-.. |pyversions| image:: https://img.shields.io/pypi/pyversions/marisa-trie.svg
-   :target: https://pypi.python.org/pypi/marisa-trie
+.. image:: https://img.shields.io/pypi/pyversions/marisa-trie.svg
+  :target: https://pypi.python.org/pypi/marisa-trie
 
-.. |github| image:: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml/badge.svg
-   :target: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml
+.. image:: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml/badge.svg
+  :target: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml
 
 Static memory-efficient Trie-like structures for Python (2.7 and 3.4+)
 based on `marisa-trie`_ C++ library.

@@ -9,8 +9,9 @@ from setuptools import setup, Extension
 
 # Note: keep requirements here to ease distributions packaging
 tests_require = [
-    "pytest",
     "hypothesis",
+    "pytest",
+    "readme_renderer",
 ]
 install_requires = [
     "setuptools",

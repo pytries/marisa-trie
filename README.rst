@@ -2,10 +2,10 @@ MARISA Trie
 ===========
 
 .. image:: https://img.shields.io/pypi/pyversions/marisa-trie.svg
-  :target: https://pypi.python.org/pypi/marisa-trie
+   :target: https://pypi.python.org/pypi/marisa-trie
 
 .. image:: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml/badge.svg
-  :target: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml
+   :target: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml
 
 Static memory-efficient Trie-like structures for Python (2.7 and 3.4+)
 based on `marisa-trie`_ C++ library.

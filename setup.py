@@ -3,7 +3,7 @@
 import glob
 import itertools
 import os.path
-from codecs import open
+from io import open
 
 from setuptools import setup, Extension
 
@@ -34,8 +34,8 @@ MARISA_FILES[:] = itertools.chain(
 
 DESCRIPTION = __doc__
 # TODO: Switch back to builtin `open(FILE, encoding="utf-8")` when dropping Python 2.7 support
-with open("README.rst", mode="r", encoding="utf-8") as f1, open(
-    "CHANGES.rst", mode="r", encoding="utf-8"
+with open("README.rst", encoding="utf-8") as f1, open(
+    "CHANGES.rst", encoding="utf-8"
 ) as f2:
     LONG_DESCRIPTION = f1.read() + f2.read()
 LICENSE = "MIT"

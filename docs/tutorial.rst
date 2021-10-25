@@ -107,7 +107,7 @@ Similarly, :meth:`~marisa_trie.RecordTrie.keys` and
     >> trie.keys(u'fo')
     [u'foo', u'foo', u'foobar']
     >> trie.items(u'fo')
-    [(u'foo', (1, 2)), (u'foo', (2, 1), (u'foobar', (3, 3))]
+    [(u'foo', (1, 2)), (u'foo', (2, 1)), (u'foobar', (3, 3))]
 
 
 marisa_trie.BytesTrie

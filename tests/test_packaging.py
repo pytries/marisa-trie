@@ -47,12 +47,12 @@ class _WarningStream:
 
 
 def test_check_pypi_rendering():
-    subprocess.check_call(["python", "setup.py", "sdist"])
+    subprocess.check_call(["python3", "setup.py", "sdist"])
 
     package = get_distribution("marisa-trie")
     pkg_info = message_from_string(package.get_metadata("PKG-INFO"))
     metadata = {k: v for k, v in pkg_info.items()}
-    lines = metadata["Description"].splitlines()
+    lines = metadata["Summary"].splitlines()
     description = lines.pop(0) + "\n"
     description += "\n".join(l[8:] for l in lines)
 

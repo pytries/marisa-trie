@@ -1,7 +1,7 @@
 MANIFEST
 src/*.html
 docs/_build
-
+venv*
 *.py[cod]
 
 # C extensions
@@ -35,3 +35,4 @@ nosetests.xml
 
 # IDE
 .idea
+.vscode

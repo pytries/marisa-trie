@@ -32,10 +32,6 @@ MARISA_FILES[:] = itertools.chain(
     *(glob.glob(os.path.join(MARISA_SOURCE_DIR, path)) for path in MARISA_FILES)
 )
 
-COMPILER_DIRECTIVES = {
-    'embedsignature': True,
-}
-
 DESCRIPTION = __doc__
 # TODO: Switch back to builtin `open(FILE, encoding="utf-8")` when dropping Python 2.7 support
 with open("README.rst", encoding="utf-8") as f1, open(
@@ -102,7 +98,6 @@ setup(
                 "src/trie.cpp",
             ],
             include_dirs=[MARISA_INCLUDE_DIR],
-            compiler_directives=COMPILER_DIRECTIVES,
         )
     ],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",

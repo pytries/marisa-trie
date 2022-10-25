@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+0.7.8 (2022-10-25)
+------------------
+
+* Added Python 3.11 support.
+* Rebuild Cython wrapper with Cython 0.29.32.
+
 0.7.7 (2021-08-04)
 ------------------
 

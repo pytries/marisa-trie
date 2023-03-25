@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+0.8.0 (2023-03-25)
+------------------
+
+* Add ``Trie.iter_prefixes_with_ids()`` method to return ``(prefix, id)`` pairs (#83).
+* Rebuild Cython wrapper with Cython 0.29.33 (#88).
+
 0.7.8 (2022-10-25)
 ------------------
 

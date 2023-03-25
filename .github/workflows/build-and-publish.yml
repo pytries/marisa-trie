@@ -37,7 +37,7 @@ jobs:
         env:
           CIBW_SKIP: "cp27-* cp35-* pp27-*" # skip 2.7 and 3.5 wheels
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: python-package-distributions
           path: ./wheelhouse/*.whl
@@ -58,7 +58,7 @@ jobs:
       - name: Build source distribution
         run: python setup.py sdist
       - name: Store the source distribution
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: python-package-distributions
           path: dist

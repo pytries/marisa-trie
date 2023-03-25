@@ -483,6 +483,17 @@ cdef class Trie(_UnicodeKeyedTrie):
             res.append(self._get_key(ag))
         return res
 
+    def iter_prefixes_with_ids(self, unicode key):
+        """
+        Return an iterator of (prefix, id) pairs of all prefixes of a given key.
+        """
+        cdef bytes b_key = <bytes>key.encode('utf8')
+        cdef agent.Agent ag
+        ag.set_query(b_key, len(b_key))
+
+        while self._trie.common_prefix_search(ag):
+            yield (self._get_key(ag), ag.key().id())
+
     def iteritems(self, unicode prefix=""):
         """
         Return an iterator over items that have a prefix ``prefix``.

@@ -198,6 +198,33 @@ def test_prefixes():
 
     assert list(trie.iter_prefixes("foobar")) == ["f", "foo", "foobar"]
 
+def test_iter_prefixes_with_keys():
+    trie = marisa_trie.Trie(["foo", "f", "foobar", "bar"])
+
+    assert set(trie.iter_prefixes_with_ids("foobar")) == set(
+        [
+            ("f", trie["f"]),
+            ("foo", trie["foo"]),
+            ("foobar", trie["foobar"]),
+        ]
+    )
+    assert set(trie.iter_prefixes_with_ids("foo")) == set(
+        [
+            ("f", trie["f"]),
+            ("foo", trie["foo"]),
+        ]
+    )
+    assert set(trie.iter_prefixes_with_ids("bar")) == set(
+        [
+            ("bar", trie["bar"]),
+        ]
+    )
+    assert set(trie.iter_prefixes_with_ids("b")) == set()
+
+    for test_key in ["foobar", "foo", "bar", "b"]:
+        assert list(trie.iter_prefixes_with_ids(test_key)) == list(
+            (prefix, trie[prefix]) for prefix in trie.prefixes(test_key)
+        )
 
 def test_keys():
     keys = ["foo", "f", "foobar", "bar"]

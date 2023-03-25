@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, unicode_literals
-
 import pickle
 from uuid import uuid4
 
@@ -85,7 +81,7 @@ def test_get(keys):
 def test_saveload(tmpdir_factory, keys):
     trie = marisa_trie.Trie(keys)
 
-    dirname = str(uuid4()) + "_"
+    dirname = f"{str(uuid4())}_"
     path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
     trie.save(path)
 
@@ -100,7 +96,7 @@ def test_saveload(tmpdir_factory, keys):
 def test_mmap(tmpdir_factory, keys):
     trie = marisa_trie.Trie(keys)
 
-    dirname = str(uuid4()) + "_"
+    dirname = f"{str(uuid4())}_"
     path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
     trie.save(path)
 
@@ -201,30 +197,22 @@ def test_prefixes():
 def test_iter_prefixes_with_keys():
     trie = marisa_trie.Trie(["foo", "f", "foobar", "bar"])
 
-    assert set(trie.iter_prefixes_with_ids("foobar")) == set(
-        [
-            ("f", trie["f"]),
-            ("foo", trie["foo"]),
-            ("foobar", trie["foobar"]),
-        ]
-    )
-    assert set(trie.iter_prefixes_with_ids("foo")) == set(
-        [
-            ("f", trie["f"]),
-            ("foo", trie["foo"]),
-        ]
-    )
-    assert set(trie.iter_prefixes_with_ids("bar")) == set(
-        [
-            ("bar", trie["bar"]),
-        ]
-    )
-    assert set(trie.iter_prefixes_with_ids("b")) == set()
+    assert set(trie.iter_prefixes_with_ids("foobar")) == {
+        ("f", trie["f"]),
+        ("foo", trie["foo"]),
+        ("foobar", trie["foobar"]),
+    }
+    assert set(trie.iter_prefixes_with_ids("foo")) == {
+        ("f", trie["f"]),
+        ("foo", trie["foo"]),
+    }
+    assert set(trie.iter_prefixes_with_ids("bar")) == {("bar", trie["bar"])}
+    assert not set(trie.iter_prefixes_with_ids("b"))
 
     for test_key in ["foobar", "foo", "bar", "b"]:
-        assert list(trie.iter_prefixes_with_ids(test_key)) == list(
+        assert list(trie.iter_prefixes_with_ids(test_key)) == [
             (prefix, trie[prefix]) for prefix in trie.prefixes(test_key)
-        )
+        ]
 
 def test_keys():
     keys = ["foo", "f", "foobar", "bar"]
@@ -235,7 +223,7 @@ def test_keys():
 def test_keys_prefix():
     keys = ["foo", "f", "foobar", "bar"]
     trie = marisa_trie.Trie(keys)
-    assert set(trie.keys("fo")) == set(["foo", "foobar"])
+    assert set(trie.keys("fo")) == {"foo", "foobar"}
     assert trie.keys("foobarz") == []
 
 
@@ -259,12 +247,10 @@ def test_items():
 def test_items_prefix():
     keys = ["foo", "f", "foobar", "bar"]
     trie = marisa_trie.Trie(keys)
-    assert set(trie.items("fo")) == set(
-        [
-            ("foo", trie["foo"]),
-            ("foobar", trie["foobar"]),
-        ]
-    )
+    assert set(trie.items("fo")) == {
+        ("foo", trie["foo"]),
+        ("foobar", trie["foobar"]),
+    }
 
 
 @given(st.sets(text))

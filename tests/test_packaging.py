@@ -5,9 +5,7 @@ import io
 import re
 import subprocess
 from email import message_from_string
-from pathlib import Path
 from pkg_resources import get_distribution
-from textwrap import dedent
 
 from readme_renderer.rst import render
 
@@ -51,7 +49,7 @@ def test_check_pypi_rendering():
 
     package = get_distribution("marisa-trie")
     pkg_info = message_from_string(package.get_metadata("PKG-INFO"))
-    metadata = {k: v for k, v in pkg_info.items()}
+    metadata = dict(pkg_info.items())
     lines = metadata["Summary"].splitlines()
     description = lines.pop(0) + "\n"
     description += "\n".join(l[8:] for l in lines)
@@ -60,5 +58,5 @@ def test_check_pypi_rendering():
     rendering = render(description, stream=warnings)
     print(description)
     print(warnings)
-    assert str(warnings) == ""
+    assert not str(warnings)
     assert rendering is not None

@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, unicode_literals
-
 import pickle
 from uuid import uuid4
 
@@ -83,7 +79,7 @@ def test_get(keys):
 def test_saveload(tmpdir_factory, keys):
     trie = marisa_trie.BinaryTrie(keys)
 
-    dirname = str(uuid4()) + "_"
+    dirname = f"{uuid4()}_"
     path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
     trie.save(path)
 
@@ -98,7 +94,7 @@ def test_saveload(tmpdir_factory, keys):
 def test_mmap(tmpdir_factory, keys):
     trie = marisa_trie.BinaryTrie(keys)
 
-    dirname = str(uuid4()) + "_"
+    dirname = f"{uuid4()}_"
     path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
     trie.save(path)
 
@@ -206,7 +202,7 @@ def test_keys():
 def test_keys_prefix():
     keys = [b"foo", b"f", b"foobar", b"bar"]
     trie = marisa_trie.BinaryTrie(keys)
-    assert set(trie.keys(b"fo")) == set([b"foo", b"foobar"])
+    assert set(trie.keys(b"fo")) == {b"foo", b"foobar"}
     assert trie.keys(b"foobarz") == []
 
 
@@ -230,12 +226,10 @@ def test_items():
 def test_items_prefix():
     keys = [b"foo", b"f", b"foobar", b"bar"]
     trie = marisa_trie.BinaryTrie(keys)
-    assert set(trie.items(b"fo")) == set(
-        [
-            (b"foo", trie[b"foo"]),
-            (b"foobar", trie[b"foobar"]),
-        ]
-    )
+    assert set(trie.items(b"fo")) == {
+        (b"foo", trie[b"foo"]),
+        (b"foobar", trie[b"foobar"]),
+    }
 
 
 @given(st.sets(text))

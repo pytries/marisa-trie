@@ -1,13 +1,7 @@
 name: Tests
 
 on:
-  pull_request:
-    paths:
-      - ".github/workflows/tests.yml"
-      - "marisa-trie/**/*.cc"
-      - "marisa-trie/**/*.h"
-      - "setup.py"
-      - "tests/*.py"
+  pull_request
 
 jobs:
   tests:
@@ -17,15 +11,15 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python: [3.6, 3.7, 3.8, 3.9, "3.10.0-rc.1"]
+        python: ["3.7", "3.8", "3.9", "3.10", "3.11"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.branch }}
           submodules: true
       - name: Use Python ${{ matrix.python }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
       - name: Install test dependencies

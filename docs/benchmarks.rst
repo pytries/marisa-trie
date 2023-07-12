@@ -23,8 +23,8 @@ with different data structures (under Python 2.7):
     to store arbitrary values in ``marisa_trie.Trie`` so it uses less
     memory than ``RecordTrie``.
 
-Benchmark results (100k unicode words, integer values (lenghts of the words),
-Python 3.2, macbook air i5 1.8 Ghz)::
+Benchmark results (100k unicode words, integer values (lengths of the words),
+Python 3.2, Macbook Air i5 1.8 Ghz)::
 
     dict building                     2.919M words/sec
     Trie building                     0.394M words/sec

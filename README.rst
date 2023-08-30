@@ -7,7 +7,7 @@ MARISA Trie
 .. image:: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml/badge.svg
    :target: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml
 
-Static memory-efficient Trie-like structures for Python (2.7 and 3.4+)
+Static memory-efficient Trie-like structures for Python (3.7+)
 based on `marisa-trie`_ C++ library.
 
 String data in a MARISA-trie may take up to 50x-100x less memory than

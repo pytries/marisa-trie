@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, unicode_literals, division
-
 import gzip
 import os
 import random
@@ -23,10 +18,10 @@ def words100k():
 
 def random_words(num):
     russian = "абвгдеёжзиклмнопрстуфхцчъыьэюя"
-    alphabet = "%s%s" % (russian, string.ascii_letters)
+    alphabet = f"{russian}{string.ascii_letters}"
     return [
-        "".join(random.choice(alphabet) for x in range(random.randint(1, 15)))
-        for y in range(num)
+        "".join(random.choice(alphabet) for _ in range(random.randint(1, 15)))
+        for _ in range(num)
     ]
 
 
@@ -36,7 +31,7 @@ def truncated_words(words):
 
 def prefixes1k(words, prefix_len):
     words = [w for w in words if len(w) >= prefix_len]
-    every_nth = int(len(words) / 1000)
+    every_nth = len(words) // 1000
     _words = [w[:prefix_len] for w in words[::every_nth]]
     return _words[:1000]
 
@@ -52,7 +47,7 @@ PREFIXES_15_1k = prefixes1k(WORDS100k, 15)
 
 def format_result(key, value, text_width):
     key = key.ljust(text_width)
-    print("    %s %s" % (key, value))
+    print(f"    {key} {value}")
 
 
 def bench(
@@ -66,7 +61,7 @@ def bench(
         def op_time(time):
             return op_count * repeats / time
 
-        val = "%0.3f%s" % (op_time(min(times)), descr)
+        val = f"{op_time(min(times)):0.3f}{descr}"
         format_result(name, val, text_width)
     except (AttributeError, TypeError):
         format_result(name, "not supported", text_width)
@@ -121,7 +116,7 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
     # build performance
     for name, setup in structures:
         timer = timeit.Timer(BUILD[name], common_setup)
-        bench("%s building" % name, timer, "M words/sec", 0.1, 5)
+        bench(f"{name} building", timer, "M words/sec", 0.1, 5)
 
     # common operations speed
     tests = [
@@ -162,7 +157,7 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
     for test_name, test, descr, op_count, repeats in tests:
         for name, setup in structures:
             timer = timeit.Timer(test, setup)
-            full_test_name = "%s %s" % (name, test_name)
+            full_test_name = f"{name} {test_name}"
             bench(full_test_name, timer, descr, op_count, repeats, 9)
 
     # trie-specific benchmarks
@@ -176,10 +171,10 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
         for meth in ["prefixes", "iter_prefixes"]:
             for name, data in _bench_data:
                 bench(
-                    "%s.%s (%s)" % (struct_name, meth, name),
+                    f"{struct_name}.{meth} ({name})",
                     timeit.Timer(
-                        "for word in %s:\n"
-                        "   for it in data.%s(word): pass" % (data, meth),
+                        f"for word in {data}:\n"
+                        f"   for it in data.{meth}(word): pass",
                         setup,
                     ),
                     runs=3,
@@ -195,8 +190,10 @@ NON_WORDS_1k = ['ыва', 'xyz', 'соы', 'Axx', 'avы']*200
         for xxx, avg, data in _bench_data:
             for meth in ["keys"]:  # ('items', 'keys', 'values'):
                 bench(
-                    '%s.%s(prefix="%s"), %s' % (struct_name, meth, xxx, avg),
-                    timeit.Timer("for word in %s: data.%s(word)" % (data, meth), setup),
+                    f'{struct_name}.{meth}(prefix="{xxx}"), {avg}',
+                    timeit.Timer(
+                        f"for word in {data}: data.{meth}(word)", setup
+                    ),
                     "K ops/sec",
                     op_count=1,
                     runs=3,

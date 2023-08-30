@@ -3,7 +3,6 @@
 import glob
 import itertools
 import os.path
-from io import open
 
 from setuptools import setup, Extension
 
@@ -33,7 +32,6 @@ MARISA_FILES[:] = itertools.chain(
 )
 
 DESCRIPTION = __doc__
-# TODO: Switch back to builtin `open(FILE, encoding="utf-8")` when dropping Python 2.7 support
 with open("README.rst", encoding="utf-8") as f1, open(
     "CHANGES.rst", encoding="utf-8"
 ) as f2:
@@ -47,12 +45,7 @@ CLASSIFIERS = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Cython",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.4",
-    "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -73,7 +66,7 @@ setup(
     author="Mikhail Korobov",
     author_email="kmike84@gmail.com",
     license=LICENSE,
-    url="https://github.com/kmike/marisa-trie",
+    url="https://github.com/pytries/marisa-trie",
     classifiers=CLASSIFIERS,
     libraries=[
         (
@@ -101,7 +94,7 @@ setup(
             include_dirs=[MARISA_INCLUDE_DIR],
         )
     ],
-    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+    python_requires=">=3.7",
     install_requires=install_requires,
     extras_require={
         "test": tests_require,

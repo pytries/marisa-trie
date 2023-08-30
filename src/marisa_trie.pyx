@@ -1,7 +1,5 @@
 # cython: profile=False, embedsignature=True
 
-from __future__ import unicode_literals
-
 from std_iostream cimport stringstream, istream, ostream
 from libc.string cimport strncmp
 cimport keyset
@@ -14,12 +12,6 @@ cimport base
 import itertools
 import struct
 import warnings
-
-try:
-    from itertools import izip
-except ImportError:
-    izip = zip
-
 
 DEFAULT_CACHE = base.MARISA_DEFAULT_CACHE
 HUGE_CACHE = base.MARISA_HUGE_CACHE
@@ -117,7 +109,7 @@ cdef class _Trie:
         cdef keyset.Keyset *ks = new keyset.Keyset()
 
         try:
-            for key, weight in izip(byte_keys, weights):
+            for key, weight in zip(byte_keys, weights):
                 ks.push_back(<char *>key, len(key), weight)
             self._trie.build(ks[0], self._config_flags(**options))
         finally:

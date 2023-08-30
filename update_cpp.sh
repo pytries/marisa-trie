@@ -1,2 +1,2 @@
 #!/bin/sh
-cython src/*.pyx src/*.pxd --cplus -a -2
+cython src/*.pyx src/*.pxd --cplus -a -3

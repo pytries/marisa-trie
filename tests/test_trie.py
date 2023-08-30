@@ -6,6 +6,7 @@ import hypothesis.strategies as st
 from hypothesis import given, assume
 
 import marisa_trie
+
 from .utils import text, Mapping
 
 

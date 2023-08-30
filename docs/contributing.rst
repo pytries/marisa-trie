@@ -34,8 +34,7 @@ Make sure ``pytest`` is installed and run
 
     $ python -m pytest
 
-from the source checkout. Tests should pass under Python 2.7,
-3.4 and newer.
+from the source checkout. Tests should pass under Python 3.7 and newer.
 
 In order to run benchmarks, type
 

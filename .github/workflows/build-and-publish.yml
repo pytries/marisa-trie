@@ -35,7 +35,7 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel
         env:
-          CIBW_SKIP: "cp36-* cp-312*" # skip 3.6 and 3.12 wheels
+          CIBW_SKIP: "cp36-* cp312*" # skip 3.6 and 3.12 wheels
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
       - uses: actions/upload-artifact@v3
         with:

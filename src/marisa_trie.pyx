@@ -9,6 +9,8 @@ cimport trie
 cimport iostream
 cimport base
 
+from cpython.buffer cimport PyBUF_SIMPLE, Py_buffer, PyObject_CheckBuffer, PyObject_GetBuffer, PyBuffer_Release
+
 import itertools
 import struct
 import warnings
@@ -48,6 +50,26 @@ LABEL_ORDER = base.MARISA_LABEL_ORDER
 # matching.
 WEIGHT_ORDER = base.MARISA_WEIGHT_ORDER
 DEFAULT_ORDER = base.MARISA_DEFAULT_ORDER
+
+
+cdef inline int getbufptr(object obj, char ** ptr, Py_ssize_t * size, Py_buffer * buf):
+    """Get a pointer from bytes/buffer object ``obj``.
+
+    On success, return 0, and set ``ptr``, ``size`` and ``buf``."""
+    cdef int result = -1
+    ptr[0] = NULL
+    size[0] = 0
+    if PyObject_CheckBuffer(obj) == 1:  # new-style Buffer interface
+        result = PyObject_GetBuffer(obj, buf, PyBUF_SIMPLE)
+        if result == 0:
+            ptr[0] = <char *>buf.buf
+            size[0] = buf.len
+    return result
+
+
+cdef inline void releasebuf(Py_buffer *buf):
+    """Release buffer if necessary."""
+    PyBuffer_Release(buf)
 
 
 cdef class _Trie:
@@ -240,6 +262,19 @@ cdef class _Trie:
         str_path = path.encode(sys.getfilesystemencoding())
         cdef char* c_path = str_path
         self._trie.mmap(c_path)
+        return self
+
+    def map(self, buffer):
+        """Load the trie from an object exposing the buffer protocol."""
+
+        cdef char *ptr = NULL
+        cdef Py_ssize_t size = 0
+        cdef Py_buffer buf
+        result = getbufptr(buffer, &ptr, &size, &buf)
+        if result != 0:
+            raise ValueError("Invalid buffer.")
+        self._trie.map(ptr, size)
+        releasebuf(&buf)
         return self
 
     def iterkeys(self, prefix=None):

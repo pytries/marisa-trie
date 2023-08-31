@@ -107,6 +107,36 @@ def test_mmap(tmpdir_factory, keys):
     for key in keys:
         assert key in trie2
 
+@given(st.sets(text))
+def test_map(tmpdir_factory, keys):
+    trie = marisa_trie.Trie(keys)
+
+    dirname = f"{str(uuid4())}_"
+    path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
+    trie.save(path)
+
+    data = open(path, "rb").read()
+    trie2 = marisa_trie.Trie()
+    trie2.map(data)
+
+    for key in keys:
+        assert key in trie2
+
+@given(st.sets(text))
+def test_map_with_pad(tmpdir_factory, keys):
+    trie = marisa_trie.Trie(keys)
+
+    dirname = f"{str(uuid4())}_"
+    path = str(tmpdir_factory.mktemp(dirname).join("trie.bin"))
+    trie.save(path)
+
+    data = b"pad" + open(path, "rb").read() + b"pad"
+    trie2 = marisa_trie.Trie()
+    trie2.map(memoryview(data)[3:-3])
+
+    for key in keys:
+        assert key in trie2
+
 
 @given(st.sets(text))
 def test_tobytes_frombytes(keys):

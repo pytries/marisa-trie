@@ -2,6 +2,14 @@
 CHANGES
 =======
 
+1.0.0 (2023-09-03)
+------------------
+
+* Dropped Python 2.7, 3.4, 3.5, 3.6 support.
+* Added ``Trie.map()`` (#90).
+* Rebuilt Cython wrapper with Cython 3.0.2.
+* Fixed benchmark documentation typos (#89).
+
 0.8.0 (2023-03-25)
 ------------------
 

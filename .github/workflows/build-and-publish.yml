@@ -19,20 +19,20 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch }}
           submodules: true
-      
+
       - name: Set up QEMU
         if: runner.os == 'Linux'
         uses: docker/setup-qemu-action@v3
         with:
           platforms: all
-          
+
       - name: Install Python
         uses: actions/setup-python@v5
         with:
@@ -43,9 +43,58 @@ jobs:
         run: python -m cibuildwheel
         env:
           CIBW_SKIP: "cp36-*" # skip 3.6
-          CIBW_ARCHS_LINUX: aarch64
+          CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
+          CIBW_ARCHS_LINUX: "auto aarch64"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions-macos
+          path: ./wheelhouse/*.whl
       - uses: actions/upload-artifact@v4
         with:
           name: python-package-distributions-linux
           path: ./wheelhouse/*.whl
 
+
+  source-distribution:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+          submodules: true
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Build source distribution
+        run: python setup.py sdist
+      - name: Store the source distribution
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions-source
+          path: dist
+          retention-days: 4
+
+  publish:
+    needs:
+      - os-built-distributions
+      - source-distribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@v4
+        with:
+          pattern: python-package-distributions-*
+          merge-multiple: true
+          path: dist/
+      - name: What will we publish?
+        run: ls -l dist
+      # - name: Publish
+      #   if: github.event.inputs.branch != ''
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     user: __token__
+      #     password: ${{ secrets.PYPI_API_TOKEN }}
+      #     skip_existing: true

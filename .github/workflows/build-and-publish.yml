@@ -26,6 +26,13 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
           submodules: true
+      
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
+          
       - name: Install Python
         uses: actions/setup-python@v5
         with:

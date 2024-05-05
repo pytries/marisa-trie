@@ -26,6 +26,13 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
           submodules: true
+
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
+
       - name: Install Python
         uses: actions/setup-python@v5
         with:
@@ -37,10 +44,16 @@ jobs:
         env:
           CIBW_SKIP: "cp36-*" # skip 3.6
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
+          CIBW_ARCHS_LINUX: "auto aarch64"
       - uses: actions/upload-artifact@v4
         with:
           name: python-package-distributions-macos
           path: ./wheelhouse/*.whl
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions-linux
+          path: ./wheelhouse/*.whl
+
 
   source-distribution:
     name: Build source distribution

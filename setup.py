@@ -61,7 +61,7 @@ CLASSIFIERS = [
 
 setup(
     name="marisa-trie",
-    version="1.1.0",
+    version="1.1.1",
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/x-rst",

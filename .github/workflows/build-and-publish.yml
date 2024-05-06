@@ -47,11 +47,7 @@ jobs:
           CIBW_ARCHS_LINUX: "auto aarch64"
       - uses: actions/upload-artifact@v4
         with:
-          name: python-package-distributions-macos
-          path: ./wheelhouse/*.whl
-      - uses: actions/upload-artifact@v4
-        with:
-          name: python-package-distributions-linux
+          name: python-package-distributions-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
 
@@ -69,7 +65,10 @@ jobs:
         with:
           python-version: "3.x"
       - name: Build source distribution
-        run: python setup.py sdist
+        run: |
+          # fix flaky python installation on github actions:
+          pip install --upgrade --force setuptools
+          python setup.py sdist
       - name: Store the source distribution
         uses: actions/upload-artifact@v4
         with:

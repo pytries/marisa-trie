@@ -66,7 +66,7 @@ jobs:
           python-version: "3.x"
       - name: Build source distribution
         run: |
-          # fix flaky python installation on github actions:
+          # FIXME: setuptools was removed starting with Python 3.12
           pip install --upgrade --force setuptools
           python setup.py sdist
       - name: Store the source distribution

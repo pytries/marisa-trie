@@ -51,7 +51,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "marisa-trie"
-copyright = "2016-2023, Mikhail Korobov & contributors"
+copyright = "2016-2024, Mikhail Korobov & contributors"
 author = "Mikhail Korobov & contributors"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -59,7 +59,7 @@ author = "Mikhail Korobov & contributors"
 # built documents.
 #
 # The short X.Y version.
-version = "1.1.1"
+version = "1.2.0"
 # The full version, including alpha/beta/rc tags.
 release = version
 

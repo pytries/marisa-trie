@@ -5,8 +5,8 @@ CHANGES
 1.2.0 (2024-06-05)
 ------------------
 
-* Added Python 3.13 support (#103).
-* Rebuild Cython wrapper with Cython 3.0.10 (#103).
+* Added Python 3.13 support (#105).
+* Rebuild Cython wrapper with Cython 3.0.10 (#105).
 
 1.1.1 (2024-05-06)
 ------------------

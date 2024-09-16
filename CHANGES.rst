@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+1.2.1 (2024-09-17)
+------------------
+
+* Publish Python 3.13 wheels.
+* Rebuild Cython wrapper with Cython 3.0.11.
+
 1.2.0 (2024-06-05)
 ------------------
 

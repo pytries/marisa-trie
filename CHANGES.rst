@@ -7,6 +7,7 @@ CHANGES
 
 * Publish Python 3.13 wheels.
 * Rebuild Cython wrapper with Cython 3.0.11.
+* Stick to ``setuptools < 72`` to workaround a crash with PyPy (https://github.com/pypa/distutils/issues/283)
 
 1.2.0 (2024-06-05)
 ------------------

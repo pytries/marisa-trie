@@ -14,9 +14,8 @@ tests_require = [
     "readme_renderer",
 ]
 install_requires = [
-    "setuptools",
-    # FIXME: remove the next line when https://github.com/pypa/distutils/issues/283 is done
-    "setuptools<72.2.0; implementation_name == 'pypy'",
+    # https://github.com/pypa/distutils/issues/283
+    "setuptools<72.2.0",
 ]
 
 MARISA_ROOT_DIR = "marisa-trie"

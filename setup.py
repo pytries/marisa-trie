@@ -14,8 +14,8 @@ tests_require = [
     "readme_renderer",
 ]
 install_requires = [
-    # https://github.com/pypa/distutils/issues/283
-    "setuptools<72.2.0",
+    "setuptools>=66.1.0",
+    'setuptools<72.2.0; implementation_name == "pypy"',  # https://github.com/pypa/distutils/issues/283
 ]
 
 MARISA_ROOT_DIR = "marisa-trie"

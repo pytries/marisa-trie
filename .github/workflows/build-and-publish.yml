@@ -64,7 +64,7 @@ jobs:
           python-version: "3.12"
       - name: Build source distribution
         run: |
-          # FIXME: setuptools was removed starting with Python 3.12
+          # setuptools was removed starting with Python 3.12
           pip install --upgrade --force setuptools
           python setup.py sdist
       - name: Store the source distribution

@@ -42,6 +42,7 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel
         env:
+          CIBW_SKIP: "pp*"  # skip PyPy releases
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
           CIBW_ARCHS_LINUX: "auto aarch64"
       - uses: actions/upload-artifact@v4

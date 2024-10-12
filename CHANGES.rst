@@ -2,12 +2,11 @@
 CHANGES
 =======
 
-1.2.1 (2024-09-17)
+1.2.1 (2024-10-12)
 ------------------
 
-* Publish Python 3.13 wheels.
+* Publish Python 3.13 wheels (only CPython ones, PyPy ones are skipped until https://github.com/pypa/distutils/issues/283 is fixed).
 * Rebuild Cython wrapper with Cython 3.0.11.
-* Stick to ``setuptools < 72.2.0`` to workaround a crash with PyPy (https://github.com/pypa/distutils/issues/283)
 
 1.2.0 (2024-06-05)
 ------------------

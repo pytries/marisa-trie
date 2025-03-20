@@ -1,11 +1,12 @@
 MARISA Trie
 ===========
 
-.. image:: https://img.shields.io/pypi/pyversions/marisa-trie.svg
-   :target: https://pypi.python.org/pypi/marisa-trie
+|PyPI Version|
+|PyPI Status|
+|PyPI Python Versions|
+|Github Build Status|
 
-.. image:: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml/badge.svg
-   :target: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml
+|Patreon|
 
 Static memory-efficient Trie-like structures for Python (3.8+)
 based on `marisa-trie`_ C++ library.
@@ -54,3 +55,14 @@ Wrapper code is licensed under MIT License.
 
 Bundled `marisa-trie`_ C++ library is dual-licensed under
 LGPL and BSD 2-clause license.
+
+.. |PyPI Version| image:: https://img.shields.io/pypi/v/marisa-trie.svg
+   :target: https://pypi.python.org/pypi/marisa-trie/
+.. |PyPI Status| image:: https://img.shields.io/pypi/status/marisa-trie.svg
+   :target: https://pypi.python.org/pypi/marisa-trie/
+.. |PyPI Python Versions| image:: https://img.shields.io/pypi/pyversions/marisa-trie.svg
+   :target: https://pypi.python.org/pypi/marisa-trie/
+.. |Github Build Status| image:: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/pytries/marisa-trie/actions/workflows/tests.yml
+.. |Patreon| image:: https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white
+   :target: https://www.patreon.com/mschoentgen

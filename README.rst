@@ -6,7 +6,11 @@ MARISA Trie
 |PyPI Python Versions|
 |Github Build Status|
 
-|Patreon|
+.. tip::
+
+    Become **my boss** to help me work on this awesome software, and make the world better:
+
+   |Patreon|
 
 Static memory-efficient Trie-like structures for Python (3.8+)
 based on `marisa-trie`_ C++ library.

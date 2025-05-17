@@ -45,6 +45,7 @@ jobs:
           CIBW_SKIP: "pp*"  # skip PyPy releases
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
           CIBW_ARCHS_LINUX: "auto aarch64"
+          CIBW_ENABLE: cpython-freethreading
       - uses: actions/upload-artifact@v4
         with:
           name: python-package-distributions-${{ matrix.os }}

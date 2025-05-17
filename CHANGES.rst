@@ -5,6 +5,7 @@ CHANGES
 1.3.0 (2025-xx-xx)
 ------------------
 
+* Updated ``libmarisa-trie`` to the latest version (0.2.7).
 * Dropped Python 3.7 support (#112).
 * Added Python 3.13 support (#112).
 * Rebuild Cython wrapper with Cython 3.0.12.

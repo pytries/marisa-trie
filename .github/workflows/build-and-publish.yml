@@ -16,23 +16,30 @@ on:
 
 jobs:
   os-built-distributions:
-    name: Build on ${{ matrix.os }}
+    name: Build ${{ matrix.arch }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+          - os: ubuntu-24.04-arm
+            arch: aarch64
+          - os: windows-latest
+            arch: AMD64
+          - os: windows-latest
+            arch: x86
+          - os: macos-latest
+            arch: x86_64
+          - os: macos-latest
+            arch: arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch }}
           submodules: true
-
-      - name: Set up QEMU
-        if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: all
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -43,13 +50,11 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel
         env:
-          CIBW_SKIP: "pp*"  # skip PyPy releases
-          CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
-          CIBW_ARCHS_LINUX: "auto aarch64"
+          CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_ENABLE: cpython-freethreading
       - uses: actions/upload-artifact@v4
         with:
-          name: python-package-distributions-${{ matrix.os }}
+          name: python-package-distributions-${{ matrix.os }}-${{ matrix.arch }}
           path: ./wheelhouse/*.whl
 
   source-distribution:

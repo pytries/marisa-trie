@@ -1,6 +1,3 @@
-include README.rst
-include CHANGES.rst
-include LICENSE
 include update_cpp.sh
 
 recursive-include src *.cpp *.pxd *.pyx

@@ -1,5 +1,3 @@
-include update_cpp.sh
-
 recursive-include src *.cpp *.pxd *.pyx
 recursive-include marisa-trie/lib/marisa *.h *.cc
 recursive-include marisa-trie/include/marisa *.h

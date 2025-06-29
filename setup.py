@@ -1,13 +1,13 @@
-import glob
 import itertools
-import os.path
+from pathlib import Path
 
+from Cython.Build import cythonize
 from setuptools import setup, Extension
 
 
-MARISA_ROOT_DIR = "marisa-trie"
-MARISA_SOURCE_DIR = os.path.join(MARISA_ROOT_DIR, "lib")
-MARISA_INCLUDE_DIR = os.path.join(MARISA_ROOT_DIR, "include")
+MARISA_ROOT_DIR = Path("marisa-trie")
+MARISA_SOURCE_DIR = MARISA_ROOT_DIR / "lib"
+MARISA_INCLUDE_DIR = MARISA_ROOT_DIR / "include"
 MARISA_FILES = [
     "marisa/*.cc",
     "marisa/grimoire.cc",
@@ -16,10 +16,19 @@ MARISA_FILES = [
     "marisa/grimoire/vector/*.cc",
 ]
 
-MARISA_FILES[:] = itertools.chain(
-    *(glob.glob(os.path.join(MARISA_SOURCE_DIR, path)) for path in MARISA_FILES)
+MARISA_FILES[:] = map(str, itertools.chain(
+        *(MARISA_SOURCE_DIR.glob(path) for path in MARISA_FILES)
+    )
 )
 
+extensions = [
+    Extension(
+        "marisa_trie",
+        sources=["src/*.pyx"],
+        language="c++",
+        include_dirs=[str(MARISA_INCLUDE_DIR)],
+    ),
+]
 
 setup(
     libraries=[
@@ -27,25 +36,9 @@ setup(
             "libmarisa-trie",
             {
                 "sources": MARISA_FILES,
-                "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR],
+                "include_dirs": [str(MARISA_SOURCE_DIR), str(MARISA_INCLUDE_DIR)],
             },
         )
     ],
-    ext_modules=[
-        Extension(
-            "marisa_trie",
-            [
-                "src/agent.cpp",
-                "src/base.cpp",
-                "src/iostream.cpp",
-                "src/key.cpp",
-                "src/keyset.cpp",
-                "src/marisa_trie.cpp",
-                "src/query.cpp",
-                "src/std_iostream.cpp",
-                "src/trie.cpp",
-            ],
-            include_dirs=[MARISA_INCLUDE_DIR],
-        )
-    ],
+    ext_modules=cythonize(extensions),
 )

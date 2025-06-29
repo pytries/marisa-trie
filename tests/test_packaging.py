@@ -3,9 +3,7 @@ Shamelessly inspired from https://github.com/pypa/twine/blob/main/twine/commands
 """
 import io
 import re
-import subprocess
-from email import message_from_string
-from pkg_resources import get_distribution
+from importlib.metadata import metadata
 
 from readme_renderer.rst import render
 
@@ -45,12 +43,7 @@ class _WarningStream:
 
 
 def test_check_pypi_rendering():
-    subprocess.check_call(["python3", "setup.py", "sdist"])
-
-    package = get_distribution("marisa-trie")
-    pkg_info = message_from_string(package.get_metadata("PKG-INFO"))
-    metadata = dict(pkg_info.items())
-    lines = metadata["Summary"].splitlines()
+    lines = metadata("marisa-trie").get("Summary", "").splitlines()
     description = lines.pop(0) + "\n"
     description += "\n".join(l[8:] for l in lines)
 

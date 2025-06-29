@@ -58,7 +58,7 @@ License
 Wrapper code is licensed under MIT License.
 
 Bundled `marisa-trie`_ C++ library is dual-licensed under
-LGPL and BSD 2-clause license.
+LGPL or BSD 2-clause license.
 
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/marisa-trie.svg
    :target: https://pypi.python.org/pypi/marisa-trie/

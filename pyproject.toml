@@ -1,0 +1,50 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=77.0"]
+
+[project]
+name = "marisa-trie"
+version = "1.2.1"
+license = "MIT AND (BSD-2-Clause OR LGPL-2.1-or-later)"
+license-files = [
+  "AUTHORS.rst",
+  "LICENSE",
+  "marisa-trie/AUTHORS",
+  "marisa-trie/COPYING.md",
+]
+description = "Static memory-efficient and fast Trie-like structures for Python."
+authors = [{ name = "Mikhail Korobov", email = "kmike84@gmail.com" }]
+requires-python = ">=3.9"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Cython",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "Topic :: Text Processing :: Linguistic",
+]
+dynamic = ["readme"]
+
+[project.optional-dependencies]
+# Note: keep requirements here to ease distributions packaging
+test = [
+  "hypothesis",
+  "pytest",
+  "readme_renderer",
+]
+
+[project.urls]
+Source = "https://github.com/pytries/marisa-trie"
+
+[tool.setuptools.dynamic]
+readme = { file = ["README.rst", "CHANGES.rst"] }

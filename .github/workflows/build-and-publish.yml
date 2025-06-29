@@ -16,7 +16,7 @@ on:
 
 jobs:
   os-built-distributions:
-    name: Build ${{ matrix.arch }} on ${{ matrix.os }}
+    name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -42,7 +42,7 @@ jobs:
           CIBW_ENABLE: cpython-freethreading
       - uses: actions/upload-artifact@v4
         with:
-          name: python-package-distributions-${{ matrix.os }}-${{ matrix.arch }}
+          name: python-package-distributions-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
   source-distribution:

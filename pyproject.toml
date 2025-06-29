@@ -7,7 +7,9 @@ name = "marisa-trie"
 version = "1.2.1"
 license = "MIT AND (BSD-2-Clause OR LGPL-2.1-or-later)"
 license-files = [
+  "AUTHORS.rst",
   "LICENSE",
+  "marisa-trie/AUTHORS",
   "marisa-trie/COPYING.md",
 ]
 description = "Static memory-efficient and fast Trie-like structures for Python."

@@ -1,6 +1,14 @@
 name: Tests
 
-on: pull_request
+on:
+  pull_request:
+
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "The branch, tag or SHA to run tests from"
+        required: true
+        default: "master"
 
 jobs:
   tests:

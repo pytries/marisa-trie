@@ -8,7 +8,7 @@ CHANGES
 * Updated ``libmarisa-trie`` to the latest version (0.2.7) (#116).
 * Dropped Python 3.7, 3.8 support (#112, #120).
 * Added Python 3.13 support (#112).
-* Rebuild Cython wrapper with Cython 3.1.2 (#119).
+* Rebuild Cython wrapper with Cython 3.1.3 (#119).
 * Moved static project metadata to ``pyproject.toml`` (#120).
 * Updated metadata license to include the bundled one from marisa-trie as well (#120).
 * Add Cython as build dependency (#122).

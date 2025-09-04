@@ -30,7 +30,7 @@ jobs:
           submodules: true
 
       - name: Install Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install build dependencies
@@ -55,7 +55,7 @@ jobs:
           ref: ${{ github.event.inputs.branch }}
           submodules: true
       - name: Install Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Build source distribution

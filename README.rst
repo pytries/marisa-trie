@@ -12,7 +12,7 @@ MARISA Trie
 
    |Patreon|
 
-Static memory-efficient Trie-like structures for Python (3.8+)
+Static memory-efficient Trie-like structures for Python (3.9+)
 based on `marisa-trie`_ C++ library.
 
 String data in a MARISA-trie may take up to 50x-100x less memory than

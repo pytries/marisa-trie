@@ -40,5 +40,9 @@ setup(
             },
         )
     ],
-    ext_modules=cythonize(extensions, language_level="3"),
+    ext_modules=cythonize(
+        extensions,
+        language_level="3",
+        compiler_directives={"freethreading_compatible": True},
+    ),
 )

@@ -1,4 +1,5 @@
 import pickle
+from collections.abc import Mapping
 from uuid import uuid4
 
 import pytest
@@ -7,7 +8,7 @@ from hypothesis import given, assume, settings, HealthCheck
 
 import marisa_trie
 
-from .utils import text, Mapping
+from .utils import text
 
 
 @given(st.sets(text), text)
@@ -227,6 +228,7 @@ def test_prefixes():
 
     assert list(trie.iter_prefixes("foobar")) == ["f", "foo", "foobar"]
 
+
 def test_iter_prefixes_with_keys():
     trie = marisa_trie.Trie(["foo", "f", "foobar", "bar"])
 
@@ -246,6 +248,7 @@ def test_iter_prefixes_with_keys():
         assert list(trie.iter_prefixes_with_ids(test_key)) == [
             (prefix, trie[prefix]) for prefix in trie.prefixes(test_key)
         ]
+
 
 def test_keys():
     keys = ["foo", "f", "foobar", "bar"]
@@ -328,6 +331,6 @@ def test_invalid_file():
         pytest.fail("Exception is not raised")
 
 
-def test_mutable_mapping():
+def test_mapping():
     for method in Mapping.__abstractmethods__:
         assert hasattr(marisa_trie.Trie, method)

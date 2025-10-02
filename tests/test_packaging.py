@@ -1,9 +1,12 @@
 """
 Shamelessly inspired from https://github.com/pypa/twine/blob/main/twine/commands/check.py
 """
+
 import io
 import re
 from importlib.metadata import metadata
+
+import pytest
 
 from readme_renderer.rst import render
 
@@ -42,6 +45,7 @@ class _WarningStream:
         return self.output.getvalue()
 
 
+@pytest.mark.thread_unsafe(reason="Spurious importlib warnings")
 def test_check_pypi_rendering():
     lines = metadata("marisa-trie").get("Summary", "").splitlines()
     description = lines.pop(0) + "\n"

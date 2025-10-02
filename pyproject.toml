@@ -28,7 +28,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
-  "Programming Language :: Python :: Free Threading :: 1 - Alpha",
+  "Programming Language :: Python :: Free Threading :: 2 - Beta",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Scientific/Engineering :: Information Analysis",
@@ -52,3 +52,9 @@ Source = "https://github.com/pytries/marisa-trie"
 
 [tool.setuptools.dynamic]
 readme = { file = ["README.rst", "CHANGES.rst"] }
+
+[tool.pytest.ini_options]
+markers = [
+  # Add pytest-run-parallel markers when the module is not installed
+  "thread_unsafe: Run in a single thread in pytest-run-parallel",
+]

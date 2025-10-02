@@ -1,4 +1,5 @@
 import pickle
+from collections.abc import Mapping
 from uuid import uuid4
 
 import pytest
@@ -6,8 +7,6 @@ import hypothesis.strategies as st
 from hypothesis import given, assume, settings, HealthCheck
 
 import marisa_trie
-
-from .utils import Mapping
 
 text = st.binary()
 
@@ -258,6 +257,6 @@ def test_invalid_file():
         pytest.fail("Exception is not raised")
 
 
-def test_mutable_mapping():
+def test_mapping():
     for method in Mapping.__abstractmethods__:
         assert hasattr(marisa_trie.BinaryTrie, method)

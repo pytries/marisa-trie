@@ -1,5 +1,6 @@
 import io
 import pickle
+from collections.abc import Mapping
 
 import pytest
 import hypothesis.strategies as st
@@ -125,3 +126,8 @@ def test_dumps_loads(data):
     buf.seek(0)
 
     assert trie == pickle.load(buf)
+
+
+def test_mapping():
+    for method in Mapping.__abstractmethods__:
+        assert hasattr(marisa_trie.BytesTrie, method)

@@ -40,7 +40,7 @@ jobs:
         env:
           CIBW_ARCHS_MACOS: "auto x86_64"
           CIBW_ENABLE: cpython-freethreading
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: python-package-distributions-${{ matrix.os }}
           path: ./wheelhouse/*.whl
@@ -63,7 +63,7 @@ jobs:
           pip install build
           python -m build --sdist
       - name: Store the source distribution
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: python-package-distributions-source
           path: dist

@@ -45,6 +45,11 @@ def parametrize(min_size: int = 0, max_size: int | None = None) -> pytest.MarkDe
                 st.dictionaries(text, records, min_size=min_size, max_size=max_size),
                 id="RecordTrie",
             ),
+            pytest.param(
+                marisa_trie.StringTrie,
+                st.dictionaries(text, text, min_size=min_size, max_size=max_size),
+                id="StringTrie",
+            ),
         ],
     )
 
@@ -53,7 +58,10 @@ def make_trie(cls, data_st, data):
     contents = data.draw(data_st)
     if isinstance(contents, dict):
         trie = cls(contents.items())
-        as_dict = {k: [v] for k, v in contents.items()}
+        if cls is marisa_trie.StringTrie:
+            as_dict = dict(contents)
+        else:
+            as_dict = {k: [v] for k, v in contents.items()}
     else:  # set of keys
         trie = cls(contents)
         as_dict = dict(trie)

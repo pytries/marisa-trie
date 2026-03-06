@@ -15,6 +15,7 @@ There are several trie classes in this package:
    marisa_trie.Trie
    marisa_trie.RecordTrie
    marisa_trie.BytesTrie
+   marisa_trie.StringTrie
 
 marisa_trie.Trie
 ~~~~~~~~~~~~~~~~
@@ -123,10 +124,44 @@ not tuples::
     [b'bar-value']
 
 
+marisa_trie.StringTrie
+~~~~~~~~~~~~~~~~~~~~~~
+
+``StringTrie`` maps unicode keys to unicode values::
+
+    >>> data = [("foo", "x"), ("fo", "y"), ("bar", "z")]
+    >>> trie = marisa_trie.StringTrie(data)
+    >>> trie["foo"]
+    "x"
+    >>> trie.get("missing", "default")
+    "default"
+
+It supports trie-style key queries and mapping-style iteration::
+
+    >>> trie.keys("f")
+    ["fo", "foo"]
+    >>> trie.values("f")
+    ["y", "x"]
+    >>> trie.items("f")
+    [("fo", "y"), ("foo", "x")]
+    >>> trie.prefixes("foobar")
+    ["fo", "foo"]
+    >>> trie.prefix_items("foobar")
+    [("fo", "y"), ("foo", "x")]
+
+``StringTrie`` is immutable after construction. It does not expose ID-based
+operations and does not support reverse lookup from values to keys.
+
+Two read-only accessors are available for advanced usage:
+
+* ``key_trie``: the internal key trie (``marisa_trie.Trie``)
+* ``value_trie``: the internal value trie (``marisa_trie.Trie``)
+
+
 Persistence
 -----------
 
-Trie objects supports saving/loading, pickling/unpickling and memory mapped I/O.
+Trie objects support saving/loading and pickling/unpickling.
 
 Save trie to a file::
 
@@ -148,13 +183,20 @@ Trie objects are picklable::
     >>> data = pickle.dumps(trie)
     >>> trie3 = pickle.loads(data)
 
+``StringTrie`` also supports ``save/load`` and ``tobytes/frombytes``.
+Its persistence format is internal to this package (separate from raw
+``marisa-build`` dictionaries).
+
 
 Memory mapped I/O
 -----------------
 
-It is possible to use memory mapped file as data source::
+Some trie classes (for example ``Trie`` and ``RecordTrie``) can use memory
+mapped files as data sources::
 
     >>> trie = marisa_trie.RecordTrie(fmt).mmap('my_record_trie.marisa')
+
+``StringTrie`` currently does not provide ``mmap/map`` APIs.
 
 This way the whole dictionary won't be loaded fully to memory; memory
 mapped I/O is an easy way to share dictionary data among processes.

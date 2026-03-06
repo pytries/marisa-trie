@@ -51,6 +51,13 @@ LABEL_ORDER = base.MARISA_LABEL_ORDER
 WEIGHT_ORDER = base.MARISA_WEIGHT_ORDER
 DEFAULT_ORDER = base.MARISA_DEFAULT_ORDER
 
+_STRING_TRIE_MAGIC = b"STRTRIE\x00"
+_STRING_TRIE_VERSION = 1
+_STRING_TRIE_FLAGS = 0
+_STRING_TRIE_U32_MAX = 2**32 - 1
+_STRING_TRIE_HEADER = struct.Struct("<8sHHIII")
+_U32 = struct.Struct("<I")
+
 
 cdef inline int getbufptr(object obj, char ** ptr, Py_ssize_t * size, Py_buffer * buf):
     """Get a pointer from bytes/buffer object ``obj``.
@@ -543,6 +550,268 @@ cdef class Trie(_UnicodeKeyedTrie):
             res.append((self._get_key(ag), ag.key().id()))
 
         return res
+
+
+cdef class StringTrie:
+    """An immutable mapping from unicode keys to unicode values.
+
+    The mapping is represented by two internal tries and a fixed-width
+    key-id to value-id table.
+    """
+    cdef Trie _key_trie
+    cdef Trie _value_trie
+    cdef bytes _id_map
+
+    def __init__(self, arg=None, num_tries=DEFAULT_NUM_TRIES, binary=False,
+                 cache_size=DEFAULT_CACHE, order=DEFAULT_ORDER, weights=None):
+        self._key_trie = Trie()
+        self._value_trie = Trie()
+        self._id_map = b""
+        if arg is not None:
+            self._build(
+                arg,
+                weights=weights,
+                num_tries=num_tries,
+                binary=binary,
+                cache_size=cache_size,
+                order=order,
+            )
+
+    def _build(self, arg, weights=None, **options):
+        cdef list keys = []
+        cdef set seen_keys = set()
+        cdef dict value_by_key = {}
+        cdef str key
+        cdef str value
+        cdef object item
+        cdef list unique_values
+        cdef list value_ids
+        cdef int key_id
+        cdef int value_id
+        cdef int num_keys
+
+        for item in arg:
+            try:
+                key, value = item
+            except Exception:
+                raise TypeError("StringTrie expects (key, value) pairs")
+
+            if not isinstance(key, unicode):
+                raise TypeError("key must be str")
+            if not isinstance(value, unicode):
+                raise TypeError("value must be str")
+
+            if key in seen_keys:
+                raise ValueError("duplicate key: %r" % key)
+
+            seen_keys.add(key)
+            keys.append(key)
+            value_by_key[key] = value
+
+        unique_values = list(dict.fromkeys(value_by_key.values()))
+
+        num_keys = len(keys)
+        if num_keys > _STRING_TRIE_U32_MAX:
+            raise ValueError("too many keys for 4-byte key-id mapping")
+        if len(unique_values) > _STRING_TRIE_U32_MAX:
+            raise ValueError("too many values for 4-byte value-id mapping")
+
+        self._key_trie = Trie(keys, weights=weights, **options)
+        self._value_trie = Trie(unique_values, **options)
+
+        if num_keys == 0:
+            self._id_map = b""
+            return
+
+        value_ids = [0] * num_keys
+        for key in keys:
+            key_id = self._key_trie[key]
+            value_id = self._value_trie[value_by_key[key]]
+            value_ids[key_id] = value_id
+        self._id_map = struct.pack("<%dI" % num_keys, *value_ids)
+
+    cdef int _value_id_from_key_id(self, int key_id) except -1:
+        return <int>_U32.unpack_from(self._id_map, key_id * 4)[0]
+
+    cdef unicode _value_for_key(self, unicode key):
+        cdef int key_id = self._key_trie[key]
+        cdef int value_id = self._value_id_from_key_id(key_id)
+        return self._value_trie.restore_key(value_id)
+
+    def __richcmp__(self, other, int op):
+        if op == 2:  # ==
+            if other is self:
+                return True
+            elif not isinstance(other, StringTrie):
+                return False
+            return (self._key_trie == (<StringTrie>other)._key_trie and
+                    self._value_trie == (<StringTrie>other)._value_trie and
+                    self._id_map == (<StringTrie>other)._id_map)
+        elif op == 3:  # !=
+            return not (self == other)
+
+        raise TypeError("unorderable types: {0} and {1}".format(
+            self.__class__, other.__class__))
+
+    def __iter__(self):
+        return self.iterkeys()
+
+    def __len__(self):
+        return len(self._key_trie)
+
+    def __contains__(self, key):
+        if not isinstance(key, unicode):
+            return False
+        return key in self._key_trie
+
+    def __getitem__(self, key):
+        if not isinstance(key, unicode):
+            raise TypeError("key must be str")
+        return self._value_for_key(<unicode>key)
+
+    def get(self, key, default=None):
+        if not isinstance(key, unicode):
+            raise TypeError("key must be str")
+        if key not in self._key_trie:
+            return default
+        return self._value_for_key(<unicode>key)
+
+    @property
+    def key_trie(self):
+        """Read-only accessor for internal key trie."""
+        return self._key_trie
+
+    @property
+    def value_trie(self):
+        """Read-only accessor for internal value trie."""
+        return self._value_trie
+
+    def iter_prefixes(self, unicode key):
+        return self._key_trie.iter_prefixes(key)
+
+    def prefixes(self, unicode key):
+        return self._key_trie.prefixes(key)
+
+    def iterkeys(self, unicode prefix=""):
+        return self._key_trie.iterkeys(prefix)
+
+    cpdef list keys(self, unicode prefix=""):
+        return self._key_trie.keys(prefix)
+
+    def itervalues(self, unicode prefix=""):
+        cdef unicode key
+        for key in self._key_trie.iterkeys(prefix):
+            yield self._value_for_key(key)
+
+    cpdef list values(self, unicode prefix=""):
+        cdef unicode key
+        cdef list res = []
+        for key in self._key_trie.iterkeys(prefix):
+            res.append(self._value_for_key(key))
+        return res
+
+    def iteritems(self, unicode prefix=""):
+        cdef unicode key
+        for key in self._key_trie.iterkeys(prefix):
+            yield key, self._value_for_key(key)
+
+    cpdef list items(self, unicode prefix=""):
+        cdef unicode key
+        cdef list res = []
+        for key in self._key_trie.iterkeys(prefix):
+            res.append((key, self._value_for_key(key)))
+        return res
+
+    def iter_prefix_items(self, unicode key):
+        cdef unicode prefix
+        for prefix in self._key_trie.iter_prefixes(key):
+            yield prefix, self._value_for_key(prefix)
+
+    cpdef list prefix_items(self, unicode key):
+        cdef unicode prefix
+        cdef list res = []
+        for prefix in self._key_trie.iter_prefixes(key):
+            res.append((prefix, self._value_for_key(prefix)))
+        return res
+
+    cpdef bytes tobytes(self) except +:
+        cdef bytes key_blob = self._key_trie.tobytes()
+        cdef bytes value_blob = self._value_trie.tobytes()
+        cdef bytes header = _STRING_TRIE_HEADER.pack(
+            _STRING_TRIE_MAGIC,
+            _STRING_TRIE_VERSION,
+            _STRING_TRIE_FLAGS,
+            len(key_blob),
+            len(value_blob),
+            len(self._id_map),
+        )
+        return header + key_blob + value_blob + self._id_map
+
+    cpdef frombytes(self, bytes data) except +:
+        cdef int header_len = _STRING_TRIE_HEADER.size
+        cdef int key_len, value_len, id_map_len
+        cdef int total_len
+        cdef int key_offset
+        cdef int value_offset
+        cdef int id_map_offset
+        cdef bytes magic
+        cdef int version
+        cdef int flags
+        cdef int key_id
+        cdef int value_id
+
+        if len(data) < header_len:
+            raise ValueError("Invalid StringTrie data: truncated header")
+
+        magic, version, flags, key_len, value_len, id_map_len = _STRING_TRIE_HEADER.unpack(
+            data[:header_len]
+        )
+        if magic != _STRING_TRIE_MAGIC:
+            raise ValueError("Invalid StringTrie data: bad magic")
+        if version != _STRING_TRIE_VERSION:
+            raise ValueError("Unsupported StringTrie version: %d" % version)
+        if flags != _STRING_TRIE_FLAGS:
+            raise ValueError("Unsupported StringTrie flags: %d" % flags)
+
+        total_len = header_len + key_len + value_len + id_map_len
+        if total_len != len(data):
+            raise ValueError("Invalid StringTrie data: invalid payload length")
+        if id_map_len % 4 != 0:
+            raise ValueError("Invalid StringTrie data: id map length is not a multiple of 4")
+
+        key_offset = header_len
+        value_offset = key_offset + key_len
+        id_map_offset = value_offset + value_len
+
+        self._key_trie = Trie().frombytes(data[key_offset:value_offset])
+        self._value_trie = Trie().frombytes(data[value_offset:id_map_offset])
+        self._id_map = data[id_map_offset:]
+
+        if len(self._key_trie) != id_map_len // 4:
+            raise ValueError("Invalid StringTrie data: key trie and id map length mismatch")
+
+        for key_id in range(len(self._key_trie)):
+            value_id = self._value_id_from_key_id(key_id)
+            if value_id < 0 or value_id >= len(self._value_trie):
+                raise ValueError("Invalid StringTrie data: value id out of range")
+
+        return self
+
+    def save(self, path):
+        """Save a StringTrie to a specified path."""
+        with open(path, "wb") as f:
+            f.write(self.tobytes())
+
+    def load(self, path):
+        """Load a StringTrie from a specified path."""
+        with open(path, "rb") as f:
+            self.frombytes(f.read())
+        return self
+
+    def __reduce__(self):
+        return self.__class__, (), self.tobytes()
+
+    __setstate__ = frombytes
 
 
 # This symbol is not allowed in utf8 so it is safe to use

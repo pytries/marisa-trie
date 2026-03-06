@@ -30,3 +30,9 @@ RecordTrie
 
 .. autoclass:: marisa_trie.RecordTrie
    :members:
+
+StringTrie
+----------
+
+.. autoclass:: marisa_trie.StringTrie
+   :members:

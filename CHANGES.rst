@@ -5,7 +5,8 @@ CHANGES
 1.3.2-dev (2025-xx-xx)
 ----------------------
 
-* 
+* Added ``StringTrie``: an immutable ``str -> str`` mapping backed by two
+  MARISA tries and a fixed-width 4-byte key-ID to value-ID table.
 
 1.3.1 (2025-08-26)
 ------------------

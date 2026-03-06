@@ -161,7 +161,7 @@ Two read-only accessors are available for advanced usage:
 Persistence
 -----------
 
-Trie objects support saving/loading and pickling/unpickling.
+Trie objects support saving/loading, pickling/unpickling, and memory mapped I/O (except for `StringTrie`).
 
 Save trie to a file::
 

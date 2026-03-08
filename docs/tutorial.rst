@@ -157,6 +157,49 @@ Two read-only accessors are available for advanced usage:
 * ``key_trie``: the internal key trie (``marisa_trie.Trie``)
 * ``value_trie``: the internal value trie (``marisa_trie.Trie``)
 
+Python equivalents of common CLI workflows:
+
+* Build and save::
+
+      >>> pairs = [("apple", "fruit"), ("app", "prefix"), ("banana", "fruit")]
+      >>> trie = marisa_trie.StringTrie(pairs)
+      >>> trie.save("my_string_trie.bin")
+
+* Exact lookup::
+
+      >>> trie.get("apple")
+      "fruit"
+      >>> trie.get("missing", "N/A")
+      "N/A"
+
+* Common prefix search (prefixes of a query key)::
+
+      >>> trie.prefixes("application")
+      ["app"]
+      >>> trie.prefix_items("application")
+      [("app", "prefix")]
+
+* Predictive search (keys/items under a prefix)::
+
+      >>> trie.keys("app")
+      ["app", "apple"]
+      >>> trie.items("app")
+      [("app", "prefix"), ("apple", "fruit")]
+
+* Dump all entries::
+
+      >>> list(trie.iteritems())
+      [("app", "prefix"), ("apple", "fruit"), ("banana", "fruit")]
+
+For large datasets, use the runnable bulk-build sample script::
+
+    $ python examples/build_string_trie.py input.tsv output.bin
+
+``input.tsv`` must be UTF-8 text with one ``key<TAB>value`` pair per line.
+You can also stream from stdin::
+
+    $ cat input.tsv | python examples/build_string_trie.py - output.bin
+
 
 Persistence
 -----------

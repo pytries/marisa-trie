@@ -2,11 +2,12 @@
 CHANGES
 =======
 
-1.3.2-dev (2025-xx-xx)
-----------------------
+1.4.0 (2026-03-10)
+------------------
 
+* Initial free-threading support and testing (#128).
 * Added ``StringTrie``: an immutable ``str -> str`` mapping backed by two
-  MARISA tries and a fixed-width 4-byte key-ID to value-ID table.
+  MARISA tries and a fixed-width 4-byte key-ID to value-ID table (#138).
 
 1.3.1 (2025-08-26)
 ------------------

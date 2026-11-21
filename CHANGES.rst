@@ -5,6 +5,8 @@ CHANGES
 1.4.2-dev (2026-xx-xx)
 ----------------------
 
+* Dropped Python 3.9 support (#145).
+* Added Python 3.15 support (#145).
 * Preserve embedded NUL keys across trie queries (#144).
 
 1.4.1 (2026-04-08)

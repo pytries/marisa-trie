@@ -446,7 +446,7 @@ cdef class Trie(_UnicodeKeyedTrie):
         :raises KeyError: if key is not present in this trie.
         """
         cdef bytes _key = <bytes>key.encode('utf8')
-        cdef int res = self._key_id(_key)
+        cdef int res = self._key_id(_key, len(_key))
         if res == -1:
             raise KeyError(key)
         return res
@@ -467,7 +467,7 @@ cdef class Trie(_UnicodeKeyedTrie):
         else:
             b_key = key
 
-        res = self._key_id(b_key)
+        res = self._key_id(b_key, len(b_key))
         if res == -1:
             return default
         return res
@@ -482,10 +482,10 @@ cdef class Trie(_UnicodeKeyedTrie):
             raise KeyError(index)
         return self._get_key(ag)
 
-    cdef int _key_id(self, char* key):
+    cdef int _key_id(self, char* key, int length):
         cdef bint res
         cdef agent.Agent ag
-        ag.set_query(key)
+        ag.set_query(key, length)
         res = self._trie.lookup(ag)
         if not res:
             return -1
@@ -497,7 +497,7 @@ cdef class Trie(_UnicodeKeyedTrie):
         """
         cdef bytes b_key = <bytes>key.encode('utf8')
         cdef agent.Agent ag
-        ag.set_query(b_key)
+        ag.set_query(b_key, len(b_key))
 
         while self._trie.common_prefix_search(ag):
             yield self._get_key(ag)
@@ -511,7 +511,7 @@ cdef class Trie(_UnicodeKeyedTrie):
         cdef list res = []
         cdef bytes b_key = <bytes>key.encode('utf8')
         cdef agent.Agent ag
-        ag.set_query(b_key)
+        ag.set_query(b_key, len(b_key))
 
         while self._trie.common_prefix_search(ag):
             res.append(self._get_key(ag))
@@ -534,7 +534,7 @@ cdef class Trie(_UnicodeKeyedTrie):
         """
         cdef bytes b_prefix = <bytes>prefix.encode('utf8')
         cdef agent.Agent ag
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             yield self._get_key(ag), ag.key().id()
@@ -544,7 +544,7 @@ cdef class Trie(_UnicodeKeyedTrie):
         cdef list res = []
         cdef bytes b_prefix = <bytes>prefix.encode('utf8')
         cdef agent.Agent ag
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             res.append((self._get_key(ag), ag.key().id()))
@@ -849,7 +849,7 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
     cdef bint _contains(self, bytes key):
         cdef agent.Agent ag
         cdef bytes _key = key + self._b_value_separator
-        ag.set_query(_key)
+        ag.set_query(_key, len(_key))
         return self._trie.predictive_search(ag)
 
     cpdef list prefixes(self, unicode key):
@@ -870,7 +870,7 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
         while ind <= key_len:
             prefix = key[:ind]
             b_prefix = <bytes>(prefix.encode('utf8') + self._b_value_separator)
-            ag.set_query(b_prefix)
+            ag.set_query(b_prefix, len(b_prefix))
             if self._trie.predictive_search(ag):
                 res.append(prefix)
 
@@ -917,7 +917,7 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
         cdef int prefix_len = len(b_prefix)
 
         cdef agent.Agent ag
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             value = ag.key().ptr()[prefix_len:ag.key().length()]
@@ -935,7 +935,7 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
         cdef int i, value_len
 
         cdef agent.Agent ag
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             raw_key = <unsigned char*>ag.key().ptr()
@@ -960,7 +960,7 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
         cdef int i, value_len
 
         cdef agent.Agent ag
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             raw_key = <unsigned char*>ag.key().ptr()
@@ -983,7 +983,7 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
         cdef int i
 
         cdef agent.Agent ag
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             raw_key = <unsigned char*>ag.key().ptr()
@@ -1002,7 +1002,7 @@ cdef class BytesTrie(_UnicodeKeyedTrie):
         cdef int i
 
         cdef agent.Agent ag
-        ag.set_query(b_prefix)
+        ag.set_query(b_prefix, len(b_prefix))
 
         while self._trie.predictive_search(ag):
             raw_key = <unsigned char*>ag.key().ptr()

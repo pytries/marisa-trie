@@ -5,7 +5,7 @@ CHANGES
 1.4.2-dev (2026-xx-xx)
 ----------------------
 
-* 
+* Preserve embedded NUL keys across trie queries (#144).
 
 1.4.1 (2026-04-08)
 ------------------

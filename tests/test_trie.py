@@ -326,7 +326,7 @@ def test_invalid_file():
     try:
         marisa_trie.Trie().load(__file__)
     except RuntimeError as e:
-        assert "MARISA_FORMAT_ERROR" in e.args[0]
+        assert "std::runtime_error" in e.args[0]
     else:
         pytest.fail("Exception is not raised")
 

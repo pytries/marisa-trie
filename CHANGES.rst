@@ -7,6 +7,7 @@ CHANGES
 
 * Dropped Python 3.9 support (#145).
 * Added Python 3.15 support (#145).
+* Updated ``libmarisa-trie`` to the latest commit ([38180f6](https://github.com/s-yata/marisa-trie/tree/38180f6d3653cd2c88dd7047711e75f48f84527c)) (#146).
 * Preserve embedded NUL keys across trie queries (#144).
 
 1.4.1 (2026-04-08)

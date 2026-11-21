@@ -1,5 +1,6 @@
 import itertools
 from pathlib import Path
+import sys
 
 from Cython.Build import cythonize
 from setuptools import setup, Extension
@@ -21,11 +22,16 @@ MARISA_FILES[:] = map(str, itertools.chain(
     )
 )
 
+if sys.platform == "win32":
+    extra_compile_args = ["/std:c++17", "/EHsc"]
+else:
+    extra_compile_args = ["-std=c++17"]
 extensions = [
     Extension(
         "marisa_trie",
         sources=["src/*.pyx"],
         language="c++",
+        extra_compile_args=extra_compile_args,
         include_dirs=[str(MARISA_INCLUDE_DIR)],
     ),
 ]

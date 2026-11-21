@@ -39,6 +39,7 @@ jobs:
         run: python -m cibuildwheel
         env:
           CIBW_ARCHS_MACOS: "auto x86_64"
+          CL: "/std:c++17 /EHsc"
           CXXFLAGS: "-std=c++17"
       - uses: actions/upload-artifact@v7
         with:

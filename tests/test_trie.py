@@ -117,9 +117,9 @@ def test_map(tmp_path, keys):
     path = str(tmp_path / f"{uuid4()}.bin")
     trie.save(path)
 
-    data = open(path, "rb").read()
     trie2 = marisa_trie.Trie()
-    trie2.map(data)
+    with open(path, "rb") as fh:
+        trie2.map(fh.read())
 
     for key in keys:
         assert key in trie2
@@ -133,7 +133,8 @@ def test_map_with_pad(tmp_path, keys):
     path = str(tmp_path / f"{uuid4()}.bin")
     trie.save(path)
 
-    data = b"pad" + open(path, "rb").read() + b"pad"
+    with open(path, "rb") as fh:
+        data = b"pad" + fh.read() + b"pad"
     trie2 = marisa_trie.Trie()
     trie2.map(memoryview(data)[3:-3])
 

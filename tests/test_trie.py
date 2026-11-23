@@ -210,6 +210,7 @@ def test_gt_lt_exceptions():
 def test_iter():
     trie = marisa_trie.Trie(["foo", "bar"])
     assert list(trie) == list(trie.iterkeys())
+    assert list(trie.iterkeys("f")) == list(trie.iterkeys("fo")) == ["foo"]
 
 
 def test_len():
@@ -260,6 +261,8 @@ def test_keys():
 def test_keys_prefix():
     keys = ["foo", "f", "foobar", "bar"]
     trie = marisa_trie.Trie(keys)
+    assert set(trie.keys("b")) == {"bar"}
+    assert set(trie.keys("f")) == {"f", "foo", "foobar"}
     assert set(trie.keys("fo")) == {"foo", "foobar"}
     assert trie.keys("foobarz") == []
 

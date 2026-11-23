@@ -1,8 +1,9 @@
 import itertools
 from pathlib import Path
+import sys
 
 from Cython.Build import cythonize
-from setuptools import setup, Extension
+from setuptools import Extension, setup
 
 
 MARISA_ROOT_DIR = Path("marisa-trie")
@@ -16,16 +17,22 @@ MARISA_FILES = [
     "marisa/grimoire/vector/*.cc",
 ]
 
-MARISA_FILES[:] = map(str, itertools.chain(
-        *(MARISA_SOURCE_DIR.glob(path) for path in MARISA_FILES)
-    )
+MARISA_FILES[:] = map(
+    str,
+    itertools.chain(*(MARISA_SOURCE_DIR.glob(path) for path in MARISA_FILES)),
 )
+
+if sys.platform == "win32":
+    extra_compile_args = ["/std:c++17", "/EHsc"]
+else:
+    extra_compile_args = ["-std=c++17"]
 
 extensions = [
     Extension(
         "marisa_trie",
         sources=["src/*.pyx"],
         language="c++",
+        extra_compile_args=extra_compile_args,
         include_dirs=[str(MARISA_INCLUDE_DIR)],
     ),
 ]
@@ -37,6 +44,7 @@ setup(
             {
                 "sources": MARISA_FILES,
                 "include_dirs": [str(MARISA_SOURCE_DIR), str(MARISA_INCLUDE_DIR)],
+                "cflags": extra_compile_args,
             },
         )
     ],
